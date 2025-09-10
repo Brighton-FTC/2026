@@ -120,11 +120,25 @@ public class AprilTagLocalization {
         telemetry.addData("# AprilTags Detected", currentDetections.size());
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null) {
-                if (detection.id == 20){
-                    telemetry.addData("obj","Blue Tower");
-                }
-                if (detection.id == 24){
-                    telemetry.addData("obj","Red Tower");
+                switch(detection.id){
+                    case 20:
+                        telemetry.addData("Obj", "Red");
+                        break;
+                    case 21:
+                        telemetry.addData("Obj", "21");
+                        break;
+                    case 22:
+                        telemetry.addData("Obj", "21");
+                        break;
+                    case 33:
+                        telemetry.addData("Obj", "21");
+                        break;
+                    case 24:
+                        telemetry.addData("Obj", "Blue");
+
+                    default:
+                        break;
+
                 }
             }
         }
