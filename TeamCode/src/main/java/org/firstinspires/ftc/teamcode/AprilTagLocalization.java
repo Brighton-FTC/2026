@@ -85,6 +85,32 @@ public class AprilTagLocalization {
         visionPortal.stopStreaming();
     }
 
+    public double returnYPosition() {
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        double posY = 0;
+        for (AprilTagDetection detection : currentDetections) {
+            posY = detection.robotPose.getPosition().y;
+        }
+        return posY;
+    }
+    public double returnXPosition() {
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        double posX = 0;
+        for (AprilTagDetection detection : currentDetections) {
+            posX = detection.robotPose.getPosition().x;
+        }
+        return posX;
+    }
+
+    public double returnYawPosition() {
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        double yaw = 0;
+        for (AprilTagDetection detection : currentDetections) {
+            yaw = detection.robotPose.getOrientation().getYaw(AngleUnit.DEGREES);
+        }
+        return yaw;
+    }
+
     public void telemetryAprilTag() {
 
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
@@ -129,10 +155,10 @@ public class AprilTagLocalization {
                         telemetry.addData("Obj", "21");
                         break;
                     case 22:
-                        telemetry.addData("Obj", "21");
+                        telemetry.addData("Obj", "22");
                         break;
-                    case 33:
-                        telemetry.addData("Obj", "21");
+                    case 23:
+                        telemetry.addData("Obj", "23");
                         break;
                     case 24:
                         telemetry.addData("Obj", "Blue");
