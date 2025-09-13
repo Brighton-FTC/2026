@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 import android.util.Size;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -16,7 +17,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 
 import java.util.List;
 
-@Configurable
+@Config
 public class AprilTagLocalization {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
