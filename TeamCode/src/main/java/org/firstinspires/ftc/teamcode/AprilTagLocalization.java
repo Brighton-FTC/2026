@@ -89,7 +89,8 @@ public class AprilTagLocalization {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         double posY = 0;
         for (AprilTagDetection detection : currentDetections) {
-            posY = detection.robotPose.getPosition().y;
+            if (detection.metadata != null && detection.metadata.id == 20 || detection.metadata != null && detection.metadata.id == 24){
+            posY = detection.robotPose.getPosition().y;}
         }
         return posY;
     }
@@ -97,7 +98,9 @@ public class AprilTagLocalization {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         double posX = 0;
         for (AprilTagDetection detection : currentDetections) {
+            if (detection.metadata != null && detection.metadata.id == 20 || detection.metadata != null && detection.metadata.id == 24){
             posX = detection.robotPose.getPosition().x;
+            }
         }
         return posX;
     }
@@ -106,7 +109,8 @@ public class AprilTagLocalization {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         double yaw = 0;
         for (AprilTagDetection detection : currentDetections) {
-            yaw = detection.robotPose.getOrientation().getYaw(AngleUnit.DEGREES);
+            if (detection.metadata != null && detection.metadata.id == 20 || detection.metadata != null && detection.metadata.id == 24){
+            yaw = detection.robotPose.getOrientation().getYaw(AngleUnit.DEGREES);}
         }
         return yaw;
     }
@@ -120,7 +124,8 @@ public class AprilTagLocalization {
 
         // Step through the list of detections and display info for each one.
         for (AprilTagDetection detection : currentDetections) {
-            if (detection.metadata != null) {
+            if (detection.metadata != null && detection.metadata.id == 20 || detection.metadata != null && detection.metadata.id == 24) {
+
                 telemetry.addData("Detection item", detection.id+ detection.metadata.name);
                 // Only use tags that don't have Obelisk in them
 
