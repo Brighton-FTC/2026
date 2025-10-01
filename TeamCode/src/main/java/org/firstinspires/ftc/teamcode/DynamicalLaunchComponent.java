@@ -33,11 +33,13 @@ public class DynamicalLaunchComponent {
     private YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES,
             0, -90, 0, 0);
 
+    private FlyWheelMotorComponent flyWheelMotor;
 
 
-    public void DynamicAngleCompoent(HardwareMap hardwareMap, String servoID, double objectXPosition, double objectYPosition, double scalingFactor, double objectHeight, double launchVelocity){
+    public DynamicalLaunchComponent(HardwareMap hardwareMap, String servoID, double objectXPosition, double objectYPosition, double scalingFactor, double objectHeight, double launchVelocity){
         launchAngleServo = hardwareMap.servo.get(servoID);
         camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1");
+        flyWheelMotor = new FlyWheelMotorComponent(hardwareMap, "FWMotor");
         this.objectXPosition = objectXPosition;
         this.objectYPosition = objectYPosition;
         this.scalingFactor = scalingFactor;
