@@ -15,4 +15,8 @@ public class FlyWheelMotorComponent {
     public void runMotorAt(double velocity){
         motor.set(velocity);
     }
+
+    public void stopMotor(){
+        motor.stopMotor();
+    }
 }
