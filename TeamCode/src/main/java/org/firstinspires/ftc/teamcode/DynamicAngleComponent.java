@@ -56,7 +56,7 @@ public class DynamicAngleComponent {
 
 
 
-
+// This adjusts the launch angle with constant motor power.
     public void aimToObject(){
         double robotYPosition = camera.returnYPosition();
         double robotXPosition = camera.returnXPosition();
