@@ -8,7 +8,24 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
+import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.HeadingInterpolator;
+import com.pedropathing.paths.Path;
+import com.pedropathing.paths.PathChain;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import java.util.function.Supplier;
+
 public class TurretComponent {
+
+    private Follower follower;
+
+    private Pose startingPose;
 
     private double scalingFactor;
 
@@ -25,7 +42,7 @@ public class TurretComponent {
     private YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES,
             0, -90, 0, 0);
 
-    public TurretComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition) {
+    public TurretComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Pose startingPose) {
         turretMotor = new Motor(hardwareMap, motorID);
         turretMotor.resetEncoder();
         turretMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
@@ -33,6 +50,9 @@ public class TurretComponent {
         this.objectXPosition = objectXPosition;
         this.objectYPosition = objectYPosition;
         this.scalingFactor = scalingFactor;
+        this.startingPose = startingPose;
+        follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
+        follower.update();
 
     }
 
@@ -56,7 +76,7 @@ public class TurretComponent {
     public void aimToObject(){
         double robotYPosition = camera.returnYPosition();
         double robotXPosition = camera.returnXPosition();
-        double robotAngle = camera.returnYawPosition();
+        double robotAngle = follower.getHeading();
         double destinationAngle = Math.atan2(objectYPosition - robotYPosition,
                 objectXPosition - robotXPosition);
 
