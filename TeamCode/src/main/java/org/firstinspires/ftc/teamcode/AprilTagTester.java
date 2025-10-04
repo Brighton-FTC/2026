@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.app.GameManager;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -10,9 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.PSButtons;
 
-import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion;
 
 @TeleOp
 public class AprilTagTester extends OpMode {
