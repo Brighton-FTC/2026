@@ -13,13 +13,13 @@ public class DynamicAngleComponent {
 
     private Servo launchAngleServo;
 
-    private double scalingFactor;
-
-    private double motorPower;
-
     private double objectXPosition;
 
     private double objectYPosition;
+
+    private double objectHeight;
+
+    private double flyWheelRadius;
 
     private AprilTagLocalization camera;
     private Position cameraPosition = new Position(DistanceUnit.INCH,
@@ -28,41 +28,47 @@ public class DynamicAngleComponent {
             0, -90, 0, 0);
 
 
-
-    public void DynamicAngleCompoent(HardwareMap hardwareMap, String servoID, double objectXPosition, double objectYPosition, double scalingFactor, double motorPower){
+    public DynamicAngleComponent(HardwareMap hardwareMap, String servoID, double objectXPosition, double objectYPosition, double objectHeight, double flyWheelRadius) {
         launchAngleServo = hardwareMap.servo.get(servoID);
         camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1");
         this.objectXPosition = objectXPosition;
         this.objectYPosition = objectYPosition;
-        this.scalingFactor = scalingFactor;
-        this.motorPower = motorPower;
+        this.objectHeight = objectHeight;
+        this.flyWheelRadius = flyWheelRadius;
     }
 
-
-    public double encoderTicksToAngle(int ticks) {
-        return (ticks * scalingFactor);
-    }
-
-    public int angleToEncoderTicks(double degrees) {
-        return (int) (degrees / scalingFactor);
-    }
 
     public void turnServoBy(double degrees) {
-        double currentPosition = launchAngleServo.getPosition();
-        double TARGET_TICK_VALUE = angleToEncoderTicks(degrees) + currentPosition;
-
-        launchAngleServo.setPosition((int) TARGET_TICK_VALUE);
+        launchAngleServo.setPosition(degrees);
     }
 
-
-
-// This adjusts the launch angle with constant motor power.
-    public void aimToObject(){
+    public void dynamicMotorPower() {
         double robotYPosition = camera.returnYPosition();
         double robotXPosition = camera.returnXPosition();
-        double destinationAngle = Math.asin((2*Math.sqrt(Math.pow(objectXPosition - robotXPosition, 2) + Math.pow(objectYPosition - robotYPosition, 2))*9.81)/Math.pow(motorPower, 2));
+        double coefficient = 1;
+        double fixV = (2.0 * Math.PI * flyWheelRadius / 60.0) * 6000;
 
-        turnServoBy(destinationAngle%360); // take the mod/remainder of toTurn/360
-        // to keep the angle in the range of [0,360]
+
+        double distance = Math.sqrt(Math.pow(objectXPosition - robotXPosition, 2) + Math.pow(objectYPosition - robotYPosition, 2));
+
+        double denom = distance * Math.tan(Math.toRadians(45)) - objectHeight;
+        double v = Math.sqrt((9.81 * Math.pow(distance, 2)) / (2.0 * Math.cos(Math.toRadians(45)) * Math.cos(Math.toRadians(45)) * denom));
+
+
+        if (denom <= 0) {
+            double inside = Math.pow(2.0 * fixV, 4) - 9.81 * (9.81 * Math.pow(distance, 2) + 2 * objectHeight * Math.pow(v, 2));
+            double destinationAngleFlat = Math.atan((Math.pow(v, 2) - Math.sqrt(inside)) / (9.81 * distance));
+            double destinationAngleArc = Math.atan((Math.pow(v, 2) + Math.sqrt(inside)) / (9.81 * distance));
+
+            double chosen = destinationAngleFlat > 0 ? destinationAngleFlat : destinationAngleArc;
+            turnServoBy(chosen % 360);
+        } else {
+
+
+            double rpm = (60.0 / (2.0 * Math.PI * flyWheelRadius)) * v * coefficient;
+
+            double motorPower = rpm / 6000;
+        }
     }
+
 }
