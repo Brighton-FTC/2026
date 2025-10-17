@@ -3,7 +3,6 @@ import android.util.Size;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -84,6 +83,36 @@ public class AprilTagLocalization {
 
     public void stopStreaming(){
         visionPortal.stopStreaming();
+    }
+
+    public double returnYPosition() {
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        double posY = 0;
+        for (AprilTagDetection detection : currentDetections) {
+            if (detection.metadata != null && detection.metadata.id == 20 || detection.metadata != null && detection.metadata.id == 24){
+                posY = detection.robotPose.getPosition().y;}
+        }
+        return posY;
+    }
+    public double returnXPosition() {
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        double posX = 0;
+        for (AprilTagDetection detection : currentDetections) {
+            if (detection.metadata != null && detection.metadata.id == 20 || detection.metadata != null && detection.metadata.id == 24){
+                posX = detection.robotPose.getPosition().x;
+            }
+        }
+        return posX;
+    }
+
+    public double returnYawPosition() {
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        double yaw = 0;
+        for (AprilTagDetection detection : currentDetections) {
+            if (detection.metadata != null && detection.metadata.id == 20 || detection.metadata != null && detection.metadata.id == 24){
+                yaw = detection.robotPose.getOrientation().getYaw(AngleUnit.DEGREES);}
+        }
+        return yaw;
     }
 
     public void telemetryAprilTag() {
