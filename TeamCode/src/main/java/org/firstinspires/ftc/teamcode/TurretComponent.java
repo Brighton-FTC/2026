@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -38,7 +40,7 @@ public class TurretComponent {
         turretMotor = new Motor(hardwareMap, motorID);
         turretMotor.resetEncoder();
         turretMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1");
+        camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1", telemetry);
         this.objectXPosition = objectXPosition;
         this.objectYPosition = objectYPosition;
         this.scalingFactor = scalingFactor;
