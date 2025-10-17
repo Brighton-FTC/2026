@@ -18,7 +18,7 @@ public class TurretTester extends OpMode {
     @Override
     public void init(){
         gamepad = new GamepadEx(gamepad1);
-        turret = new TurretComponent(hardwareMap, "turretMotor", 0.05, -72, 72, startingPose, telemetry);
+        turret = new TurretComponent(hardwareMap, "turretMotor", 0.05, -72, 72, startingPose, telemetry, 20);
     }
 
     @Override
