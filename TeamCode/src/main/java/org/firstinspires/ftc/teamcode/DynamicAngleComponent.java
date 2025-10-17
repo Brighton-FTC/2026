@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -11,8 +12,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import java.lang.Math;
 
+
+@Config
 public class DynamicAngleComponent {
 
+    public double coefficient;
     private Servo launchAngleServo;
 
     private double objectXPosition;
@@ -50,7 +54,6 @@ public class DynamicAngleComponent {
     public void dynamicMotorPower() {
         double robotYPosition = camera.returnYPosition();
         double robotXPosition = camera.returnXPosition();
-        double coefficient = 1;
         double fixV = (2.0 * Math.PI * flyWheelRadius / 60.0) * 6000;
 
 
