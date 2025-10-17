@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -32,7 +34,7 @@ public class DynamicAngleComponent {
 
     public DynamicAngleComponent(HardwareMap hardwareMap, String servoID, double objectXPosition, double objectYPosition, double objectHeight, double flyWheelRadius) {
         launchAngleServo = hardwareMap.servo.get(servoID);
-        camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1");
+        camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1", telemetry);
         flyWheel = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
         this.objectXPosition = objectXPosition;
         this.objectYPosition = objectYPosition;
