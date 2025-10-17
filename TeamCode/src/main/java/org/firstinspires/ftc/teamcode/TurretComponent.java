@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -15,11 +16,12 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 
 
+@Config
 public class TurretComponent {
 
     private Follower follower;
 
-    private Pose startingPose;
+    public double kP = 0.05;
 
     private double scalingFactor;
 
@@ -36,15 +38,17 @@ public class TurretComponent {
     private YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES,
             0, -90, 0, 0);
 
-    public TurretComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Pose startingPose, Telemetry telemetry) {
+    public TurretComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Pose startingPose, Telemetry telemetry, double teethDistance) {
         turretMotor = new Motor(hardwareMap, motorID);
         turretMotor.resetEncoder();
+        turretMotor.setDistancePerPulse(teethDistance);
         turretMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+
         camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1", telemetry);
         this.objectXPosition = objectXPosition;
         this.objectYPosition = objectYPosition;
         this.scalingFactor = scalingFactor;
-        this.startingPose = startingPose;
+
         follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
         follower.update();
 
@@ -61,9 +65,12 @@ public class TurretComponent {
     public void turnTurretBy(double degrees) {
         double currentPosition = turretMotor.getCurrentPosition();
         double TARGET_TICK_VALUE = angleToEncoderTicks(degrees) + currentPosition;
-
-        turretMotor.setTargetPosition((int) TARGET_TICK_VALUE);
         turretMotor.setRunMode(Motor.RunMode.PositionControl);
+        turretMotor.setPositionCoefficient(kP);
+
+        turretMotor.setPositionTolerance(20);
+
+        turretMotor.setTargetDistance((int) TARGET_TICK_VALUE);
         turretMotor.set(1);
     }
 
