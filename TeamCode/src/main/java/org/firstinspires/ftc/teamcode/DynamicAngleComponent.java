@@ -69,7 +69,7 @@ public class DynamicAngleComponent {
             double destinationAngleArc = Math.atan((Math.pow(fixV, 2) + Math.sqrt(inside)) / (386.09 * distance));
 
             double chosen = destinationAngleFlat > 0 ? destinationAngleFlat : destinationAngleArc;
-            turnServoBy(chosen % 360);
+            turnServoBy(Math.toDegrees(chosen) % 360);
         } else {
 
 
