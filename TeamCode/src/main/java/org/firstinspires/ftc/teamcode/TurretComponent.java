@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
 @Config
@@ -49,6 +50,7 @@ public class TurretComponent {
         this.objectYPosition = objectYPosition;
         this.scalingFactor = scalingFactor;
 
+        follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
         follower.update();
 
