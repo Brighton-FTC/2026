@@ -16,7 +16,7 @@ import java.lang.Math;
 @Config
 public class DynamicAngleComponent {
 
-    public double coefficient;
+    public double coefficient = 1;
     private Servo launchAngleServo;
 
     private double objectXPosition;
@@ -54,32 +54,34 @@ public class DynamicAngleComponent {
     public void dynamicMotorPower() {
         double robotYPosition = camera.returnYPosition();
         double robotXPosition = camera.returnXPosition();
-        double fixV = (2.0 * Math.PI * flyWheelRadius / 60.0) * 6000;
+
+        if (robotXPosition != 0 && robotYPosition != 0){
+            double fixV = (2.0 * Math.PI * flyWheelRadius / 60.0) * 6000;
 
 
-        double distance = Math.sqrt(Math.pow(objectXPosition - robotXPosition, 2) + Math.pow(objectYPosition - robotYPosition, 2));
+            double distance = Math.sqrt(Math.pow(objectXPosition - robotXPosition, 2) + Math.pow(objectYPosition - robotYPosition, 2));
 
-        double denom = distance * Math.tan(Math.toRadians(45)) - objectHeight;
-        double v = Math.sqrt((386.09 * Math.pow(distance, 2)) / (2.0 * Math.cos(Math.toRadians(45)) * Math.cos(Math.toRadians(45)) * denom));
-
-
-        if (denom <= 0) {
-            double inside = Math.pow(2.0 * fixV, 4) - 386.09 * (386.09 * Math.pow(distance, 2) + 2 * objectHeight * Math.pow(fixV, 2));
-            double destinationAngleFlat = Math.atan((Math.pow(fixV, 2) - Math.sqrt(inside)) / (386.09 * distance));
-            double destinationAngleArc = Math.atan((Math.pow(fixV, 2) + Math.sqrt(inside)) / (386.09 * distance));
-
-            double chosen = destinationAngleFlat > 0 ? destinationAngleFlat : destinationAngleArc;
-            turnServoBy(Math.toDegrees(chosen) % 360);
-        } else {
+            double denom = distance * Math.tan(Math.toRadians(45)) - objectHeight;
+            double v = Math.sqrt((386.09 * Math.pow(distance, 2)) / (2.0 * Math.cos(Math.toRadians(45)) * Math.cos(Math.toRadians(45)) * denom));
 
 
-            double rpm = (60.0 / (2.0 * Math.PI * flyWheelRadius)) * v * coefficient;
+            if (denom <= 0) {
+                double inside = Math.pow(2.0 * fixV, 4) - 386.09 * (386.09 * Math.pow(distance, 2) + 2 * objectHeight * Math.pow(fixV, 2));
+                double destinationAngleFlat = Math.atan((Math.pow(fixV, 2) - Math.sqrt(inside)) / (386.09 * distance));
+                double destinationAngleArc = Math.atan((Math.pow(fixV, 2) + Math.sqrt(inside)) / (386.09 * distance));
 
-            double motorPower = rpm / 6000;
+                double chosen = destinationAngleFlat > 0 ? destinationAngleFlat : destinationAngleArc;
+                turnServoBy(Math.toDegrees(chosen) % 360);
+            } else {
 
-            flyWheel.runMotorAt(motorPower);
+
+                double rpm = (60.0 / (2.0 * Math.PI * flyWheelRadius)) * v * coefficient;
+
+                double motorPower = rpm / 6000;
+
+                flyWheel.runMotorAt(motorPower);
+            }
         }
-
 
     }
 

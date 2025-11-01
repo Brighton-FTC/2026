@@ -10,6 +10,8 @@ public class LaunchTester extends OpMode {
     private DynamicAngleComponent launcher;
 
     private GamepadEx gamepad;
+
+    private Boolean run = false;
     @Override
     public void init() {
         launcher = new DynamicAngleComponent(hardwareMap, "launcherServo", -72, 72, 42, 2, telemetry);
@@ -20,10 +22,14 @@ public class LaunchTester extends OpMode {
     public void loop() {
         gamepad.readButtons();
         if (gamepad.wasJustPressed(PSButtons.CIRCLE)){
-            launcher.dynamicMotorPower();
+            run = true;
         }
         else if (gamepad.wasJustPressed(PSButtons.SQUARE)){
             launcher.stop();
+            run = false;
+        }
+        if (run){
+            launcher.dynamicMotorPower();
         }
 
     }
