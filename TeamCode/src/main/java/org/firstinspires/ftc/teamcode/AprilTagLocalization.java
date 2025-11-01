@@ -1,17 +1,19 @@
 package org.firstinspires.ftc.teamcode;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 import android.util.Size;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.bylazar.configurables.annotations.Configurable;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import com.acmerobotics.dashboard.FtcDashboard;
 
@@ -21,8 +23,9 @@ import java.util.List;
 public class AprilTagLocalization {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
+    private final MultipleTelemetry telemetry;
 
-     /* Orientation:
+    /* Orientation:
      * If all values are zero (no rotation), that implies the camera is pointing straight up. In
      * most cases, you'll need to set the pitch to -90 degrees (rotation about the x-axis), meaning
      * the camera is horizontal. Use a yaw of 0 if the camera is pointing forwards, +90 degrees if
@@ -39,28 +42,23 @@ public class AprilTagLocalization {
     private VisionPortal visionPortal;
 
 
-    public AprilTagLocalization(HardwareMap hardwareMap, Position cameraPosition, YawPitchRollAngles cameraOrientation, String webcamID){
+    public AprilTagLocalization(HardwareMap hardwareMap, Position cameraPosition, YawPitchRollAngles cameraOrientation, String webcamID, Telemetry telemetry){
         FtcDashboard dashboard = FtcDashboard.getInstance();
-        telemetry = dashboard.getTelemetry();
+        this.telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
         aprilTag = new AprilTagProcessor.Builder()
                 // The following default settings are available to un-comment and edit as needed.
-                //.setDrawAxes(false)
-                //.setDrawCubeProjection(false)
-                //.setDrawTagOutline(true)
-                //.setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-                //.setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
-                //.setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+                .setDrawAxes(true)
+                .setDrawCubeProjection(true)
+                .setDrawTagOutline(true)
+                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+                .setTagLibrary(AprilTagGameDatabase.getDecodeTagLibrary())
+                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
                 .setCameraPose(cameraPosition, cameraOrientation)
-                // == CAMERA CALIBRATION ==
-                // If you do not manually specify calibration parameters, the SDK will attempt
-                // to load a predefined calibration for your camera.
-                //.setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
-                // ... these parameters are fx, fy, cx, cy.
-
                 .build();
 
         VisionPortal.Builder builder = new VisionPortal.Builder();
+
 
         builder.setCamera(hardwareMap.get(WebcamName.class, webcamID));
         builder.enableLiveView(true);
@@ -72,13 +70,15 @@ public class AprilTagLocalization {
 
 
         visionPortal = builder.build();
-
+        dashboard.startCameraStream(visionPortal, 30);
 
 
     }
 
     public void startStreaming(){
         visionPortal.resumeStreaming();
+        visionPortal.resumeLiveView();
+        telemetry.update();
     }
 
     public void stopStreaming(){
@@ -90,7 +90,7 @@ public class AprilTagLocalization {
         double posY = 0;
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null && detection.metadata.id == 20 || detection.metadata != null && detection.metadata.id == 24){
-            posY = detection.robotPose.getPosition().y;}
+                posY = detection.robotPose.getPosition().y;}
         }
         return posY;
     }
@@ -99,7 +99,7 @@ public class AprilTagLocalization {
         double posX = 0;
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null && detection.metadata.id == 20 || detection.metadata != null && detection.metadata.id == 24){
-            posX = detection.robotPose.getPosition().x;
+                posX = detection.robotPose.getPosition().x;
             }
         }
         return posX;
@@ -110,7 +110,7 @@ public class AprilTagLocalization {
         double yaw = 0;
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null && detection.metadata.id == 20 || detection.metadata != null && detection.metadata.id == 24){
-            yaw = detection.robotPose.getOrientation().getYaw(AngleUnit.DEGREES);}
+                yaw = detection.robotPose.getOrientation().getYaw(AngleUnit.DEGREES);}
         }
         return yaw;
     }
@@ -124,8 +124,7 @@ public class AprilTagLocalization {
 
         // Step through the list of detections and display info for each one.
         for (AprilTagDetection detection : currentDetections) {
-            if (detection.metadata != null && detection.metadata.id == 20 || detection.metadata != null && detection.metadata.id == 24) {
-
+            if (detection.metadata != null) {
                 telemetry.addData("Detection item", detection.id+ detection.metadata.name);
                 // Only use tags that don't have Obelisk in them
 
@@ -138,12 +137,15 @@ public class AprilTagLocalization {
                 telemetry.addData("Pitch", detection.robotPose.getOrientation().getPitch(AngleUnit.DEGREES));
                 telemetry.addData("Roll", detection.robotPose.getOrientation().getRoll(AngleUnit.DEGREES));
                 telemetry.addData("Yaw", detection.robotPose.getOrientation().getYaw(AngleUnit.DEGREES));
-
+                telemetry.update();
             } else {
                 telemetry.addData("ID", detection.id);
                 telemetry.addData("Center", detection.center.x + detection.center.y);
+                telemetry.addData("metadata", detection.metadata);
+                telemetry.update();
             }
-        }   // end for() loop
+        }
+        telemetry.update();// end for() loop
 
     }   // end method telemetryAprilTag()
 
@@ -151,22 +153,27 @@ public class AprilTagLocalization {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         telemetry.addData("# AprilTags Detected", currentDetections.size());
         for (AprilTagDetection detection : currentDetections) {
-            if (detection.metadata != null) {
+            if (detection.robotPose != null) {
                 switch(detection.id){
                     case 20:
                         telemetry.addData("Obj", "Red");
+                        telemetry.update();
                         break;
                     case 21:
                         telemetry.addData("Obj", "21");
+                        telemetry.update();
                         break;
                     case 22:
-                        telemetry.addData("Obj", "22");
+                        telemetry.addData("Obj", "21");
+                        telemetry.update();
                         break;
-                    case 23:
-                        telemetry.addData("Obj", "23");
+                    case 33:
+                        telemetry.addData("Obj", "21");
+                        telemetry.update();
                         break;
                     case 24:
                         telemetry.addData("Obj", "Blue");
+                        telemetry.update();
 
                     default:
                         break;
@@ -174,6 +181,7 @@ public class AprilTagLocalization {
                 }
             }
         }
+        telemetry.update();
 
     }
 }
