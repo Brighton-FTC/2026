@@ -11,7 +11,7 @@ public class LaunchTester extends OpMode {
 
     private GamepadEx gamepad;
 
-    private Boolean run = false;
+    private boolean run = false;
     @Override
     public void init() {
         launcher = new DynamicAngleComponent(hardwareMap, "launcherServo", -72, 72, 42, 2, telemetry);
