@@ -37,6 +37,17 @@ public class PIDMotorComponent {
         motor.setVeloCoefficients(kP, kI, kD);
         motor.setFeedforwardCoefficients(kS, kV, kA);
 
+
+
+
+    }
+
+    public void VelControlTest1(){
+        motor.set((double) 1/2);
+        telemetry.addData("Velocity", motor.getCorrectedVelocity());
+    }
+
+    public void VelControlTest2(){
         motor.set(1);
         telemetry.addData("Velocity", motor.getCorrectedVelocity());
     }
