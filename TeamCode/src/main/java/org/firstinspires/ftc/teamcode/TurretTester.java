@@ -18,7 +18,8 @@ public class TurretTester extends OpMode {
     @Override
     public void init(){
         gamepad = new GamepadEx(gamepad1);
-        turret = new TurretComponent(hardwareMap, "turretMotor", 0.05, -72, 72, startingPose, telemetry, 20);
+        //Scaling factor == 3.214 in degrees; 0.0561 in radians. (360*0.25/28)
+        turret = new TurretComponent(hardwareMap, "turretMotor", 3.214, -72, 72, startingPose, telemetry);
     }
 
     @Override
