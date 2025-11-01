@@ -60,6 +60,8 @@ public class TurretComponent {
         return (ticks * scalingFactor);
     }
 
+
+    //Each tick is 1 teeth distance of movement.
     public int angleToEncoderTicks(double degrees) {
         return (int) (degrees / scalingFactor);
     }
@@ -72,7 +74,7 @@ public class TurretComponent {
 
         turretMotor.setPositionTolerance(20);
 
-        turretMotor.setTargetDistance((int) TARGET_TICK_VALUE);
+        turretMotor.setTargetPosition((int) TARGET_TICK_VALUE);
         turretMotor.set(1);
     }
 
