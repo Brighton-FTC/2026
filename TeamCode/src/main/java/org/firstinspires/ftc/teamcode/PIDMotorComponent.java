@@ -14,12 +14,15 @@ public class PIDMotorComponent {
     private Motor motor;
     private MultipleTelemetry telemetry;
 
-    public double kP;
-    public double kI;
-    public double kD;
-    public double kS;
-    public double kV;
-    public double kA;
+
+    public double kP; // Corrects based on current error
+    public double kI; //Corrects based on accumulated error
+    public double kD; // Corrects based on rate of error change
+    public double kS; // Overcomes static friction
+    public double kV; // Provides voltage proportional to desired velocity
+    public double kA; // Compensates for acceleration/inertia demands
+
+    public double scalingFactor;
     public PIDMotorComponent(HardwareMap hardwareMap, String motorID, Telemetry telemetry){
         motor = new Motor(hardwareMap, motorID);
         motor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
@@ -38,6 +41,10 @@ public class PIDMotorComponent {
         telemetry.addData("Velocity", motor.getCorrectedVelocity());
     }
 
+    public int angleToEncoderTicks(double degrees) {
+        return (int) (degrees / scalingFactor);
+    }
+
 
     public void startPosControlTest(){
         telemetry.update();
@@ -45,7 +52,7 @@ public class PIDMotorComponent {
         motor.setPositionCoefficient(kP);
 
         motor.setDistancePerPulse(20);
-        motor.setTargetPosition(1200);
+        motor.setTargetPosition(motor.getCurrentPosition() + angleToEncoderTicks(180));
         motor.set(1);
         telemetry.addData("Position", motor.getCurrentPosition());
     }
