@@ -85,17 +85,19 @@ public class TurretComponent {
         turretMotor.set(1);
     }
 
-    public void aimToObject(){
+    public void aimToObject() {
         double robotYPosition = camera.returnYPosition();
         double robotXPosition = camera.returnXPosition();
-        double robotAngle = Math.toDegrees(follower.getHeading());
-        double destinationAngle = Math.toDegrees(Math.atan2(objectYPosition - robotYPosition,
-                objectXPosition - robotXPosition));
+        if (robotXPosition != 0 && robotYPosition != 0) {
+            double robotAngle = Math.toDegrees(follower.getHeading());
+            double destinationAngle = Math.toDegrees(Math.atan2(objectYPosition - robotYPosition,
+                    objectXPosition - robotXPosition));
 
-        turretAngle = encoderTicksToAngle(turretMotor.getCurrentPosition());
+            turretAngle = encoderTicksToAngle(turretMotor.getCurrentPosition());
 
-        double toTurn = destinationAngle - (turretAngle+robotAngle);
-        turnTurretBy(((toTurn + 540) % 360) - 180); // take the mod/remainder of toTurn/360
-        // to keep the angle in the range of [0,360]
+            double toTurn = destinationAngle - (turretAngle + robotAngle);
+            turnTurretBy(((toTurn + 540) % 360) - 180); // take the mod/remainder of toTurn/360
+            // to keep the angle in the range of [0,360]
+        }
     }
 }

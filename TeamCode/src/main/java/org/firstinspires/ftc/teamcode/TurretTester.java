@@ -13,6 +13,8 @@ public class TurretTester extends OpMode {
 
     private final Pose startingPose = new Pose(0, 0, Math.toRadians(0));
 
+    public boolean run = false;
+
 
 
     @Override
@@ -27,6 +29,9 @@ public class TurretTester extends OpMode {
         gamepad.readButtons();
 
         if (gamepad.wasJustPressed(PSButtons.CIRCLE)){
+            run = true;
+        }
+        if (run){
             turret.aimToObject();
         }
     }
