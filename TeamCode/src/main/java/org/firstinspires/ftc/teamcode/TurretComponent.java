@@ -39,10 +39,13 @@ public class TurretComponent {
     private YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES,
             0, -90, 0, 0);
 
-    public TurretComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Pose startingPose, Telemetry telemetry, double teethDistance) {
+
+
+    public TurretComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Pose startingPose, Telemetry telemetry) {
         turretMotor = new Motor(hardwareMap, motorID);
         turretMotor.resetEncoder();
-        turretMotor.setDistancePerPulse(teethDistance);
+        //remove if
+        turretMotor.setDistancePerPulse(4*scalingFactor); // 360/28 = 4*3.214
         turretMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1", telemetry);
@@ -58,12 +61,16 @@ public class TurretComponent {
 
     public double encoderTicksToAngle(int ticks) {
         return (ticks * scalingFactor);
+        //return (((double) ticks /4)*scalingFactor);
     }
 
-
+    //Gear Ratio is 0.25
+    //Turret degree per motor revolution is 360*0.25 = 90
+    //PPR for GoBuilda Yellow Jacket = 28
     //Each tick is 1 teeth distance of movement.
     public int angleToEncoderTicks(double degrees) {
         return (int) (degrees / scalingFactor);
+        //return (int) ((degrees*4)/scalingFactor);
     }
 
     public void turnTurretBy(double degrees) {
@@ -78,17 +85,19 @@ public class TurretComponent {
         turretMotor.set(1);
     }
 
-    public void aimToObject(){
+    public void aimToObject() {
         double robotYPosition = camera.returnYPosition();
         double robotXPosition = camera.returnXPosition();
-        double robotAngle = Math.toDegrees(follower.getHeading());
-        double destinationAngle = Math.toDegrees(Math.atan2(objectYPosition - robotYPosition,
-                objectXPosition - robotXPosition));
+        if (robotXPosition != 0 && robotYPosition != 0) {
+            double robotAngle = Math.toDegrees(follower.getHeading());
+            double destinationAngle = Math.toDegrees(Math.atan2(objectYPosition - robotYPosition,
+                    objectXPosition - robotXPosition));
 
-        turretAngle = encoderTicksToAngle(turretMotor.getCurrentPosition());
+            turretAngle = encoderTicksToAngle(turretMotor.getCurrentPosition());
 
-        double toTurn = destinationAngle - (turretAngle+robotAngle);
-        turnTurretBy(((toTurn + 540) % 360) - 180); // take the mod/remainder of toTurn/360
-        // to keep the angle in the range of [0,360]
+            double toTurn = destinationAngle - (turretAngle + robotAngle);
+            turnTurretBy(((toTurn + 540) % 360) - 180); // take the mod/remainder of toTurn/360
+            // to keep the angle in the range of [0,360]
+        }
     }
 }
