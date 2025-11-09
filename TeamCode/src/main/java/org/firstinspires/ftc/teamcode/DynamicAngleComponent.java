@@ -44,6 +44,7 @@ public class DynamicAngleComponent {
         this.objectYPosition = objectYPosition;
         this.objectHeight = objectHeight;
         this.flyWheelRadius = flyWheelRadius;
+        launchAngleServo.setPosition(0);
     }
 
     //Gear ratio for servo gear vs launcher gear
