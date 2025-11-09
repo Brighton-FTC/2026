@@ -46,35 +46,57 @@ public class DynamicAngleComponent {
         this.flyWheelRadius = flyWheelRadius;
     }
 
-
-    public void turnServoBy(double degrees) {
-        launchAngleServo.setPosition(degrees);
+    //Gear ratio for servo gear vs launcher gear
+    //setPos (Gr*degrees/ppd)/180
+    public void turnServoTo(double degrees) {
+        //Gear ratio = 2, launch angle is set to 45 degrees when servo is at neutral position.
+        //Servo constrained [0, 90], launch angle constrained [45, 90]
+        launchAngleServo.setPosition((2*(degrees-45))/180);
     }
 
     public void dynamicMotorPower() {
+
+        /*
+        Assuming turret faces the goal at all time, therefore 3D kinematics may be neglected.
+        2 Modes of launching artifacts - adjusting speed or adjusting angle (adjusting speed comes in priority)
+
+        Launch mode is switched to dynamic angle if / when it is unreachable at 45 degrees
+
+
+         */
         double robotYPosition = camera.returnYPosition();
         double robotXPosition = camera.returnXPosition();
 
         if (robotXPosition != 0 && robotYPosition != 0){
+
+
             double fixV = (2.0 * Math.PI * flyWheelRadius / 60.0) * 6000;
 
 
             double distance = Math.sqrt(Math.pow(objectXPosition - robotXPosition, 2) + Math.pow(objectYPosition - robotYPosition, 2));
-
+            
+            //We let y = objectHeight and x = distance from robot
             double denom = distance * Math.tan(Math.toRadians(45)) - objectHeight;
+            
+            //Linear velocity required for artifact to pass through x = distance from robot and y = object height
             double v = Math.sqrt((386.09 * Math.pow(distance, 2)) / (2.0 * Math.cos(Math.toRadians(45)) * Math.cos(Math.toRadians(45)) * denom));
 
-
+            //Denominator less than or equal 0 will yield undefined / imaginary solution. Meaning no velocity will allow artifact to reach target at 45 degrees.
             if (denom <= 0) {
-                double inside = Math.pow(2.0 * fixV, 4) - 386.09 * (386.09 * Math.pow(distance, 2) + 2 * objectHeight * Math.pow(fixV, 2));
+                double inside = Math.pow(fixV, 4) - 386.09 * (386.09 * Math.pow(distance, 2) + 2 * objectHeight * Math.pow(fixV, 2));
+
+                //Solving the quadratic yields 2 roots of trajectory in different shapes.
                 double destinationAngleFlat = Math.atan((Math.pow(fixV, 2) - Math.sqrt(inside)) / (386.09 * distance));
                 double destinationAngleArc = Math.atan((Math.pow(fixV, 2) + Math.sqrt(inside)) / (386.09 * distance));
 
-                double chosen = destinationAngleFlat > 0 ? destinationAngleFlat : destinationAngleArc;
-                turnServoBy(Math.toDegrees(chosen) % 360);
+                double chosen = Math.max(destinationAngleFlat, destinationAngleArc);
+                turnServoTo(Math.toDegrees(chosen) % 360);
             } else {
 
+                //This ensures launch angle is reset to 45 when the launcher is running in dynamic velocity mode.
+                turnServoTo(45);
 
+                //Linear velocity is converted to angular velocity.
                 double rpm = (60.0 / (2.0 * Math.PI * flyWheelRadius)) * v * coefficient;
 
                 double motorPower = rpm / 6000;
