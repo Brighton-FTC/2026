@@ -59,6 +59,10 @@ public class TurretComponent {
 
     }
 
+    public void resetTurretEncoder(){
+        turretMotor.resetEncoder();
+    }
+
     public double encoderTicksToAngle(int ticks) {
         return (ticks * scalingFactor);
         //return (((double) ticks /4)*scalingFactor);
