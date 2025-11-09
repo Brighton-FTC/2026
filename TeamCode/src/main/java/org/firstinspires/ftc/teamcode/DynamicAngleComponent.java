@@ -44,7 +44,6 @@ public class DynamicAngleComponent {
         this.objectYPosition = objectYPosition;
         this.objectHeight = objectHeight;
         this.flyWheelRadius = flyWheelRadius;
-        launchAngleServo.setPosition(0);
     }
 
     //Gear ratio for servo gear vs launcher gear
@@ -53,6 +52,10 @@ public class DynamicAngleComponent {
         //Gear ratio = 2, launch angle is set to 45 degrees when servo is at neutral position.
         //Servo constrained [0, 90], launch angle constrained [45, 90]
         launchAngleServo.setPosition((2*(degrees-45))/180);
+    }
+
+    public void resetServo(){
+        launchAngleServo.setPosition(0);
     }
 
     public void dynamicMotorPower() {
@@ -95,7 +98,7 @@ public class DynamicAngleComponent {
             } else {
 
                 //This ensures launch angle is reset to 45 when the launcher is running in dynamic velocity mode.
-                turnServoTo(45);
+                resetServo();
 
                 //Linear velocity is converted to angular velocity.
                 double rpm = (60.0 / (2.0 * Math.PI * flyWheelRadius)) * v * coefficient;
