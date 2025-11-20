@@ -45,7 +45,7 @@ public class TurretComponent {
         turretMotor = new Motor(hardwareMap, motorID);
         turretMotor.resetEncoder();
         //remove if
-        turretMotor.setDistancePerPulse(4*scalingFactor); // 360/28 = 4*3.214
+        turretMotor.setDistancePerPulse(4*scalingFactor); // 360/537.7 = 4*0.167
         turretMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1", telemetry);
@@ -70,8 +70,7 @@ public class TurretComponent {
 
     //Gear Ratio is 0.25
     //Turret degree per motor revolution is 360*0.25 = 90
-    //PPR for GoBuilda Yellow Jacket = 28
-    //Each tick is 1 teeth distance of movement.
+    //PPR for GoBuilda Yellow Jacket = 537.7
     public int angleToEncoderTicks(double degrees) {
         return (int) (degrees / scalingFactor);
         //return (int) ((degrees*4)/scalingFactor);
