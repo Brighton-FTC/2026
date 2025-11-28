@@ -8,6 +8,7 @@ public class IntakeMotorComponent {
     private final Motor motor;
     public IntakeMotorComponent(HardwareMap hardwareMap, String motorID){
         motor = new Motor(hardwareMap, motorID);
+        motor.setRunMode(Motor.RunMode.RawPower);
 
     }
 
