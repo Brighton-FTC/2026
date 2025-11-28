@@ -19,6 +19,10 @@ public class DynamicAngleComponent {
     public double coefficient = 1;
     private Servo launchAngleServo;
 
+    private static final double MIN_POSITION = 0;
+
+    private static final double MAX_POSITION = 180;
+
     private double objectXPosition;
 
     private double objectYPosition;
@@ -38,6 +42,7 @@ public class DynamicAngleComponent {
 
     public DynamicAngleComponent(HardwareMap hardwareMap, String servoID, double objectXPosition, double objectYPosition, double objectHeight, double flyWheelRadius, Telemetry telemetry) {
         launchAngleServo = hardwareMap.servo.get(servoID);
+        launchAngleServo.setDirection(Servo.Direction.REVERSE);
         camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1", telemetry);
         flyWheel = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
         this.objectXPosition = objectXPosition;
@@ -49,9 +54,9 @@ public class DynamicAngleComponent {
     //Gear ratio for servo gear vs launcher gear
     //setPos (Gr*degrees/ppd)/180
     public void turnServoTo(double degrees) {
-        //Gear ratio = 2, launch angle is set to 45 degrees when servo is at neutral position.
+        //Gear ratio = 2, launch angle is set to 60 degrees when servo is at neutral position.
         //Servo constrained [0, 90], launch angle constrained [45, 90]
-        launchAngleServo.setPosition((2*(degrees-45))/180);
+        launchAngleServo.setPosition((2*(degrees-60))/300);
     }
 
     public void resetServo(){
@@ -64,7 +69,7 @@ public class DynamicAngleComponent {
         Assuming turret faces the goal at all time, therefore 3D kinematics may be neglected.
         2 Modes of launching artifacts - adjusting speed or adjusting angle (adjusting speed comes in priority)
 
-        Launch mode is switched to dynamic angle if / when it is unreachable at 45 degrees
+        Launch mode is switched to dynamic angle if / when it is unreachable at 60 degrees
 
 
          */
@@ -80,12 +85,12 @@ public class DynamicAngleComponent {
             double distance = Math.sqrt(Math.pow(objectXPosition - robotXPosition, 2) + Math.pow(objectYPosition - robotYPosition, 2));
             
             //We let y = objectHeight and x = distance from robot
-            double denom = distance * Math.tan(Math.toRadians(45)) - objectHeight;
+            double denom = distance * Math.tan(Math.toRadians(60)) - objectHeight;
             
             //Linear velocity required for artifact to pass through x = distance from robot and y = object height
-            double v = Math.sqrt((386.09 * Math.pow(distance, 2)) / (2.0 * Math.cos(Math.toRadians(45)) * Math.cos(Math.toRadians(45)) * denom));
+            double v = Math.sqrt((386.09 * Math.pow(distance, 2)) / (2.0 * Math.cos(Math.toRadians(60)) * Math.cos(Math.toRadians(60)) * denom));
 
-            //Denominator less than or equal 0 will yield undefined / imaginary solution. Meaning no velocity will allow artifact to reach target at 45 degrees.
+            //Denominator less than or equal 0 will yield undefined / imaginary solution. Meaning no velocity will allow artifact to reach target at 60 degrees.
             if (denom <= 0) {
                 double inside = Math.pow(fixV, 4) - 386.09 * (386.09 * Math.pow(distance, 2) + 2 * objectHeight * Math.pow(fixV, 2));
 
@@ -97,7 +102,7 @@ public class DynamicAngleComponent {
                 turnServoTo(Math.toDegrees(chosen) % 360);
             } else {
 
-                //This ensures launch angle is reset to 45 when the launcher is running in dynamic velocity mode.
+                //This ensures launch angle is reset to 60 when the launcher is running in dynamic velocity mode.
                 resetServo();
 
                 //Linear velocity is converted to angular velocity.
