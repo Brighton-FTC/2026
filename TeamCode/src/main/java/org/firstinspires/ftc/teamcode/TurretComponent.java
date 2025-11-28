@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import android.sax.StartElementListener;
+
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -32,6 +36,7 @@ public class TurretComponent {
 
     private double objectYPosition;
     private Motor turretMotor;
+    private final MultipleTelemetry telemetry;
 
     private AprilTagLocalization camera;
     private Position cameraPosition = new Position(DistanceUnit.INCH,
@@ -52,6 +57,8 @@ public class TurretComponent {
         this.objectXPosition = objectXPosition;
         this.objectYPosition = objectYPosition;
         this.scalingFactor = scalingFactor;
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        this.telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
@@ -99,6 +106,8 @@ public class TurretComponent {
             turretAngle = encoderTicksToAngle(turretMotor.getCurrentPosition());
 
             double toTurn = destinationAngle - (turretAngle + robotAngle);
+            telemetry.addData("To turn :", toTurn);
+            telemetry.update();
             turnTurretBy(((toTurn + 540) % 360) - 180); // take the mod/remainder of toTurn/360
             // to keep the angle in the range of [0,360]
         }

@@ -60,10 +60,13 @@ public class AprilTagTester extends OpMode {
         if (state == 1){
             camera.startStreaming();
             camera.telemetryAprilTag();
+
         } else if (state == 2) {
             camera.startStreaming();
             camera.checkCase();
         }
+
+
         telemetry.update();
     }
 
