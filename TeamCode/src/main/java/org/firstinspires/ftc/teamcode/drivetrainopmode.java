@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 public class drivetrainopmode extends OpMode {
     private Follower follower;
     public static Pose startingPose;
-    private boolean automatedDrive;
+    private boolean automatedDrive = false;
     private Supplier<PathChain> pathChain;
     private TelemetryManager telemetryManager;
     private boolean slowMode = false;
@@ -36,11 +36,6 @@ public class drivetrainopmode extends OpMode {
         follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
         follower.update();
         telemetryManager = PanelsTelemetry.INSTANCE.getTelemetry();
-
-        pathChain = () -> follower.pathBuilder()
-                .addPath(new Path(new BezierLine(follower::getPose, new Pose(45, 98))))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(45), 0.8))
-                .build();
 
     }
 
@@ -68,16 +63,6 @@ public class drivetrainopmode extends OpMode {
                     -gamepad1.right_stick_x * slowModeMultiplier,
                     true
             );
-        }
-
-        if (gamepad1.aWasPressed()) {
-            follower.followPath(pathChain.get());
-            automatedDrive = true;
-        }
-
-        if (automatedDrive && (gamepad1.bWasPressed() || follower.isBusy())) {
-            follower.startTeleopDrive();
-            automatedDrive = false;
         }
 
         if (gamepad1.rightBumperWasPressed()) {
