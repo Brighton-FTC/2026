@@ -16,7 +16,6 @@ public class FlyWheelMotorComponent {
     public double kD;
     public double kS;
     public double kV;
-    public double kA;
 
 
 
@@ -24,7 +23,7 @@ public class FlyWheelMotorComponent {
         motor = new Motor(hardwareMap, motorID);
         motor.setRunMode(Motor.RunMode.VelocityControl);
         motor.setVeloCoefficients(kP, kI, kD);
-        motor.setFeedforwardCoefficients(kS, kV, kA);
+        motor.setFeedforwardCoefficients(kS, kV);
 
     }
 
