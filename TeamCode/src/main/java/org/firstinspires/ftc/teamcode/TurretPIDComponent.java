@@ -93,7 +93,6 @@ public class TurretPIDComponent {
         double TARGET_TICK_VALUE = angleToEncoderTicks(degrees) + currentPosition;
         controller.setSetPoint(TARGET_TICK_VALUE);
         double power = controller.calculate(currentPosition);
-        turretMotor.setRunMode(Motor.RunMode.PositionControl);
 
         turretMotor.set(power);
     }
