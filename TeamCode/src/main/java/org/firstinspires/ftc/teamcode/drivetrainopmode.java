@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 @TeleOp
 public class drivetrainopmode extends OpMode {
     private Follower follower;
-    public static Pose startingPose;
+    public static Pose startingPose = new Pose(0, 0, Math.toRadians(0));
     private boolean automatedDrive = false;
     private Supplier<PathChain> pathChain;
     private TelemetryManager telemetryManager;
