@@ -45,10 +45,10 @@ public class Team1Drivetrain extends LinearOpMode {
 
             if (fieldCentric) {
                 double yaw = imu.getRobotYawPitchRollAngles().getYaw();
-                drive.driveFieldCentric(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, yaw, true);
+                drive.driveFieldCentric((gamepad1.left_stick_y/2), -(gamepad1.left_stick_x/2), (gamepad1.right_stick_x/2), yaw, true);
                 telemetry.addLine("Field Centric");
             } else {
-                drive.driveRobotCentric(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, true);
+                drive.driveRobotCentric((gamepad1.left_stick_y/2), -(gamepad1.left_stick_x/2), (gamepad1.right_stick_x/2), true);
                 telemetry.addLine("Robot Centric");
             }
 
