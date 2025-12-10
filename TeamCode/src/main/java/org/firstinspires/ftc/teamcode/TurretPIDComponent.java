@@ -6,6 +6,7 @@ import android.sax.StartElementListener;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -22,11 +23,13 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
 @Config
-public class TurretComponent {
+public class TurretPIDComponent {
 
     private Follower follower;
 
-    public double kP = 0.05;
+    public double kP = 0.0015;
+    public double kI = 0.05;
+    public double kD = 0.05;
 
     private double scalingFactor;
 
@@ -44,9 +47,9 @@ public class TurretComponent {
     private YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES,
             0, -90, 0, 0);
 
+    private final PIDController controller = new PIDController(0, 0, 0);
 
-
-    public TurretComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Pose startingPose, Telemetry telemetry) {
+    public TurretPIDComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Pose startingPose, Telemetry telemetry) {
         turretMotor = new Motor(hardwareMap, motorID);
         turretMotor.resetEncoder();
         //remove if
@@ -84,21 +87,20 @@ public class TurretComponent {
     }
 
     public void turnTurretBy(double degrees) {
+        controller.setPID(kP, kI, kD);
+
         double currentPosition = turretMotor.getCurrentPosition();
         double TARGET_TICK_VALUE = angleToEncoderTicks(degrees) + currentPosition;
-        turretMotor.setRunMode(Motor.RunMode.PositionControl);
-        turretMotor.setPositionCoefficient(kP);
+        controller.setSetPoint(TARGET_TICK_VALUE);
+        double power = controller.calculate(currentPosition);
 
-        turretMotor.setPositionTolerance(20);
-
-        turretMotor.setTargetPosition((int) TARGET_TICK_VALUE);
-        turretMotor.set(1);
+        turretMotor.set(power);
     }
 
     public void aimToObject() {
         double robotYPosition = camera.returnYPosition();
         double robotXPosition = camera.returnXPosition();
-        if (robotXPosition != 0 && robotYPosition != 0) {
+        if (robotXPosition != 1000 && robotYPosition != 1000) {
             double robotAngle = Math.toDegrees(follower.getHeading());
             double destinationAngle = Math.toDegrees(Math.atan2(objectYPosition - robotYPosition,
                     objectXPosition - robotXPosition));
