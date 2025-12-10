@@ -87,19 +87,25 @@ public class AprilTagLocalization {
 
     public double returnYPosition() {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-        double posY = 0;
+        double posY = 1000;
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null && detection.metadata.id == 20 || detection.metadata != null && detection.metadata.id == 24){
                 posY = detection.robotPose.getPosition().y;}
+            else{
+                posY = 1000;
+            }
         }
         return posY;
     }
     public double returnXPosition() {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-        double posX = 0;
+        double posX = 1000;
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null && detection.metadata.id == 20 || detection.metadata != null && detection.metadata.id == 24){
                 posX = detection.robotPose.getPosition().x;
+            }
+            else{
+                posX = 1000;
             }
         }
         return posX;
@@ -129,11 +135,11 @@ public class AprilTagLocalization {
                 // Only use tags that don't have Obelisk in them
 
                 telemetry.addData("PositionX",
-                            detection.robotPose.getPosition().x);
+                        detection.robotPose.getPosition().x);
                 telemetry.addData("PosY",
-                            detection.robotPose.getPosition().y);
+                        detection.robotPose.getPosition().y);
                 telemetry.addData("PosZ",
-                            detection.robotPose.getPosition().z);
+                        detection.robotPose.getPosition().z);
                 telemetry.addData("Pitch", detection.robotPose.getOrientation().getPitch(AngleUnit.DEGREES));
                 telemetry.addData("Roll", detection.robotPose.getOrientation().getRoll(AngleUnit.DEGREES));
                 telemetry.addData("Yaw", detection.robotPose.getOrientation().getYaw(AngleUnit.DEGREES));
@@ -185,3 +191,4 @@ public class AprilTagLocalization {
 
     }
 }
+
