@@ -100,7 +100,7 @@ public class TurretPIDComponent {
     public void aimToObject() {
         double robotYPosition = camera.returnYPosition();
         double robotXPosition = camera.returnXPosition();
-        if (robotXPosition != 0 && robotYPosition != 0) {
+        if (robotXPosition != 1000 && robotYPosition != 1000) {
             double robotAngle = Math.toDegrees(follower.getHeading());
             double destinationAngle = Math.toDegrees(Math.atan2(objectYPosition - robotYPosition,
                     objectXPosition - robotXPosition));
