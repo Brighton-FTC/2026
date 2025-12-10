@@ -13,6 +13,7 @@ public class Team1Drivetrain extends LinearOpMode {
     @Override
     public void runOpMode() {
         boolean fieldCentric = false;
+        double maxPower = 0.8;
 
         Motor[] motors = {
                 new Motor(hardwareMap, "front_left_drive"),
@@ -28,7 +29,7 @@ public class Team1Drivetrain extends LinearOpMode {
         imu.initialize(new IMU.Parameters(
                 new RevHubOrientationOnRobot(
                         RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                        RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
+                        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
                 )
         ));
         imu.resetYaw();
@@ -45,10 +46,10 @@ public class Team1Drivetrain extends LinearOpMode {
 
             if (fieldCentric) {
                 double yaw = imu.getRobotYawPitchRollAngles().getYaw();
-                drive.driveFieldCentric((gamepad1.left_stick_y/2), -(gamepad1.left_stick_x/2), (gamepad1.right_stick_x/2), yaw, true);
+                drive.driveFieldCentric((gamepad1.left_stick_y*maxPower), -(gamepad1.left_stick_x*maxPower), (gamepad1.right_stick_x*maxPower), yaw, true);
                 telemetry.addLine("Field Centric");
             } else {
-                drive.driveRobotCentric((gamepad1.left_stick_y/2), -(gamepad1.left_stick_x/2), (gamepad1.right_stick_x/2), true);
+                drive.driveRobotCentric((gamepad1.left_stick_y*maxPower), -(gamepad1.left_stick_x*maxPower), (gamepad1.right_stick_x*maxPower), true);
                 telemetry.addLine("Robot Centric");
             }
 
