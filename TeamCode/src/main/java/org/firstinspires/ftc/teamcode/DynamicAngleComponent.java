@@ -31,7 +31,8 @@ public class DynamicAngleComponent {
 
     private double flyWheelRadius;
 
-    private FlyWheelMotorComponent flyWheel;
+    //private FlyWheelMotorComponent flyWheel;
+    private FlyWheelMotorPIDComponent flyWheel;
 
     private AprilTagLocalization camera;
     private Position cameraPosition = new Position(DistanceUnit.INCH,
@@ -44,7 +45,8 @@ public class DynamicAngleComponent {
         launchAngleServo = hardwareMap.servo.get(servoID);
         launchAngleServo.setDirection(Servo.Direction.REVERSE);
         camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1", telemetry);
-        flyWheel = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
+        //flyWheel = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
+        flyWheel = new FlyWheelMotorPIDComponent(hardwareMap, "flyWheelMotor");
         this.objectXPosition = objectXPosition;
         this.objectYPosition = objectYPosition;
         this.objectHeight = objectHeight;

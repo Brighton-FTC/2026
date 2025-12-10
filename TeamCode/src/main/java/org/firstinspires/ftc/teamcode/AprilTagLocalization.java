@@ -87,19 +87,25 @@ public class AprilTagLocalization {
 
     public double returnYPosition() {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-        double posY = 0;
+        double posY = 1000;
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null && detection.metadata.id == 20 || detection.metadata != null && detection.metadata.id == 24){
                 posY = detection.robotPose.getPosition().y;}
+            else{
+                posY = 1000;
+            }
         }
         return posY;
     }
     public double returnXPosition() {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-        double posX = 0;
+        double posX = 1000;
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null && detection.metadata.id == 20 || detection.metadata != null && detection.metadata.id == 24){
                 posX = detection.robotPose.getPosition().x;
+            }
+            else{
+                posX = 1000;
             }
         }
         return posX;
