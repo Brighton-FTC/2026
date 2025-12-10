@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -8,24 +10,15 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-public class MecanumDrivePractice {
-    private DcMotor frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor;
+public class MecanumDrivePractice extends LinearOpMode{
+    private Motor frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor;
     private IMU imu;
 
     public void init(HardwareMap hwMap) {
-        frontLeftMotor = hwMap.get(DcMotor.class, "lf");
-        backLeftMotor = hwMap.get(DcMotor.class, "lr");
-        frontRightMotor = hwMap.get(DcMotor.class, "rf");
-        backRightMotor = hwMap.get(DcMotor.class, "rr");
-
-        //test if the this is reversed or not
-        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeftMotor = new Motor(hwMap, "lf");
+        backLeftMotor = new Motor(hwMap, "lr");
+        frontRightMotor = new Motor(hwMap, "rf");
+        backRightMotor = new Motor(hwMap, "rr");
 
         imu = hwMap.get(IMU.class, "imu");
 
@@ -51,10 +44,10 @@ public class MecanumDrivePractice {
         maxPower = Math.max(maxPower, Math.abs(frontRightPower));
         maxPower = Math.max(maxPower, Math.abs(backRightPower));
 
-        frontLeftMotor.setPower(maxSpeed * (frontLeftPower / maxPower));
-        backLeftMotor.setPower(maxSpeed * (backLeftPower / maxPower));
-        frontRightMotor.setPower(maxSpeed * (frontRightPower / maxPower));
-        backRightMotor.setPower(maxSpeed * (backRightPower / maxPower));
+        frontLeftMotor.set(maxSpeed * (frontLeftPower / maxPower));
+        backLeftMotor.set(maxSpeed * (backLeftPower / maxPower));
+        frontRightMotor.set(maxSpeed * (frontRightPower / maxPower));
+        backRightMotor.set(maxSpeed * (backRightPower / maxPower));
     }
 
     public void driveFieldRelative(double forward, double strafe, double rotate){
@@ -68,6 +61,11 @@ public class MecanumDrivePractice {
         double newStrafe = r * Math.cos(theta);
 
         this.drive(newForward,newStrafe,rotate);
+    }
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+
     }
 }
 
