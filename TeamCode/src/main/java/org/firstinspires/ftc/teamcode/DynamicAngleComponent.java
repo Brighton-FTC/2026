@@ -31,7 +31,8 @@ public class DynamicAngleComponent {
 
     private double flyWheelRadius;
 
-    private FlyWheelMotorComponent flyWheel;
+    //private FlyWheelMotorComponent flyWheel;
+    private FlyWheelMotorPIDComponent flyWheel;
 
     private AprilTagLocalization camera;
     private Position cameraPosition = new Position(DistanceUnit.INCH,
@@ -44,7 +45,8 @@ public class DynamicAngleComponent {
         launchAngleServo = hardwareMap.servo.get(servoID);
         launchAngleServo.setDirection(Servo.Direction.REVERSE);
         camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1", telemetry);
-        flyWheel = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
+        //flyWheel = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
+        flyWheel = new FlyWheelMotorPIDComponent(hardwareMap, "flyWheelMotor");
         this.objectXPosition = objectXPosition;
         this.objectYPosition = objectYPosition;
         this.objectHeight = objectHeight;
@@ -83,10 +85,10 @@ public class DynamicAngleComponent {
 
 
             double distance = Math.sqrt(Math.pow(objectXPosition - robotXPosition, 2) + Math.pow(objectYPosition - robotYPosition, 2));
-            
+
             //We let y = objectHeight and x = distance from robot
             double denom = distance * Math.tan(Math.toRadians(60)) - objectHeight;
-            
+
             //Linear velocity required for artifact to pass through x = distance from robot and y = object height
             double v = Math.sqrt((386.09 * Math.pow(distance, 2)) / (2.0 * Math.cos(Math.toRadians(60)) * Math.cos(Math.toRadians(60)) * denom));
 
@@ -121,3 +123,4 @@ public class DynamicAngleComponent {
     }
 
 }
+
