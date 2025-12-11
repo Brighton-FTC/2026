@@ -12,7 +12,7 @@ public class FlyWheelMotorTester extends OpMode {
 
     @Override
     public void init() {
-        flyWheel = new FlyWheelMotorComponent(hardwareMap, "flywheel");
+        flyWheel = new FlyWheelMotorComponent(hardwareMap, "turretMotor");
         gamepad = new GamepadEx(gamepad1);
     }
 
