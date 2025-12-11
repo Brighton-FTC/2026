@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -40,7 +41,7 @@ public class Team1Drivetrain extends LinearOpMode {
 
         while (!isStopRequested()) {
             gamepad.readButtons();
-            if (gamepad.wasJustPressed(PSButtons.TRIANGLE)) {
+            if (gamepad.wasJustPressed(GamepadKeys.Button.X)) {
                 fieldCentric = !fieldCentric;
             }
 
