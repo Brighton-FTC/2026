@@ -20,7 +20,7 @@ public class FlyWheelMotorTester extends OpMode {
     public void loop() {
         gamepad.readButtons();
         if (gamepad.wasJustPressed(PSButtons.CIRCLE)){
-            flyWheel.runMotorAt((double) 1000 / 6000);
+            flyWheel.runMotorAt(1);
         } else if (gamepad.wasJustPressed(PSButtons.SQUARE)) {
             flyWheel.stopMotor();
         }
