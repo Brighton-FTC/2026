@@ -48,7 +48,7 @@ public class PIDMotorComponent {
     }
 
     public void VelControlTest2(){
-        motor.set(-1);
+        motor.set(1);
         telemetry.addData("Velocity", motor.getCorrectedVelocity());
     }
 
