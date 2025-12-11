@@ -37,9 +37,9 @@ public class BlueTeleop extends OpMode {
     private TurretPIDComponent turret;
 
     private ServoKickComponent kicker1;
-    private ServoKickComponent kicker2;
+    //private ServoKickComponent kicker2;
 
-    private ServoKickComponent kicker3;
+    //private ServoKickComponent kicker3;
 
     private DynamicAngleComponent launcher;
 
@@ -55,8 +55,8 @@ public class BlueTeleop extends OpMode {
         follower.update();
         telemetryManager = PanelsTelemetry.INSTANCE.getTelemetry();
         kicker1 = new ServoKickComponent(hardwareMap, "kicker1");
-        kicker2 = new ServoKickComponent(hardwareMap, "kicker2");
-        kicker3 = new ServoKickComponent(hardwareMap, "kicker3");
+        //kicker2 = new ServoKickComponent(hardwareMap, "kicker2");
+        //kicker3 = new ServoKickComponent(hardwareMap, "kicker3");
 
         turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, -72, 72, startingPose, telemetry);
 
@@ -124,17 +124,17 @@ public class BlueTeleop extends OpMode {
                 kicker1.down();
             }
             if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)){
-                kicker2.up();
-                kicker2.down();
+                //kicker2.up();
+                //kicker2.down();
             }
             if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)){
-                kicker3.up();
-                kicker3.down();
+                //kicker3.up();
+                //kicker3.down();
             }
             if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)){
                 kicker1.down();
-                kicker2.down();
-                kicker3.down();
+                //kicker2.down();
+//                kicker3.down();
             }
 
         }
