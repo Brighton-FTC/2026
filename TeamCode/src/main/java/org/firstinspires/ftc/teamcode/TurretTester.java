@@ -13,19 +13,24 @@ public class TurretTester extends OpMode {
 
     private final Pose startingPose = new Pose(0, 0, Math.toRadians(0));
 
+    public boolean run = false;
+
 
 
     @Override
     public void init(){
         gamepad = new GamepadEx(gamepad1);
-        turret = new TurretComponent(hardwareMap, "turretMotor", 0.05, -72, 72, startingPose, telemetry, 20);
+        //Scaling factor == 3.214 in degrees; 0.0561 in radians. (360*0.25/28)
+        turret = new TurretComponent(hardwareMap, "turretMotor", 0.167, -72, 72, startingPose, telemetry);
     }
 
     @Override
     public void loop(){
         gamepad.readButtons();
-
         if (gamepad.wasJustPressed(PSButtons.CIRCLE)){
+            run = true;
+        }
+        if (run){
             turret.aimToObject();
         }
     }
