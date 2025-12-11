@@ -21,9 +21,6 @@ public class FlyWheelMotorComponent {
 
     public FlyWheelMotorComponent(HardwareMap hardwareMap, String motorID){
         motor = new Motor(hardwareMap, motorID);
-        motor.setRunMode(Motor.RunMode.VelocityControl);
-        motor.setVeloCoefficients(kP, kI, kD);
-        motor.setFeedforwardCoefficients(kS, kV);
 
     }
 

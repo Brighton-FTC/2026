@@ -41,7 +41,7 @@ public class RedTeleop extends OpMode {
 
     //private ServoKickComponent kicker3;
 
-    private DynamicAngleComponent launcher;
+    private FlyWheelMotorComponent launcher;
 
     private IntakeMotorComponent intake;
     private TelemetryManager telemetryManager;
@@ -60,7 +60,7 @@ public class RedTeleop extends OpMode {
 
         turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, 72, 72, startingPose, telemetry);
 
-        launcher = new DynamicAngleComponent(hardwareMap, "launcherServo", 72, 72, 42, 2.83, telemetry);
+        launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
 
         intake = new IntakeMotorComponent(hardwareMap, "intakeMotor");
         
@@ -104,11 +104,11 @@ public class RedTeleop extends OpMode {
                 shooting = true;
             }
             else if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&& shooting){
-                launcher.stop();
+                launcher.stopMotor();
                 shooting = false;
             }
             if (shooting){
-                launcher.dynamicMotorPower();
+                launcher.runMotorAt(1);
             }
 
             if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&&!intaking){
