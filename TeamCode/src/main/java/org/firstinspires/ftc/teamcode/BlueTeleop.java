@@ -101,22 +101,22 @@ public class BlueTeleop extends OpMode {
             }
 
             if (gamepadEx1.wasJustPressed(PSButtons.CROSS) && !shooting) {
+                launcher.runMotorAt(1);
                 shooting = true;
             }
             else if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&& shooting){
                 launcher.stopMotor();
                 shooting = false;
             }
-            if (shooting){
-                launcher.runMotorAt(1);
-            }
+
+
             if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&&!intaking){
-                intaking = true;
                 intake.startMotor();
+                intaking = true;
             }
             else if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&&intaking){
+                intake.stopMotor();
                 intaking = false;
-                intake.startMotor();
             }
 
             if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_UP)){

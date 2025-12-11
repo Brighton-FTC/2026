@@ -101,14 +101,12 @@ public class RedTeleop extends OpMode {
             }
 
             if (gamepadEx1.wasJustPressed(PSButtons.CROSS) && !shooting) {
+                launcher.runMotorAt(1);
                 shooting = true;
             }
             else if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&& shooting){
                 launcher.stopMotor();
                 shooting = false;
-            }
-            if (shooting){
-                launcher.runMotorAt(1);
             }
 
             if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&&!intaking){
@@ -117,7 +115,7 @@ public class RedTeleop extends OpMode {
             }
             else if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&&intaking){
                 intaking = false;
-                intake.startMotor();
+                intake.stopMotor();
             }
 
             if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
