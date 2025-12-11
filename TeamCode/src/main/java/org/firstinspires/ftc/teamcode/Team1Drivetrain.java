@@ -13,7 +13,7 @@ public class Team1Drivetrain extends LinearOpMode {
     @Override
     public void runOpMode() {
         boolean fieldCentric = false;
-        double maxPower = 0.8;
+        double maxPower = 0.9;
 
         Motor[] motors = {
                 new Motor(hardwareMap, "front_left_drive"),
