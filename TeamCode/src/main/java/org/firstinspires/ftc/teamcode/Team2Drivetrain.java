@@ -21,7 +21,8 @@ public class Team2Drivetrain extends LinearOpMode {
         };
 
         motors[0].setInverted(true);
-        motors[3].setInverted(true);
+        motors[1].setInverted(true);
+        motors[2].setInverted(true);
 
 
         MecanumDrive drive = new MecanumDrive(motors[0], motors[1], motors[2], motors[3]);
