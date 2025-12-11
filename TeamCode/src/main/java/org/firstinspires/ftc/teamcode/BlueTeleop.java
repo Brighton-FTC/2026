@@ -35,6 +35,7 @@ public class BlueTeleop extends OpMode {
     private Supplier<PathChain> pathChain;
 
     //private TurretPIDComponent turret;
+    private FlyWheelMotorComponent turret;
 
     private ServoKickComponent kicker1;
     //private ServoKickComponent kicker2;
@@ -60,6 +61,7 @@ public class BlueTeleop extends OpMode {
 
         //turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, -72, 72, startingPose, telemetry);
 
+        turret = new FlyWheelMotorComponent(hardwareMap, "turretMotor");
         launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
 
         intake = new IntakeMotorComponent(hardwareMap, "intakeMotor");
@@ -78,20 +80,21 @@ public class BlueTeleop extends OpMode {
     @Override
     public void loop() {
         follower.update();
+        gamepadEx1.readButtons();
         telemetryManager.update();
         //turret.aimToObject();
 
         if (!automatedDrive) {
             if (!slowMode) follower.setTeleOpDrive(
                     -gamepadEx1.getLeftY(),
-                    -gamepadEx1.getLeftX(),
+                    gamepadEx1.getLeftX(),
                     -gamepadEx1.getRightX(),
                     true
             );
 
             else follower.setTeleOpDrive(
                     -gamepadEx1.getLeftY() * slowModeMultiplier,
-                    -gamepadEx1.getLeftX() * slowModeMultiplier,
+                    gamepadEx1.getLeftX() * slowModeMultiplier,
                     -gamepadEx1.getRightX() * slowModeMultiplier,
                     true
             );
@@ -101,7 +104,7 @@ public class BlueTeleop extends OpMode {
             }
 
             if (gamepadEx1.wasJustPressed(PSButtons.CROSS) && !shooting) {
-                launcher.runMotorAt(1);
+                launcher.runMotorAt(-1);
                 shooting = true;
             }
             else if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&& shooting){
@@ -136,6 +139,7 @@ public class BlueTeleop extends OpMode {
                 //kicker2.down();
 //                kicker3.down();
             }
+            turret.runMotorAt(gamepadEx2.getLeftY());
 
         }
 
