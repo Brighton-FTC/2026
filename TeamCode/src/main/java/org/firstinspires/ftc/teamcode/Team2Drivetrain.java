@@ -55,7 +55,7 @@ public class Team2Drivetrain extends LinearOpMode {
                 motors[3].setInverted(!motors[3].getInverted());
             }
 
-            drive.driveRobotCentric(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, true);
+            drive.driveRobotCentric(-gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x, true);
             telemetry.addLine("Robot Centric");
 
             telemetry.addData("FL", motors[0].getInverted());
