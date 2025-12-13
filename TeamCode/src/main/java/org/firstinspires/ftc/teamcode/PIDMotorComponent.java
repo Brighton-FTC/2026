@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -15,20 +16,23 @@ public class PIDMotorComponent {
     private MultipleTelemetry telemetry;
 
 
-    public double kP; // Corrects based on current error
-    public double kI; //Corrects based on accumulated error
-    public double kD; // Corrects based on rate of error change
+    public double kP = 0.001; // Corrects based on current error
+    public double kI = 0.05; //Corrects based on accumulated error
+    public double kD = 0.05; // Corrects based on rate of error change
     public double kS; // Overcomes static friction
     public double kV; // Provides voltage proportional to desired velocity
     public double kA; // Compensates for acceleration/inertia demands
 
-    public double scalingFactor;
+    public double scalingFactor = 0.167;
+
+    public PIDController pid = new PIDController(kP, kI, kD);
     public PIDMotorComponent(HardwareMap hardwareMap, String motorID, Telemetry telemetry){
         motor = new Motor(hardwareMap, motorID);
         motor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         FtcDashboard dashboard = FtcDashboard.getInstance();
         this.telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
         motor.resetEncoder();
+
     }
 
     public void startVelControlTest(){
@@ -59,12 +63,13 @@ public class PIDMotorComponent {
 
     public void startPosControlTest(){
         telemetry.update();
-        motor.setRunMode(Motor.RunMode.PositionControl);
-        motor.setPositionCoefficient(kP);
+        pid.setSetPoint((motor.getCurrentPosition() + angleToEncoderTicks(90)));
 
-        motor.setDistancePerPulse(20);
-        motor.setTargetPosition(motor.getCurrentPosition() + angleToEncoderTicks(180));
-        motor.set(1);
+        pid.calculate(pid.getSetPoint());
+        double output = pid.calculate(motor.getCurrentPosition());
+
+        motor.setDistancePerPulse(4*scalingFactor);
+        motor.set(output);
         telemetry.addData("Position", motor.getCurrentPosition());
     }
 
