@@ -38,6 +38,10 @@ public class FlyWheelMotorPIDComponent {
 
     }
 
+    public double getVel(){
+        return motor.getCorrectedVelocity();
+    }
+
     public void stopMotor(){
         motor.stopMotor();
     }
