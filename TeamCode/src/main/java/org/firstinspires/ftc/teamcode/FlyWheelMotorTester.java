@@ -7,12 +7,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp
 public class FlyWheelMotorTester extends OpMode {
 
-    private FlyWheelMotorComponent flyWheel;
+    private FlyWheelMotorPIDComponent flyWheel;
     private GamepadEx gamepad;
 
     @Override
     public void init() {
-        flyWheel = new FlyWheelMotorComponent(hardwareMap, "flywheel");
+        flyWheel = new FlyWheelMotorPIDComponent(hardwareMap, "turretMotor");
         gamepad = new GamepadEx(gamepad1);
     }
 
@@ -20,9 +20,14 @@ public class FlyWheelMotorTester extends OpMode {
     public void loop() {
         gamepad.readButtons();
         if (gamepad.wasJustPressed(PSButtons.CIRCLE)){
-            flyWheel.runMotorAt((double) 1000 / 6000);
+            flyWheel.runMotorAt(1);
         } else if (gamepad.wasJustPressed(PSButtons.SQUARE)) {
             flyWheel.stopMotor();
         }
+        if (gamepad.wasJustPressed(PSButtons.CROSS)){
+            flyWheel.runMotorAt(0.5);
+        }
+        telemetry.addData("vel", flyWheel.getVel());
+        telemetry.update();
     }
 }
