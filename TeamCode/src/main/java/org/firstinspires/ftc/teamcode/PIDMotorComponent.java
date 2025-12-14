@@ -73,4 +73,8 @@ public class PIDMotorComponent {
         telemetry.addData("Position", motor.getCurrentPosition());
     }
 
+    public double getPos(){
+        return motor.getCurrentPosition();
+    }
+
 }

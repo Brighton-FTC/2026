@@ -19,7 +19,6 @@ public class PIDMotorTester extends OpMode {
 
     @Override
     public void loop() {
-        telemetry.update();
         gamepad.readButtons();
         if (gamepad.wasJustPressed(PSButtons.CIRCLE)){
             motor.startVelControlTest();
@@ -33,5 +32,7 @@ public class PIDMotorTester extends OpMode {
         else if (gamepad.wasJustPressed(PSButtons.SQUARE)){
             motor.startPosControlTest();
         }
+        telemetry.addData("Pos,", motor.getPos());
+        telemetry.update();
     }
 }
