@@ -50,7 +50,7 @@ public class TurretPIDComponent {
     private final PIDController controller = new PIDController(0, 0, 0);
 
     public TurretPIDComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Pose startingPose, Telemetry telemetry) {
-        turretMotor = new Motor(hardwareMap, motorID);
+        turretMotor = new Motor(hardwareMap, motorID, Motor.GoBILDA.RPM_312);
         turretMotor.resetEncoder();
         //remove if
         turretMotor.setDistancePerPulse(4*scalingFactor); // 360/537.7 = 4*0.167
