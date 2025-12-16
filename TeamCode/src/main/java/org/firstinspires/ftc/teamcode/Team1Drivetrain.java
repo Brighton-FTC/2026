@@ -9,12 +9,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 @TeleOp(name = "Eason's Team Drivetrain", group = "team1")
 public class Team1Drivetrain extends LinearOpMode {
     @Override
     public void runOpMode() {
         boolean fieldCentric = false;
-        double maxPower = 0.9;
+        double maxPower = 1;
 
         Motor[] motors = {
                 new Motor(hardwareMap, "front_left_drive"),
@@ -41,16 +43,16 @@ public class Team1Drivetrain extends LinearOpMode {
 
         while (!isStopRequested()) {
             gamepad.readButtons();
-            if (gamepad.wasJustPressed(GamepadKeys.Button.X)) {
+            if (gamepad.wasJustPressed(PSButtons.TRIANGLE)) {
                 fieldCentric = !fieldCentric;
             }
 
             if (fieldCentric) {
-                double yaw = imu.getRobotYawPitchRollAngles().getYaw();
-                drive.driveFieldCentric((gamepad1.left_stick_y*maxPower), -(gamepad1.left_stick_x*maxPower), (gamepad1.right_stick_x*maxPower), yaw, true);
+                double yaw = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+                drive.driveFieldCentric((gamepad1.left_stick_y*maxPower), -(gamepad1.left_stick_x*maxPower), -(gamepad1.right_stick_x*maxPower), yaw, true);
                 telemetry.addLine("Field Centric");
             } else {
-                drive.driveRobotCentric((gamepad1.left_stick_y*maxPower), -(gamepad1.left_stick_x*maxPower), (gamepad1.right_stick_x*maxPower), true);
+                drive.driveRobotCentric((gamepad1.left_stick_y*maxPower), -(gamepad1.left_stick_x*maxPower), -(gamepad1.right_stick_x*maxPower), true);
                 telemetry.addLine("Robot Centric");
             }
 
