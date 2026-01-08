@@ -11,17 +11,26 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+enum Ball {
+    GREEN,
+    PURPLE,
+    EMPTY
+}
+
 public class IndexerComponent {
-    public boolean[] targetColours = {true, true, false};
-    public boolean[] colours = {false, false, false};
-    public boolean[] used = {false, false, false};
+    //////////////////// BALLS ////////////////////
+    // Array representing the colours of current balls in storage
+    public Ball[] colours = {Ball.EMPTY, Ball.EMPTY, Ball.EMPTY};
 
-    public int currentBall = 0;
 
+    /////////////////// HARDWARE ///////////////////
+    // Array holding the servos
     public Servo[] servos = {null, null, null};
+    // Array holding the colour sensors
     public ColorSensor[] sensors = {null, null, null};
 
-    public static final int servoAngle = 100;
+    /////////////////// CONSTANTS ///////////////////
+    public static final float servoAngle = 0.5f;
 
     public IndexerComponent() {
         servos[0] = hardwareMap.servo.get("indexerservo1");
@@ -34,7 +43,6 @@ public class IndexerComponent {
     }
 
     public void update() {
-
     }
 
     public void sense() {
@@ -42,26 +50,42 @@ public class IndexerComponent {
             int rb = (sensors[i].red()+sensors[i].blue())/2;
             int g = (sensors[i].green());
             if ((sensors[i].blue()+sensors[i].red()+sensors[i].green())/3>50) {
-                used[i] = false;
                 if (rb > g) {
                     // Purple
-                    colours[i] = true;
+                    colours[i] = Ball.PURPLE;
                 }
                 {
                     // Green
-                    colours[i] = false;
+                    colours[i] = Ball.GREEN;
                 }
             } else {
-                used[i] = true;
+                colours[i] = Ball.EMPTY;
             }
         }
     }
 
-    public void fire() {
+    public void fire(Ball targetColour) {
+        // Detect the balls in storage
         sense();
 
+        // Initialise slot
+        int slot = -1;
 
-        currentBall++;
+        // Loop over all of the slots and find the ones that have the right colour of ball in it.
+        for (int i = 0; i<3; i++) {
+            if (colours[i] == targetColour) {
+                slot = i;
+                break;
+            }
+        }
+
+        servos[slot].setPosition(servoAngle);
+    }
+
+    public void reset() {
+        for (int i = 0; i<3; i++) {
+            servos[i].setPosition(0);
+        }
     }
 
 }

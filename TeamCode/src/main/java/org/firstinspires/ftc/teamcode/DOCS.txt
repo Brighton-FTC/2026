@@ -1,0 +1,24 @@
+# Indexer
+Yanni Papadimitriou
+
+There are two versions of the indexer: 1- and 3- sensor.
+
+## 3 Sensor - Lazy
+The 3 sensor version works by reading every slot, determining if the ball exists, and if so, its colour, then saves it to the 'colours' array. This uses a simple 3-case enum (GREEN, PURPLE, EMPTY).
+Lazy sensing: runs on demand.
+Advantages:
+ - More performant - does not run every 'update()', causing decreased resources utilisation.
+ - More reliable - has a lower chance of failing, mainly through elimination of double readings.
+
+Disadvantages:
+ - More expensive - 3 sensors vs 1.
+
+## 1 Sensor - Active
+The 1 sensor version works by reading a colour sensor on the intake every update. When it senses a ball, it populates the first empty slot of the array, and blocks until the ball isn't sensed anymore to prevent multiple readings. It unblocks when no more balls are sensed.
+Active sensing: runs every update.
+Advantages:
+ - Less expensive - 1 sensors vs 3
+
+Disadvantages:
+ - Less performant - runs every update, wasting resources.
+ - Less reliable - higher chance of failing, misread balls are fatal.
