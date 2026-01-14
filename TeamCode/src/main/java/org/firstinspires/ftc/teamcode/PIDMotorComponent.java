@@ -18,7 +18,7 @@ public class PIDMotorComponent {
 
     public double kP = 0.001; // Corrects based on current error
     public double kI = 0.05; //Corrects based on accumulated error
-    public double kD = 0.05; // Corrects based on rate of error change
+    public double kD = 0.00; // Corrects based on rate of error change
     public double kS; // Overcomes static friction
     public double kV; // Provides voltage proportional to desired velocity
     public double kA; // Compensates for acceleration/inertia demands
@@ -62,14 +62,12 @@ public class PIDMotorComponent {
 
 
     public void startPosControlTest(){
-        telemetry.update();
         pid.setSetPoint((motor.getCurrentPosition() + angleToEncoderTicks(90)));
 
         double output = pid.calculate(motor.getCurrentPosition());
 
         motor.setDistancePerPulse(4*scalingFactor);
         motor.set(output);
-        telemetry.addData("Position", motor.getCurrentPosition());
     }
 
     public double getPos(){
