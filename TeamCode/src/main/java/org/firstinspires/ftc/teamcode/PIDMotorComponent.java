@@ -65,7 +65,6 @@ public class PIDMotorComponent {
         telemetry.update();
         pid.setSetPoint((motor.getCurrentPosition() + angleToEncoderTicks(90)));
 
-        pid.calculate(pid.getSetPoint());
         double output = pid.calculate(motor.getCurrentPosition());
 
         motor.setDistancePerPulse(4*scalingFactor);
