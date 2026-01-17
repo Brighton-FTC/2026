@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -24,9 +25,10 @@ public class ServoTester extends OpMode{
         //actually we just need one in this case because we are testing if we can activate servo or not
         //In the real production code we need 3 objects just like this.
         servo1 = new ServoKickComponent(hardwareMap, "servo1");
-
         gamepad = new GamepadEx(gamepad1);
 
+        servo1.down();
+        up = false;
     }
 
     @Override
@@ -45,8 +47,18 @@ public class ServoTester extends OpMode{
             servo1.getServoStatus();
             //here we can output it for debugging with telemetry but i need to read docs for this because its pain in the ass...
         }
+        if(gamepad.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
+            servo1.up();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            servo1.down();
+        }
 
     }
+
 
     //We have 3 servos for 3 artifacts this game.
 
