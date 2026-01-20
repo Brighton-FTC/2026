@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp
 public class TurretTester extends OpMode {
 
-    private TurretComponent turret;
+    private TurretPIDComponent turret;
     private GamepadEx gamepad;
 
     private final Pose startingPose = new Pose(0, 0, Math.toRadians(0));
@@ -21,7 +21,7 @@ public class TurretTester extends OpMode {
     public void init(){
         gamepad = new GamepadEx(gamepad1);
         //Scaling factor == 3.214 in degrees; 0.0561 in radians. (360*0.25/28)
-        turret = new TurretComponent(hardwareMap, "turretMotor", 0.167, -72, 72, startingPose, telemetry);
+        turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, 0, 144, startingPose, telemetry);
     }
 
     @Override
