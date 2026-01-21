@@ -28,8 +28,8 @@ public class TurretPIDComponent {
     private Follower follower;
 
     public double kP = 0.0015;
-    public double kI = 0.05;
-    public double kD = 0.05;
+    public double kI = 0.0;
+    public double kD = 0.0;
 
     private double scalingFactor;
 
@@ -56,7 +56,7 @@ public class TurretPIDComponent {
         turretMotor.setDistancePerPulse(4*scalingFactor); // 360/537.7 = 4*0.167
         turretMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
-        camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1", telemetry);
+//        camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1", telemetry);
         this.objectXPosition = objectXPosition;
         this.objectYPosition = objectYPosition;
         this.scalingFactor = scalingFactor;
