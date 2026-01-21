@@ -11,6 +11,8 @@ public class PIDMotorTester extends OpMode {
     private PIDMotorComponent motor;
     private GamepadEx gamepad;
 
+    private boolean isRunningPos = false;
+
     @Override
     public void init() {
         motor = new PIDMotorComponent(hardwareMap, "turretMotor", telemetry);
@@ -30,6 +32,10 @@ public class PIDMotorTester extends OpMode {
             motor.VelControlTest2();
         }
         else if (gamepad.wasJustPressed(PSButtons.SQUARE)){
+            isRunningPos = true;
+        }
+
+        if (isRunningPos){
             motor.startPosControlTest();
         }
         telemetry.addData("Pos,", motor.getPos());

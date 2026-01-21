@@ -67,8 +67,16 @@ public class PIDMotorComponent {
         double output = pid.calculate(motor.getCurrentPosition());
 
         motor.setDistancePerPulse(4*scalingFactor);
+
         motor.set(output);
+
+        if (pid.getPositionError()<5) {
+            motor.set(0);
+        }
+
     }
+
+
 
     public double getPos(){
         return motor.getCurrentPosition();
