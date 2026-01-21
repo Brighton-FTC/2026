@@ -50,7 +50,7 @@ public class TurretPIDComponent {
     private final PIDController controller = new PIDController(0, 0, 0);
 
     public TurretPIDComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Pose startingPose, Telemetry telemetry) {
-        turretMotor = new Motor(hardwareMap, motorID);
+        turretMotor = new Motor(hardwareMap, motorID, Motor.GoBILDA.RPM_312);
         turretMotor.resetEncoder();
         //remove if
         turretMotor.setDistancePerPulse(4*scalingFactor); // 360/537.7 = 4*0.167
@@ -98,8 +98,10 @@ public class TurretPIDComponent {
     }
 
     public void aimToObject() {
-        double robotYPosition = camera.returnYPosition();
-        double robotXPosition = camera.returnXPosition();
+        //double robotYPosition = camera.returnYPosition();
+        //double robotXPosition = camera.returnXPosition();
+        double robotYPosition = follower.getPose().getY();
+        double robotXPosition = follower.getPose().getX();
         if (robotXPosition != 1000 && robotYPosition != 1000) {
             double robotAngle = Math.toDegrees(follower.getHeading());
             double destinationAngle = Math.toDegrees(Math.atan2(objectYPosition - robotYPosition,
@@ -110,7 +112,15 @@ public class TurretPIDComponent {
             double toTurn = destinationAngle - (turretAngle + robotAngle);
             telemetry.addData("To turn :", toTurn);
             telemetry.update();
-            turnTurretBy(((toTurn + 540) % 360) - 180); // take the mod/remainder of toTurn/360
+            double turnMod = (((toTurn + 540) % 360) - 180);
+
+            if(turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) > 180){
+                turnTurretBy(turnMod-360);
+            } else if (turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) < -180) {
+                turnTurretBy(turnMod+360);
+            } else {
+                turnTurretBy(turnMod);
+            } // take the mod/remainder of toTurn/360
             // to keep the angle in the range of [0,360]
         }
     }
