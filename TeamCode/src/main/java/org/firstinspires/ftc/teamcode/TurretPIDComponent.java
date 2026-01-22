@@ -95,6 +95,9 @@ public class TurretPIDComponent {
         double power = controller.calculate(currentPosition);
 
         turretMotor.set(power);
+        if (controller.getPositionError()<5) {
+            turretMotor.set(0);
+        }
     }
 
     public void aimToObject() {
