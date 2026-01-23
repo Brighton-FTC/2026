@@ -33,7 +33,7 @@ public class TurretTester extends OpMode {
             run = true;
         }
         if (run){
-            turret.aimToObject();
+            turret.aimToObject(12, 132, Math.toRadians(315));
         }
         telemetry.update();
     }

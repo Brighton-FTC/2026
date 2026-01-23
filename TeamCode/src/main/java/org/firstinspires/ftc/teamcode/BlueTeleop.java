@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 @Configurable
 @TeleOp
 public class BlueTeleop extends OpMode {
-    private Follower follower;
+    public Follower follower;
     private boolean shooting = false;
 
     private boolean intaking = false;
@@ -96,7 +96,7 @@ public class BlueTeleop extends OpMode {
             else follower.setTeleOpDrive(
                     -gamepadEx1.getLeftY() * slowModeMultiplier,
                     gamepadEx1.getLeftX() * slowModeMultiplier,
-                    gamepadEx1.getRightX() * slowModeMultiplier,
+                    -gamepadEx1.getRightX() * slowModeMultiplier,
                     false
             );
 
@@ -106,7 +106,7 @@ public class BlueTeleop extends OpMode {
                 aim = false;
             }
             if (aim){
-                turret.aimToObject();
+                turret.aimToObject(follower.getPose().getX(), follower.getPose().getY(), follower.getHeading());
             }
 
             if (gamepadEx1.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
