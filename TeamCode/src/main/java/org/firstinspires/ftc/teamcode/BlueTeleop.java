@@ -28,6 +28,8 @@ public class BlueTeleop extends OpMode {
 
     private boolean intaking = false;
 
+    private boolean aim = false;
+
     private GamepadEx gamepadEx1;
     private GamepadEx gamepadEx2;
     public static Pose startingPose = new Pose(12, 132, Math.toRadians(315));
@@ -82,42 +84,50 @@ public class BlueTeleop extends OpMode {
         follower.update();
         gamepadEx1.readButtons();
         telemetryManager.update();
-        turret.aimToObject();
 
         if (!automatedDrive) {
             if (!slowMode) follower.setTeleOpDrive(
                     -gamepadEx1.getLeftY(),
                     gamepadEx1.getLeftX(),
-                    -gamepadEx1.getRightX(),
-                    true
+                    gamepadEx1.getRightX(),
+                    false
             );
 
             else follower.setTeleOpDrive(
                     -gamepadEx1.getLeftY() * slowModeMultiplier,
                     gamepadEx1.getLeftX() * slowModeMultiplier,
-                    -gamepadEx1.getRightX() * slowModeMultiplier,
-                    true
+                    gamepadEx1.getRightX() * slowModeMultiplier,
+                    false
             );
+
+            if (gamepadEx1.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)&&!aim) {
+                aim = true;
+            }else if (gamepadEx1.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)&&aim){
+                aim = false;
+            }
+            if (aim){
+                turret.aimToObject();
+            }
 
             if (gamepadEx1.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
                 slowMode = !slowMode;
             }
 
-            if (gamepadEx1.wasJustPressed(PSButtons.CROSS) && !shooting) {
-                launcher.runMotorAt(-1);
+            if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE) && !shooting) {
+                launcher.runMotorAt(1);
                 shooting = true;
             }
-            else if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&& shooting){
+            else if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&& shooting){
                 launcher.stopMotor();
                 shooting = false;
             }
 
 
-            if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&&!intaking){
+            if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&!intaking){
                 intake.startMotor();
                 intaking = true;
             }
-            else if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&&intaking){
+            else if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&intaking){
                 intake.stopMotor();
                 intaking = false;
             }

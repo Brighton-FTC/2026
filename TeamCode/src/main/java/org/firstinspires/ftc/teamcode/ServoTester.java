@@ -44,7 +44,7 @@ public class ServoTester extends OpMode{
             up = true;
         }
         if (gamepad.wasJustPressed(PSButtons.CIRCLE)){
-            servo1.getServoStatus();
+            telemetry.addData("pos", servo1.getServoStatus());
             //here we can output it for debugging with telemetry but i need to read docs for this because its pain in the ass...
         }
         if(gamepad.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
