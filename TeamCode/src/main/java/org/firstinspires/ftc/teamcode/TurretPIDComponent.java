@@ -27,9 +27,9 @@ public class TurretPIDComponent {
 
     private Follower follower;
 
-    public double kP = 0.0015;
-    public double kI = 0.05;
-    public double kD = 0.05;
+    public double kP = 0.0017;
+    public double kI = 0.0;
+    public double kD = 0.0;
 
     private double scalingFactor;
 
@@ -50,22 +50,23 @@ public class TurretPIDComponent {
     private final PIDController controller = new PIDController(0, 0, 0);
 
     public TurretPIDComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Pose startingPose, Telemetry telemetry) {
-        turretMotor = new Motor(hardwareMap, motorID, Motor.GoBILDA.RPM_312);
+        turretMotor = new Motor(hardwareMap, motorID);
         turretMotor.resetEncoder();
+        controller.setPID(kP, kI, kD);
         //remove if
         turretMotor.setDistancePerPulse(4*scalingFactor); // 360/537.7 = 4*0.167
         turretMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
-        camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1", telemetry);
+//        camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1", telemetry);
         this.objectXPosition = objectXPosition;
         this.objectYPosition = objectYPosition;
         this.scalingFactor = scalingFactor;
         FtcDashboard dashboard = FtcDashboard.getInstance();
         this.telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
-        follower.update();
+//        follower = Constants.createFollower(hardwareMap);
+//        follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
+//        follower.update();
 
     }
 
@@ -87,25 +88,36 @@ public class TurretPIDComponent {
     }
 
     public void turnTurretBy(double degrees) {
-        controller.setPID(kP, kI, kD);
+
 
         double currentPosition = turretMotor.getCurrentPosition();
-        double TARGET_TICK_VALUE = angleToEncoderTicks(degrees) + currentPosition;
+        double TARGET_TICK_VALUE = angleToEncoderTicks(degrees); // + currentPosition;
         controller.setSetPoint(TARGET_TICK_VALUE);
         double power = controller.calculate(currentPosition);
 
         turretMotor.set(power);
+        if (controller.getPositionError()<5) {
+            turretMotor.set(0);
+        }
     }
 
-    public void aimToObject() {
+    public double getXPos(){
+        return follower.getPose().getX();
+    }
+
+    public double getYPos(){
+        return follower.getPose().getY();
+    }
+
+    public void aimToObject(double robotX, double robotY, double robotHeading) {
         //double robotYPosition = camera.returnYPosition();
         //double robotXPosition = camera.returnXPosition();
-        double robotYPosition = follower.getPose().getY();
-        double robotXPosition = follower.getPose().getX();
-        if (robotXPosition != 1000 && robotYPosition != 1000) {
-            double robotAngle = Math.toDegrees(follower.getHeading());
-            double destinationAngle = Math.toDegrees(Math.atan2(objectYPosition - robotYPosition,
-                    objectXPosition - robotXPosition));
+        //follower.getPose().getY();
+        //follower.getPose().getX();
+        if (robotX != 1000 && robotY != 1000) {
+            double robotAngle = Math.toDegrees(robotHeading);
+            double destinationAngle = Math.toDegrees(Math.atan2(objectYPosition - robotY,
+                    objectXPosition - robotX));
 
             turretAngle = encoderTicksToAngle(turretMotor.getCurrentPosition());
 
@@ -122,6 +134,8 @@ public class TurretPIDComponent {
                 turnTurretBy(turnMod);
             } // take the mod/remainder of toTurn/360
             // to keep the angle in the range of [0,360]
+            turnTurretBy(turnMod);
         }
     }
+
 }
