@@ -59,9 +59,9 @@ public class DynamicAngleComponent {
         this.flyWheelRadius = flyWheelRadius;
         this.efficiency = efficiency;
 
-        follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
-        follower.update();
+//        follower = Constants.createFollower(hardwareMap);
+//        follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
+//        follower.update();
     }
 
     //Gear ratio for servo gear vs launcher gear
@@ -76,7 +76,7 @@ public class DynamicAngleComponent {
         launchAngleServo.setPosition(0);
     }
 
-    public void dynamicMotorPower() {
+    public void dynamicMotorPower(double robotX, double robotY) {
 
         /*
         Assuming turret faces the goal at all time, therefore 3D kinematics may be neglected.
@@ -89,16 +89,13 @@ public class DynamicAngleComponent {
 //        double robotYPosition = camera.returnYPosition();
 //        double robotXPosition = camera.returnXPosition();
 
-        double robotYPosition = follower.getPose().getY();
-        double robotXPosition = follower.getPose().getX();
-
-        if (robotXPosition != 0 && robotYPosition != 0){
+        if (robotX != 0 && robotY != 0){
 
             //Efficiency of the hood must not be neglected.
             double fixV = (2.0 * Math.PI * flyWheelRadius / 60.0) * 6000  * efficiency;
 
 
-            double distance = Math.sqrt(Math.pow(objectXPosition - robotXPosition, 2) + Math.pow(objectYPosition - robotYPosition, 2));
+            double distance = Math.sqrt(Math.pow(objectXPosition - robotX, 2) + Math.pow(objectYPosition - robotY, 2));
 
             //We let y = objectHeight and x = distance from robot
             double denom = distance * Math.tan(Math.toRadians(60)) - objectHeight;
