@@ -52,6 +52,7 @@ public class TurretPIDComponent {
     public TurretPIDComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Pose startingPose, Telemetry telemetry) {
         turretMotor = new Motor(hardwareMap, motorID);
         turretMotor.resetEncoder();
+        controller.setPID(kP, kI, kD);
         //remove if
         turretMotor.setDistancePerPulse(4*scalingFactor); // 360/537.7 = 4*0.167
         turretMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
@@ -87,15 +88,15 @@ public class TurretPIDComponent {
     }
 
     public void turnTurretBy(double degrees) {
-        controller.setPID(kP, kI, kD);
+
 
         double currentPosition = turretMotor.getCurrentPosition();
-        double TARGET_TICK_VALUE = angleToEncoderTicks(degrees) + currentPosition;
+        double TARGET_TICK_VALUE = angleToEncoderTicks(degrees); // + currentPosition;
         controller.setSetPoint(TARGET_TICK_VALUE);
         double power = controller.calculate(currentPosition);
 
         turretMotor.set(power);
-        if (controller.getPositionError()<10) {
+        if (controller.getPositionError()<5) {
             turretMotor.set(0);
         }
     }
@@ -108,32 +109,51 @@ public class TurretPIDComponent {
         return follower.getPose().getY();
     }
 
+//    public void aimToObject() {
+//        //double robotYPosition = camera.returnYPosition();
+//        //double robotXPosition = camera.returnXPosition();
+//        double robotYPosition = follower.getPose().getY();
+//        double robotXPosition = follower.getPose().getX();
+//        if (robotXPosition != 1000 && robotYPosition != 1000) {
+//            double robotAngle = Math.toDegrees(follower.getHeading());
+//            double destinationAngle = Math.toDegrees(Math.atan2(objectYPosition - robotYPosition,
+//                    objectXPosition - robotXPosition));
+//
+//            turretAngle = encoderTicksToAngle(turretMotor.getCurrentPosition());
+//
+//            double toTurn = destinationAngle - (turretAngle + robotAngle);
+//            telemetry.addData("To turn :", toTurn);
+//            telemetry.update();
+//            double turnMod = (((toTurn + 540) % 360) - 180);
+//
+////            if(turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) > 180){
+////                turnTurretBy(turnMod-360);
+////            } else if (turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) < -180) {
+////                turnTurretBy(turnMod+360);
+////            } else {
+////                turnTurretBy(turnMod);
+////            } // take the mod/remainder of toTurn/360
+////            // to keep the angle in the range of [0,360]
+//           turnTurretBy(turnMod);
+//        }
+//    }
     public void aimToObject() {
-        //double robotYPosition = camera.returnYPosition();
-        //double robotXPosition = camera.returnXPosition();
-        double robotYPosition = follower.getPose().getY();
-        double robotXPosition = follower.getPose().getX();
-        if (robotXPosition != 1000 && robotYPosition != 1000) {
+        double robotX = follower.getPose().getX();
+        double robotY = follower.getPose().getY();
+
+        if (robotX != 1000 && robotY != 1000) {
             double robotAngle = Math.toDegrees(follower.getHeading());
-            double destinationAngle = Math.toDegrees(Math.atan2(objectYPosition - robotYPosition,
-                    objectXPosition - robotXPosition));
+            double destinationAngle = Math.toDegrees(Math.atan2(objectYPosition - robotY,
+                    objectXPosition - robotX));
 
-            turretAngle = encoderTicksToAngle(turretMotor.getCurrentPosition());
+            // absolute target turret angle
+            double absoluteTarget = destinationAngle - robotAngle;
 
-            double toTurn = destinationAngle - (turretAngle + robotAngle);
-            telemetry.addData("To turn :", toTurn);
-            telemetry.update();
-            double turnMod = (((toTurn + 540) % 360) - 180);
+            // normalize to [-180, 180]
+            absoluteTarget = ((absoluteTarget + 180) % 360) - 180;
 
-//            if(turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) > 180){
-//                turnTurretBy(turnMod-360);
-//            } else if (turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) < -180) {
-//                turnTurretBy(turnMod+360);
-//            } else {
-//                turnTurretBy(turnMod);
-//            } // take the mod/remainder of toTurn/360
-//            // to keep the angle in the range of [0,360]
-           turnTurretBy(turnMod);
+            turnTurretBy(absoluteTarget);
         }
     }
+
 }

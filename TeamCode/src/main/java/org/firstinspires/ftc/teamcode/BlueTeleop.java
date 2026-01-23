@@ -32,7 +32,7 @@ public class BlueTeleop extends OpMode {
 
     private GamepadEx gamepadEx1;
     private GamepadEx gamepadEx2;
-    public static Pose startingPose = new Pose(12, 132, Math.toRadians(315));
+    public final Pose startingPose = new Pose(12, 132, Math.toRadians(315));
     private boolean automatedDrive = false;
     private Supplier<PathChain> pathChain;
 
