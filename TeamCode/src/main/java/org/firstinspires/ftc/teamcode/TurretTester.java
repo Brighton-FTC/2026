@@ -11,7 +11,7 @@ public class TurretTester extends OpMode {
     private TurretPIDComponent turret;
     private GamepadEx gamepad;
 
-    private final Pose startingPose = new Pose(0, 0, Math.toRadians(0));
+    public final Pose startingPose = new Pose(12, 132, Math.toRadians(315));
 
     public boolean run = false;
 
@@ -33,7 +33,7 @@ public class TurretTester extends OpMode {
             run = true;
         }
         if (run){
-            turret.aimToObject();
+            turret.aimToObject(12, 132, Math.toRadians(315));
         }
         telemetry.update();
     }
