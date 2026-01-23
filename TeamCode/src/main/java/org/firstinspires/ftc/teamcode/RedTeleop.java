@@ -27,14 +27,15 @@ public class RedTeleop extends OpMode {
     private boolean shooting = false;
 
     private boolean intaking = false;
-    
+
     private GamepadEx gamepadEx1;
     private GamepadEx gamepadEx2;
-    public static Pose startingPose = new Pose(48, 48, Math.toRadians(45));
+    public static Pose startingPose = new Pose(132, 132, Math.toRadians(225));
     private boolean automatedDrive = false;
     private Supplier<PathChain> pathChain;
 
     private TurretPIDComponent turret;
+    //private FlyWheelMotorComponent turret;
 
     private ServoKickComponent kicker1;
     //private ServoKickComponent kicker2;
@@ -58,16 +59,17 @@ public class RedTeleop extends OpMode {
         //kicker2 = new ServoKickComponent(hardwareMap, "kicker2");
         //kicker3 = new ServoKickComponent(hardwareMap, "kicker3");
 
-        turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, 72, 72, startingPose, telemetry);
+        //turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, -72, 72, startingPose, telemetry);
 
+        turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, 144, 144, startingPose, telemetry);
         launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
 
         intake = new IntakeMotorComponent(hardwareMap, "intakeMotor");
-        
+
         gamepadEx1 = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
-        
-        
+
+
     }
 
     @Override
@@ -78,20 +80,21 @@ public class RedTeleop extends OpMode {
     @Override
     public void loop() {
         follower.update();
+        gamepadEx1.readButtons();
         telemetryManager.update();
         turret.aimToObject();
 
         if (!automatedDrive) {
             if (!slowMode) follower.setTeleOpDrive(
                     -gamepadEx1.getLeftY(),
-                    -gamepadEx1.getLeftX(),
+                    gamepadEx1.getLeftX(),
                     -gamepadEx1.getRightX(),
                     true
             );
 
             else follower.setTeleOpDrive(
                     -gamepadEx1.getLeftY() * slowModeMultiplier,
-                    -gamepadEx1.getLeftX() * slowModeMultiplier,
+                    gamepadEx1.getLeftX() * slowModeMultiplier,
                     -gamepadEx1.getRightX() * slowModeMultiplier,
                     true
             );
@@ -101,7 +104,7 @@ public class RedTeleop extends OpMode {
             }
 
             if (gamepadEx1.wasJustPressed(PSButtons.CROSS) && !shooting) {
-                launcher.runMotorAt(1);
+                launcher.runMotorAt(-1);
                 shooting = true;
             }
             else if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&& shooting){
@@ -109,33 +112,25 @@ public class RedTeleop extends OpMode {
                 shooting = false;
             }
 
+
             if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&&!intaking){
-                intaking = true;
                 intake.startMotor();
+                intaking = true;
             }
             else if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&&intaking){
-                intaking = false;
                 intake.stopMotor();
+                intaking = false;
             }
 
             if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
                 kicker1.up();
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 kicker1.down();
             }
-            if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)){
-                //kicker2.up();
-                //kicker2.down();
-            }
-            if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)){
-                //kicker3.up();
-                //kicker3.down();
-            }
-            if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)){
-                kicker1.down();
-                //kicker2.down();
-                //kicker3.down();
-            }
-
         }
 
 

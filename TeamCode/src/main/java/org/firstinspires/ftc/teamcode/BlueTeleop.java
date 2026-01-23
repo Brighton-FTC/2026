@@ -30,12 +30,12 @@ public class BlueTeleop extends OpMode {
 
     private GamepadEx gamepadEx1;
     private GamepadEx gamepadEx2;
-    public static Pose startingPose = new Pose(-48, 48, Math.toRadians(135));
+    public static Pose startingPose = new Pose(12, 132, Math.toRadians(315));
     private boolean automatedDrive = false;
     private Supplier<PathChain> pathChain;
 
-    //private TurretPIDComponent turret;
-    private FlyWheelMotorComponent turret;
+    private TurretPIDComponent turret;
+    //private FlyWheelMotorComponent turret;
 
     private ServoKickComponent kicker1;
     //private ServoKickComponent kicker2;
@@ -61,7 +61,7 @@ public class BlueTeleop extends OpMode {
 
         //turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, -72, 72, startingPose, telemetry);
 
-        turret = new FlyWheelMotorComponent(hardwareMap, "turretMotor");
+        turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, 0, 144, startingPose, telemetry);
         launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
 
         intake = new IntakeMotorComponent(hardwareMap, "intakeMotor");
@@ -82,7 +82,7 @@ public class BlueTeleop extends OpMode {
         follower.update();
         gamepadEx1.readButtons();
         telemetryManager.update();
-        //turret.aimToObject();
+        turret.aimToObject();
 
         if (!automatedDrive) {
             if (!slowMode) follower.setTeleOpDrive(
@@ -124,23 +124,13 @@ public class BlueTeleop extends OpMode {
 
             if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
                 kicker1.up();
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 kicker1.down();
             }
-            if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)){
-                //kicker2.up();
-                //kicker2.down();
-            }
-            if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)){
-                //kicker3.up();
-                //kicker3.down();
-            }
-            if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)){
-                kicker1.down();
-                //kicker2.down();
-//                kicker3.down();
-            }
-            turret.runMotorAt(gamepadEx2.getLeftY());
-
         }
 
 
