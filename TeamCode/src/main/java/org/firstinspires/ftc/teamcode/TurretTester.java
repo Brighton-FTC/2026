@@ -26,6 +26,8 @@ public class TurretTester extends OpMode {
 
     @Override
     public void loop(){
+        telemetry.addData("x", turret.getXPos());
+        telemetry.addData("y", turret.getYPos());
         gamepad.readButtons();
         if (gamepad.wasJustPressed(PSButtons.CIRCLE)){
             run = true;
@@ -33,5 +35,6 @@ public class TurretTester extends OpMode {
         if (run){
             turret.aimToObject();
         }
+        telemetry.update();
     }
 }
