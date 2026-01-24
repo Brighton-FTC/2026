@@ -79,3 +79,8 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+.gradle/8.9/checksums/checksums.lock
+.gradle/8.9/fileHashes/fileHashes.bin
+.gradle/8.9/fileHashes/fileHashes.lock
+.gradle/config.properties
+local.properties

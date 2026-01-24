@@ -1,6 +1,4 @@
-package org.firstinspires.ftc.teamcode;
-
-import android.hardware.HardwareBuffer;
+package org.firstinspires.ftc.teamcode.ServoKick;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;

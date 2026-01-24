@@ -1,7 +1,5 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Turret;
 
-
-import android.sax.StartElementListener;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -19,7 +17,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+
+import org.firstinspires.ftc.teamcode.AprilTag.AprilTagLocalization;
 
 
 @Config
@@ -126,15 +125,16 @@ public class TurretPIDComponent {
             telemetry.update();
             double turnMod = (((toTurn + 540) % 360) - 180);
 
-            if(turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) > 180){
+
+            // take the mod/remainder of toTurn/360 to keep angle in the range of [0,360]
+            if (turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) > 180) {
                 turnTurretBy(turnMod-360);
             } else if (turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) < -180) {
                 turnTurretBy(turnMod+360);
             } else {
                 turnTurretBy(turnMod);
-            } // take the mod/remainder of toTurn/360
-            // to keep the angle in the range of [0,360]
-           turnTurretBy(turnMod);
+            }
+//           turnTurretBy(turnMod); // isn't this turning twice?
         }
     }
 
