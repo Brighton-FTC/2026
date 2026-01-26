@@ -21,15 +21,18 @@ public class Constants {
 
 
     public static MecanumConstants driveConstants = new MecanumConstants()
-            .maxPower(1)
-            .rightFrontMotorName("rf")
-            .rightRearMotorName("rr")
-            .leftRearMotorName("lr")
             .leftFrontMotorName("lf")
+            .rightFrontMotorName("rf")
+            .leftRearMotorName("lr")
+            .rightRearMotorName("rr")
+
             .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE);
+            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
+
+            .maxPower(1);
+
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)

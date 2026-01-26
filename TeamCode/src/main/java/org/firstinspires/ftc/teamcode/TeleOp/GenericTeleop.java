@@ -95,16 +95,16 @@ public abstract class GenericTeleop extends OpMode {
 
         if (!automatedDrive) {
             if (!slowMode) follower.setTeleOpDrive(
-                    -gamepadEx1.getLeftY(),
-                    gamepadEx1.getLeftX(),
+                    gamepadEx1.getLeftY(),
+                    -gamepadEx1.getLeftX(),
                     gamepadEx1.getRightX(),
                     false
             );
 
             else follower.setTeleOpDrive(
-                    -gamepadEx1.getLeftY() * slowModeMultiplier,
-                    gamepadEx1.getLeftX() * slowModeMultiplier,
-                    -gamepadEx1.getRightX() * slowModeMultiplier,
+                    gamepadEx1.getLeftY() * slowModeMultiplier,
+                    -gamepadEx1.getLeftX() * slowModeMultiplier,
+                    gamepadEx1.getRightX() * slowModeMultiplier,
                     false
             );
 //
@@ -117,9 +117,9 @@ public abstract class GenericTeleop extends OpMode {
 //                turret.aimToObject(follower.getPose().getX(), follower.getPose().getY(), follower.getHeading());
 //            }
 //
-//            if (gamepadEx1.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
-//                slowMode = !slowMode;
-//            }
+            if (gamepadEx1.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
+                slowMode = !slowMode;
+            }
 //
 //            if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE) && !shooting) {
 //                launcher.runMotorAt(1);
