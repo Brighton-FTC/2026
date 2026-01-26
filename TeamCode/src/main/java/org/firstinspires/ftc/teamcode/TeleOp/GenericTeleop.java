@@ -67,16 +67,16 @@ public abstract class GenericTeleop extends OpMode {
         follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
         follower.update();
         telemetryManager = PanelsTelemetry.INSTANCE.getTelemetry();
-        kicker1 = new ServoKickComponent(hardwareMap, "kicker1");
-        //kicker2 = new ServoKickComponent(hardwareMap, "kicker2");
-        //kicker3 = new ServoKickComponent(hardwareMap, "kicker3");
-
-        //turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, -72, 72, startingPose, telemetry);
-
-        turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, getObjectXPosition(), 144, startingPose, telemetry);
-        launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
-
-        intake = new IntakeMotorComponent(hardwareMap, "intakeMotor");
+//        kicker1 = new ServoKickComponent(hardwareMap, "kicker1");
+//        //kicker2 = new ServoKickComponent(hardwareMap, "kicker2");
+//        //kicker3 = new ServoKickComponent(hardwareMap, "kicker3");
+//
+//        //turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, -72, 72, startingPose, telemetry);
+//
+//        turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, getObjectXPosition(), 144, startingPose, telemetry);
+//        launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
+//
+//        intake = new IntakeMotorComponent(hardwareMap, "intakeMotor");
 
         gamepadEx1 = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
@@ -107,48 +107,48 @@ public abstract class GenericTeleop extends OpMode {
                     -gamepadEx1.getRightX() * slowModeMultiplier,
                     false
             );
-
-            if (gamepadEx1.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)&&!aim) {
-                aim = true;
-            }else if (gamepadEx1.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)&&aim){
-                aim = false;
-            }
-            if (aim){
-                turret.aimToObject(follower.getPose().getX(), follower.getPose().getY(), follower.getHeading());
-            }
-
-            if (gamepadEx1.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
-                slowMode = !slowMode;
-            }
-
-            if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE) && !shooting) {
-                launcher.runMotorAt(1);
-                shooting = true;
-            }
-            else if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&& shooting){
-                launcher.stopMotor();
-                shooting = false;
-            }
-
-
-            if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&!intaking){
-                intake.startMotor();
-                intaking = true;
-            }
-            else if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&intaking){
-                intake.stopMotor();
-                intaking = false;
-            }
-
-            if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
-                kicker1.up();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                kicker1.down();
-            }
+//
+//            if (gamepadEx1.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)&&!aim) {
+//                aim = true;
+//            }else if (gamepadEx1.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)&&aim){
+//                aim = false;
+//            }
+//            if (aim){
+//                turret.aimToObject(follower.getPose().getX(), follower.getPose().getY(), follower.getHeading());
+//            }
+//
+//            if (gamepadEx1.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
+//                slowMode = !slowMode;
+//            }
+//
+//            if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE) && !shooting) {
+//                launcher.runMotorAt(1);
+//                shooting = true;
+//            }
+//            else if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&& shooting){
+//                launcher.stopMotor();
+//                shooting = false;
+//            }
+//
+//
+//            if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&!intaking){
+//                intake.startMotor();
+//                intaking = true;
+//            }
+//            else if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&intaking){
+//                intake.stopMotor();
+//                intaking = false;
+//            }
+//
+//            if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
+//                kicker1.up();
+//                try {
+//                    Thread.sleep(500);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                kicker1.down();
+//            }
         }
 
 
