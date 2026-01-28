@@ -16,6 +16,7 @@ public class Team1Drivetrain extends LinearOpMode {
     @Override
     public void runOpMode() {
         boolean fieldCentric = false;
+        boolean intake_on = false;
         double maxPower = 1;
 
         Motor[] motors = {
@@ -50,7 +51,11 @@ public class Team1Drivetrain extends LinearOpMode {
             }
 
             if (gamepad.wasJustPressed(PSButtons.SQUARE)) {
-                intake.set(1);
+                if(!intake_on) {
+                    intake.set(0.7);
+                } else {
+                    intake.set(0);
+                }
             }
 
             if (fieldCentric) {
