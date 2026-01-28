@@ -25,6 +25,8 @@ public class Team1Drivetrain extends LinearOpMode {
                 new Motor(hardwareMap, "back_right_drive")
         };
 
+        Motor intake = new Motor(hardwareMap, "intake");
+
 
         MecanumDrive drive = new MecanumDrive(motors[0], motors[1], motors[2], motors[3]);
 
@@ -45,6 +47,10 @@ public class Team1Drivetrain extends LinearOpMode {
             gamepad.readButtons();
             if (gamepad.wasJustPressed(PSButtons.TRIANGLE)) {
                 fieldCentric = !fieldCentric;
+            }
+
+            if (gamepad.wasJustPressed(PSButtons.SQUARE)) {
+                intake.set(1);
             }
 
             if (fieldCentric) {
