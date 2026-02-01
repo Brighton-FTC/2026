@@ -28,7 +28,7 @@ public class TurretPIDComponent {
 
     public double kP = 0.0017;
     public double kI = 0.0;
-    public double kD = 0.0;
+    public double kD = 0.01;
 
     private double scalingFactor;
 
@@ -108,7 +108,7 @@ public class TurretPIDComponent {
         return follower.getPose().getY();
     }
 
-    public void aimToObject(double robotX, double robotY, double robotHeading) {
+    public double aimToObject(double robotX, double robotY, double robotHeading) {
         //double robotYPosition = camera.returnYPosition();
         //double robotXPosition = camera.returnXPosition();
         //follower.getPose().getY();
@@ -135,7 +135,9 @@ public class TurretPIDComponent {
                 turnTurretBy(turnMod);
             }
 //           turnTurretBy(turnMod); // isn't this turning twice?
+            return toTurn;
         }
+        return 0;
     }
 
 }

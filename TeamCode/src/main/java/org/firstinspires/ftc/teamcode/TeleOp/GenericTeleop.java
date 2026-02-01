@@ -27,7 +27,6 @@ import java.util.function.Supplier;
  */
 
 @Configurable
-@TeleOp
 public abstract class GenericTeleop extends OpMode {
     public Follower follower;
     private boolean shooting = false;
@@ -98,14 +97,14 @@ public abstract class GenericTeleop extends OpMode {
                     -gamepadEx1.getLeftY(),
                     gamepadEx1.getLeftX(),
                     gamepadEx1.getRightX(),
-                    false
+                    true
             );
 
             else follower.setTeleOpDrive(
                     -gamepadEx1.getLeftY() * slowModeMultiplier,
                     gamepadEx1.getLeftX() * slowModeMultiplier,
                     -gamepadEx1.getRightX() * slowModeMultiplier,
-                    false
+                    true
             );
 
             if (gamepadEx1.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)&&!aim) {
