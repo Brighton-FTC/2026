@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.Turret.TurretPIDComponent;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
+// CREATE A CLASS DERIVED FROM THIS ONE, MARK WITH `@autonomous` AND GIVE POSITIONS TO CONSTRUCTOR
+
 public abstract class AutoTeleop extends OpMode {
 
     private Follower follower;
@@ -53,9 +55,9 @@ public abstract class AutoTeleop extends OpMode {
     private final PathChain[] collectChain = new PathChain[3];
 
     AutoTeleop(Pose startPose, Pose shootPose, Pair<Pose, Pose>[] collectPoses, double targetX, double targetY) {
-        this.startPose = startPose;
-        this.shootPose = shootPose;
-        this.collectPoses = collectPoses;
+        this.startPose = startPose; // Self explanatory
+        this.shootPose = shootPose; // Self explanatory
+        this.collectPoses = collectPoses; // First element is start of collecting the three, second element is the end position of collection.
         this.targetX = targetX;
         this.targetY = targetY;
 
