@@ -4,6 +4,8 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
 import com.pedropathing.ftc.drivetrains.MecanumConstants;
+import com.pedropathing.ftc.localization.Encoder;
+import com.pedropathing.ftc.localization.constants.DriveEncoderConstants;
 import com.pedropathing.ftc.localization.constants.TwoWheelConstants;
 import com.pedropathing.paths.PathConstraints;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -18,10 +20,10 @@ public class Constants {
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
-            .rightFrontMotorName("rf")
-            .rightRearMotorName("rr")
-            .leftRearMotorName("lr")
-            .leftFrontMotorName("lf")
+            .rightFrontMotorName("front_right_drive")
+            .rightRearMotorName("back_right_drive")
+            .leftRearMotorName("back_left_drive")
+            .leftFrontMotorName("front_left_drive")
             .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
@@ -29,23 +31,21 @@ public class Constants {
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
+                .driveEncoderLocalizer(localizerConstants)
                 .pathConstraints(pathConstraints)
                 .mecanumDrivetrain(driveConstants)
-                .twoWheelLocalizer(localizerConstants)
                 .build();
-
     }
 
 
-    public static TwoWheelConstants localizerConstants = new TwoWheelConstants()
-            .forwardEncoder_HardwareMapName("leftFront")
-            .strafeEncoder_HardwareMapName("rightRear")
-            .IMU_HardwareMapName("imu")
-            .IMU_Orientation(
-                    new RevHubOrientationOnRobot(
-                            RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                            RevHubOrientationOnRobot.UsbFacingDirection.LEFT
-                    )
-            );
+    public static DriveEncoderConstants localizerConstants = new DriveEncoderConstants()
+            .rightFrontMotorName("front_right_drive")
+            .rightRearMotorName("back_right_drive")
+            .leftRearMotorName("back_left_drive")
+            .leftFrontMotorName("front_left_drive")
+            .leftFrontEncoderDirection(Encoder.FORWARD)
+            .leftRearEncoderDirection(Encoder.FORWARD)
+            .rightFrontEncoderDirection(Encoder.FORWARD)
+            .rightRearEncoderDirection(Encoder.FORWARD);
 
 }

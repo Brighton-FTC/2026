@@ -52,9 +52,11 @@ public class Team1Drivetrain extends LinearOpMode {
 
             if (gamepad.wasJustPressed(PSButtons.SQUARE)) {
                 if(!intake_on) {
-                    intake.set(0.7);
+                    intake.set(0.8);
+                    intake_on = true;
                 } else {
                     intake.set(0);
+                    intake_on = false;
                 }
             }
 
