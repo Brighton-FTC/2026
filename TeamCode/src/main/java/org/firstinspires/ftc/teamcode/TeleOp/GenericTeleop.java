@@ -77,6 +77,8 @@ public abstract class GenericTeleop extends OpMode {
 
         gamepadEx1 = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
+
+        turret.resetTurretEncoder();
     }
 
     @Override
