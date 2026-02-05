@@ -26,7 +26,7 @@ public class TurretPIDComponent {
 
     private Follower follower;
 
-    public double kP = 0.0017;
+    public double kP = 0.001;
     public double kI = 0.0;
     public double kD = 0.0;
 
