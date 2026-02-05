@@ -49,7 +49,7 @@ public class TurretPIDComponent {
 
     private final PIDController controller = new PIDController(0, 0, 0);
 
-    public TurretPIDComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Pose startingPose, Telemetry telemetry) {
+    public TurretPIDComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Telemetry telemetry) {
         turretMotor = new Motor(hardwareMap, motorID);
         turretMotor.resetEncoder();
         controller.setPID(kP, kI, kD);
@@ -98,6 +98,9 @@ public class TurretPIDComponent {
         telemetry.addData("Motor Power: ", power);
 
         turretMotor.set(-power);
+        if (controller.getPositionError() < 5){
+            turretMotor.set(0);
+        }
     }
 
 
