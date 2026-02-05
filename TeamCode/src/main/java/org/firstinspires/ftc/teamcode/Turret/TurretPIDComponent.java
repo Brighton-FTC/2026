@@ -28,10 +28,16 @@ public class TurretPIDComponent {
 
     private Follower follower;
 
+<<<<<<< HEAD
     static public double kP = 0.0017;
 
     static public double kI = 0.0;
     static public double kD = 0.0;
+=======
+    public static double kP = 0.0017;
+    public static double kI = 0.0;
+    public static double kD = 0.0;
+>>>>>>> 46667ba3c93ed992cfab6c156fa8c4aa2deab740
 
     private double scalingFactor;
 
@@ -97,19 +103,9 @@ public class TurretPIDComponent {
         controller.setSetPoint(TARGET_TICK_VALUE);
         double power = controller.calculate(currentPosition);
 
-        turretMotor.set(power);
-        if (controller.getPositionError()<5) {
-            turretMotor.set(0);
-        }
+        turretMotor.set(-power);
     }
 
-    public double getXPos(){
-        return follower.getPose().getX();
-    }
-
-    public double getYPos(){
-        return follower.getPose().getY();
-    }
 
     public void aimToObject(double robotX, double robotY, double robotHeading) {
         //double robotYPosition = camera.returnYPosition();

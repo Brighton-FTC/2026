@@ -24,12 +24,11 @@ public class TurretTester extends OpMode {
         gamepad = new GamepadEx(gamepad1);
         //Scaling factor == 3.214 in degrees; 0.0561 in radians. (360*0.25/28)
         turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, 0, 144, startingPose, telemetry);
+        turret.resetTurretEncoder();
     }
 
     @Override
     public void loop(){
-        telemetry.addData("x", turret.getXPos());
-        telemetry.addData("y", turret.getYPos());
         gamepad.readButtons();
         if (gamepad.wasJustPressed(PSButtons.CIRCLE)){
             run = true;
