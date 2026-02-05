@@ -27,17 +27,9 @@ import org.firstinspires.ftc.teamcode.AprilTag.AprilTagLocalization;
 public class TurretPIDComponent {
 
     private Follower follower;
-
-<<<<<<< HEAD
-    static public double kP = 0.0017;
-
-    static public double kI = 0.0;
-    static public double kD = 0.0;
-=======
     public static double kP = 0.0017;
     public static double kI = 0.0;
     public static double kD = 0.0;
->>>>>>> 46667ba3c93ed992cfab6c156fa8c4aa2deab740
 
     private double scalingFactor;
 
@@ -102,6 +94,8 @@ public class TurretPIDComponent {
         double TARGET_TICK_VALUE = angleToEncoderTicks(degrees); // + currentPosition;
         controller.setSetPoint(TARGET_TICK_VALUE);
         double power = controller.calculate(currentPosition);
+
+        telemetry.addData("Motor Power: ", power);
 
         turretMotor.set(-power);
     }
