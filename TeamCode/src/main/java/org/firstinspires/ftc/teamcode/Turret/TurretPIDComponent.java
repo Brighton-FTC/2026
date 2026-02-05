@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -22,13 +23,14 @@ import org.firstinspires.ftc.teamcode.AprilTag.AprilTagLocalization;
 
 
 @Config
+@Configurable
 public class TurretPIDComponent {
 
     private Follower follower;
 
-    public double kP = 0.001;
-    public double kI = 0.0;
-    public double kD = 0.0;
+    public static double kP = 0.001;
+    public static double kI = 0.0;
+    public static double kD = 0.0;
 
     private double scalingFactor;
 
