@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
 
-import android.sax.StartElementListener;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -19,17 +18,18 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+
+import org.firstinspires.ftc.teamcode.AprilTagLocalization;
 
 
 @Config
+@Configurable
 public class TurretPIDComponent {
 
     private Follower follower;
-
-    public double kP = 0.0017;
-    public double kI = 0.0;
-    public double kD = 0.0;
+    public static double kP = 0.0017;
+    public static double kI = 0.0;
+    public static double kD = 0.0;
 
     private double scalingFactor;
 
@@ -49,7 +49,7 @@ public class TurretPIDComponent {
 
     private final PIDController controller = new PIDController(0, 0, 0);
 
-    public TurretPIDComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Pose startingPose, Telemetry telemetry) {
+    public TurretPIDComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Telemetry telemetry) {
         turretMotor = new Motor(hardwareMap, motorID);
         turretMotor.resetEncoder();
         controller.setPID(kP, kI, kD);
@@ -71,7 +71,7 @@ public class TurretPIDComponent {
     }
 
     public void resetTurretEncoder(){
-        turretMotor.resetEncoder();
+        turretMotor.stopAndResetEncoder();
     }
 
     public double encoderTicksToAngle(int ticks) {
@@ -95,19 +95,18 @@ public class TurretPIDComponent {
         controller.setSetPoint(TARGET_TICK_VALUE);
         double power = controller.calculate(currentPosition);
 
-        turretMotor.set(power);
-        if (controller.getPositionError()<5) {
+        telemetry.addData("Motor Power: ", power);
+        telemetry.update();
+
+
+        if (controller.getPositionError() < 5){
             turretMotor.set(0);
+        } else {
+            turretMotor.set(-power);
         }
     }
 
-    public double getXPos(){
-        return follower.getPose().getX();
-    }
 
-    public double getYPos(){
-        return follower.getPose().getY();
-    }
 
     public void aimToObject(double robotX, double robotY, double robotHeading) {
         //double robotYPosition = camera.returnYPosition();
@@ -126,15 +125,16 @@ public class TurretPIDComponent {
             telemetry.update();
             double turnMod = (((toTurn + 540) % 360) - 180);
 
-            if(turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) > 180){
+
+            // take the mod/remainder of toTurn/360 to keep angle in the range of [0,360]
+            if (turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) > 180) {
                 turnTurretBy(turnMod-360);
             } else if (turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) < -180) {
                 turnTurretBy(turnMod+360);
             } else {
                 turnTurretBy(turnMod);
-            } // take the mod/remainder of toTurn/360
-            // to keep the angle in the range of [0,360]
-            turnTurretBy(turnMod);
+            }
+//           turnTurretBy(turnMod); // isn't this turning twice?
         }
     }
 
