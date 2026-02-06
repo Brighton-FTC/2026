@@ -1,11 +1,9 @@
-package org.firstinspires.ftc.teamcode.Turret;
+package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.teamcode.PSButtons;
 
 @TeleOp
 public class TurretTester extends OpMode {
@@ -24,7 +22,6 @@ public class TurretTester extends OpMode {
         gamepad = new GamepadEx(gamepad1);
         //Scaling factor == 3.214 in degrees; 0.0561 in radians. (360*0.25/28)
         turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, 0, 144, telemetry);
-        turret.resetTurretEncoder();
     }
 
     @Override
