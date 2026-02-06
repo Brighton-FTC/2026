@@ -71,7 +71,7 @@ public class TurretPIDComponent {
     }
 
     public void resetTurretEncoder(){
-        turretMotor.stopAndResetEncoder();
+        turretMotor.resetEncoder();
     }
 
     public double encoderTicksToAngle(int ticks) {
@@ -98,12 +98,10 @@ public class TurretPIDComponent {
         telemetry.addData("Motor Power: ", power);
         telemetry.update();
 
+        turretMotor.set(-power);
 
         if (controller.getPositionError() < 5){
-            turretMotor.set(0);
-        } else {
-            turretMotor.set(-power);
-        }
+            turretMotor.set(0);}
     }
 
 
