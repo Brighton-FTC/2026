@@ -93,7 +93,6 @@ public class TurretPIDComponent {
         double TARGET_TICK_VALUE = angleToEncoderTicks(degrees) + currentPosition;
         controller.setSetPoint(TARGET_TICK_VALUE);
         double power = controller.calculate(currentPosition);
-        power = Math.max(-1, Math.min(1, power));
 
         telemetry.addData("Motor Power: ", power);
         telemetry.update();
