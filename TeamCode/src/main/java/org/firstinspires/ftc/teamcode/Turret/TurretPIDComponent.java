@@ -52,7 +52,6 @@ public class TurretPIDComponent {
     public TurretPIDComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Telemetry telemetry) {
         turretMotor = new Motor(hardwareMap, motorID);
         turretMotor.resetEncoder();
-        controller.setPID(kP, kI, kD);
         //remove if
         turretMotor.setDistancePerPulse(4*scalingFactor); // 360/537.7 = 4*0.167
         turretMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
@@ -88,18 +87,19 @@ public class TurretPIDComponent {
     }
 
     public void turnTurretBy(double degrees) {
-
+        controller.setPID(kP, kI, kD);
 
         double currentPosition = turretMotor.getCurrentPosition();
-        double TARGET_TICK_VALUE = angleToEncoderTicks(degrees); // + currentPosition;
+        double TARGET_TICK_VALUE = angleToEncoderTicks(degrees) + currentPosition;
         controller.setSetPoint(TARGET_TICK_VALUE);
         double power = controller.calculate(currentPosition);
+        power = Math.max(-1, Math.min(1, power));
 
         telemetry.addData("Motor Power: ", power);
         telemetry.update();
 
         turretMotor.set(-power);
-        if (controller.getPositionError() < 5) {
+        if (Math.abs(controller.getPositionError()) < 5) {
             turretMotor.set(0);
         }
     }
