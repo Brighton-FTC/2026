@@ -89,3 +89,23 @@ local.properties
 .gradle/8.9/fileHashes/fileHashes.lock
 .gradle/config.properties
 local.properties
+
+# FTC / Android Studio
+
+.gradle/
+build/
+*/build/
+
+local.properties
+
+.idea/
+*.iml
+
+*.lock
+
+captures/
+.externalNativeBuild/
+.cxx/
+
+.DS_Store
+Thumbs.db
