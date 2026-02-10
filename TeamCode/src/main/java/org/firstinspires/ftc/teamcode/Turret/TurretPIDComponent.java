@@ -98,7 +98,7 @@ public class TurretPIDComponent {
         telemetry.addData("Motor Power: ", power);
         telemetry.update();
 
-        turretMotor.set(-power);
+        turretMotor.set(power);
     }
 
 
@@ -116,20 +116,20 @@ public class TurretPIDComponent {
             turretAngle = encoderTicksToAngle(turretMotor.getCurrentPosition());
 
             double toTurn = destinationAngle - (turretAngle + robotAngle);
-            telemetry.addData("To turn :", toTurn);
-            telemetry.update();
             double turnMod = (((toTurn + 540) % 360) - 180);
+            telemetry.addData("To turn :", turnMod);
+            telemetry.update();
 
 
-            // take the mod/remainder of toTurn/360 to keep angle in the range of [0,360]
-            if (turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) > 180) {
-                turnTurretBy(turnMod-360);
-            } else if (turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) < -180) {
-                turnTurretBy(turnMod+360);
-            } else {
-                turnTurretBy(turnMod);
-            }
-//           turnTurretBy(turnMod); // isn't this turning twice?
+//            // take the mod/remainder of toTurn/360 to keep angle in the range of [0,360]
+//            if (turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) > 180) {
+//                turnTurretBy(turnMod-360);
+//            } else if (turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) < -180) {
+//                turnTurretBy(turnMod+360);
+//            } else {
+//                turnTurretBy(turnMod);
+//            }
+           turnTurretBy(turnMod);
         }
     }
 
