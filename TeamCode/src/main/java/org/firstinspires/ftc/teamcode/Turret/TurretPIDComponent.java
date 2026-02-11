@@ -122,12 +122,14 @@ public class TurretPIDComponent {
 
 
 //            // take the mod/remainder of toTurn/360 to keep angle in the range of [0,360]
-//            if (turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) > 180) {
-//                turnTurretBy(turnMod-360);
-//            } else if (turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) < -180) {
-//                turnTurretBy(turnMod+360);
+//            if (destinationAngle > 180) {
+//                telemetry.addData("long path", true);
+//                telemetry.update();
+//            } else if (destinationAngle < -180) {
+//                telemetry.addData("long path", true);
+//                telemetry.update();
 //            } else {
-//                turnTurretBy(turnMod);
+//                telemetry.addData("long path", false);
 //            }
            turnTurretBy(turnMod);
         }
