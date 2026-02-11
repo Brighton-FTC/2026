@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.pedropathing.util.Timer;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-
+//OUTDATED - USE BLUE1AUTO INSTEAD
 @Autonomous
 public class BlueAutoRoutine1 extends OpMode {
     private Follower follower;

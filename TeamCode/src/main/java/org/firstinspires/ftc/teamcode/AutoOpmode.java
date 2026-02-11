@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import android.util.Pair;
 
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
@@ -14,17 +15,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-/*
-I made this by looking at both the pedropathing docs in their example code section,
-as well as some ideas from subzero and their auto, which uses a similar opmode
-specifically for their robot that can be used in multiple cases to reduce repeated
-code. Still need to add other hardware like intake and shooting logic.
-If this doesn't work then it is still a good learning exercise
- */
-@Autonomous(name="Practice Auto")
+// Create a new class that extends AutoOpmode and then change the super and other things (look at the other ones already done) CHANGE COORDINATES IN SUBCLASSES
+@Autonomous(name="Auto Opmode")
 public class AutoOpmode extends OpMode {
     private Follower follower;
     private Timer pathTimer, opModeTimer;
+    private MotorEx intake = new MotorEx(hardwareMap, "intake");
 
     public enum PathState {
         DRIVE_START_SHOOT,
@@ -139,7 +135,7 @@ public class AutoOpmode extends OpMode {
                     follower.followPath(shootToCollectPaths[2], true);
                     setPathState(PathState.COLLECT_3);
                 }
-                break;
+                break;   
             case COLLECT_3:
                 //intake on
                 if(!follower.isBusy()){

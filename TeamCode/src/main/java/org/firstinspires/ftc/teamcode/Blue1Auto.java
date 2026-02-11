@@ -4,10 +4,10 @@ import android.util.Pair;
 
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-@Autonomous(name="example auto using autoopmode ")
-public class ExampleBlueAuto extends AutoOpmode {
-    public ExampleBlueAuto(){
+//I think this is blue 1 idk
+@Autonomous(name="Blue 1 autonomous")
+public class Blue1Auto extends AutoOpmode {
+    public Blue1Auto(){
         super(
                 new Pose(21.751351351351364,124.95135135135135,Math.toRadians(142)),
                 new Pose(50.20540540540541,93.98918918918922,Math.toRadians(133)),
