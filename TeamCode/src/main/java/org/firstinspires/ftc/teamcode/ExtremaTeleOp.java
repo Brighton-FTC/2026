@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -11,12 +10,13 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-@TeleOp(name = "Eason's Team Drivetrain", group = "team1")
-public class Team1Drivetrain extends LinearOpMode {
+@TeleOp(name = "Extrema TeleOp", group = "team1")
+public class ExtremaTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() {
         boolean fieldCentric = false;
         boolean intake_on = false;
+        boolean storage_on = false;
         double maxPower = 1;
 
         Motor[] motors = {
@@ -27,6 +27,7 @@ public class Team1Drivetrain extends LinearOpMode {
         };
 
         Motor intake = new Motor(hardwareMap, "intake");
+        Motor storage = new Motor(hardwareMap, "storage");
 
 
         MecanumDrive drive = new MecanumDrive(motors[0], motors[1], motors[2], motors[3]);
@@ -57,6 +58,16 @@ public class Team1Drivetrain extends LinearOpMode {
                 } else {
                     intake.set(0);
                     intake_on = false;
+                }
+            }
+
+            if (gamepad.wasJustPressed(PSButtons.CIRCLE)) {
+                if(!storage_on) {
+                    storage.set(0.5);
+                    storage_on = true;
+                } else {
+                    storage.set(0);
+                    storage_on = false;
                 }
             }
 
