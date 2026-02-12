@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Turret;
 
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -19,7 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 
-import org.firstinspires.ftc.teamcode.AprilTagLocalization;
+import org.firstinspires.ftc.teamcode.AprilTag.AprilTagLocalization;
 
 
 @Config
