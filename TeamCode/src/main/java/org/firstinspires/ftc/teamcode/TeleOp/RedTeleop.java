@@ -31,5 +31,3 @@ public class RedTeleop extends GenericTeleop {
         return new Pose(132, 132, Math.toRadians(225));
     }
 }
-
-/// WHY WON'T GIT WORK
