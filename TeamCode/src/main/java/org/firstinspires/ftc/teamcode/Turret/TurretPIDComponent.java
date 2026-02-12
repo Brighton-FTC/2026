@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -22,13 +23,13 @@ import org.firstinspires.ftc.teamcode.AprilTag.AprilTagLocalization;
 
 
 @Config
+@Configurable
 public class TurretPIDComponent {
 
     private Follower follower;
-
-    public double kP = 0.0017;
-    public double kI = 0.0;
-    public double kD = 0.01;
+    public static double kP = 0.0017;
+    public static double kI = 0.0;
+    public static double kD = 0.0;
 
     private double scalingFactor;
 
@@ -48,13 +49,13 @@ public class TurretPIDComponent {
 
     private final PIDController controller = new PIDController(0, 0, 0);
 
-    public TurretPIDComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Pose startingPose, Telemetry telemetry) {
+    public TurretPIDComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Telemetry telemetry) {
         turretMotor = new Motor(hardwareMap, motorID);
         turretMotor.resetEncoder();
-        controller.setPID(kP, kI, kD);
         //remove if
         turretMotor.setDistancePerPulse(4*scalingFactor); // 360/537.7 = 4*0.167
         turretMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        turretMotor.setRunMode(Motor.RunMode.VelocityControl);
 
 //        camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1", telemetry);
         this.objectXPosition = objectXPosition;
@@ -70,7 +71,7 @@ public class TurretPIDComponent {
     }
 
     public void resetTurretEncoder(){
-        turretMotor.resetEncoder();
+        turretMotor.stopAndResetEncoder();
     }
 
     public double encoderTicksToAngle(int ticks) {
@@ -87,28 +88,22 @@ public class TurretPIDComponent {
     }
 
     public void turnTurretBy(double degrees) {
-
+        controller.setPID(kP, kI, kD);
 
         double currentPosition = turretMotor.getCurrentPosition();
-        double TARGET_TICK_VALUE = angleToEncoderTicks(degrees); // + currentPosition;
+        double TARGET_TICK_VALUE = angleToEncoderTicks(degrees) + currentPosition;
         controller.setSetPoint(TARGET_TICK_VALUE);
         double power = controller.calculate(currentPosition);
 
-        turretMotor.set(power);
-        if (controller.getPositionError()<5) {
-            turretMotor.set(0);
-        }
+        telemetry.addData("Motor Power: ", power);
+        telemetry.update();
+
+        turretMotor.set(-power);
     }
 
-    public double getXPos(){
-        return follower.getPose().getX();
-    }
 
-    public double getYPos(){
-        return follower.getPose().getY();
-    }
 
-    public double aimToObject(double robotX, double robotY, double robotHeading) {
+    public void aimToObject(double robotX, double robotY, double robotHeading) {
         //double robotYPosition = camera.returnYPosition();
         //double robotXPosition = camera.returnXPosition();
         //follower.getPose().getY();
@@ -135,9 +130,11 @@ public class TurretPIDComponent {
                 turnTurretBy(turnMod);
             }
 //           turnTurretBy(turnMod); // isn't this turning twice?
-            return toTurn;
         }
-        return 0;
+    }
+
+    public double getPIDSetPoint(){
+        return controller.getSetPoint();
     }
 
 }

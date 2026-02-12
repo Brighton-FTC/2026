@@ -5,6 +5,8 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Turret.TurretPIDComponent;
+
 @TeleOp
 public class TurretTester extends OpMode {
 

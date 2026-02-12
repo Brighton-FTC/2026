@@ -9,7 +9,6 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.FlyWheel.FlyWheelMotorComponent;
 import org.firstinspires.ftc.teamcode.IntakeMotorComponent;
@@ -72,7 +71,7 @@ public abstract class GenericTeleop extends OpMode {
 
         //turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, -72, 72, startingPose, telemetry);
 
-        turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, getObjectXPosition(), 144, startingPose, telemetry);
+        turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, getObjectXPosition(), 144, telemetry);
         launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
 
         intake = new IntakeMotorComponent(hardwareMap, "intakeMotor");
