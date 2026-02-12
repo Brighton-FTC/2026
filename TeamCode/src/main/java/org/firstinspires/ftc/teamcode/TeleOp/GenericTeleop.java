@@ -71,9 +71,9 @@ public abstract class GenericTeleop extends OpMode {
         telemetryManager = PanelsTelemetry.INSTANCE.getTelemetry();
 //
         turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, getObjectXPosition(), 144, telemetry);
-//        launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
+        launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
 //
-//        intake = new IntakeMotorComponent(hardwareMap, "intakeMotor");
+       intake = new IntakeMotorComponent(hardwareMap, "intakeMotor");
 
         gamepadEx1 = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
@@ -149,24 +149,24 @@ public abstract class GenericTeleop extends OpMode {
                 driveFieldCentric = !driveFieldCentric;
             }
 //
-//            if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE) && !shooting) {
-//                launcher.runMotorAt(1);
-//                shooting = true;
-//            }
-//            else if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&& shooting){
-//                launcher.stopMotor();
-//                shooting = false;
-//            }
+            if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE) && !shooting) {
+                launcher.runMotorAt(1);
+                shooting = true;
+            }
+            else if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&& shooting){
+                launcher.stopMotor();
+                shooting = false;
+            }
 //
 //
-//            if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&!intaking){
-//                intake.startMotor();
-//                intaking = true;
-//            }
-//            else if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&intaking){
-//                intake.stopMotor();
-//                intaking = false;
-//            }
+            if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&!intaking){
+                intake.startMotor();
+                intaking = true;
+            }
+            else if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&intaking){
+                intake.stopMotor();
+                intaking = false;
+            }
 //
         }
 
