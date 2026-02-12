@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.arcrobotics.ftclib.drivebase.TankDrive;
+import com.arcrobotics.ftclib.drivebase.DifferentialDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
@@ -15,7 +15,8 @@ public class TankDriveTrain extends LinearOpMode {
     private Motor right_front_1, right_front_2, right_back_1, right_back_2;
 
     private MotorGroup leftSide, rightSide;
-    private TankDrive drive;
+    // Use differential drive which is what modern ftclib uses. You can still use tankDrive method
+    private DifferentialDrive drive;
     private GamepadEx gamepad;
 
     @Override
@@ -32,7 +33,7 @@ public class TankDriveTrain extends LinearOpMode {
         leftSide = new MotorGroup(left_front_1, left_front_2, left_back_1, left_back_2);
         rightSide = new MotorGroup(right_front_1, right_front_2, right_back_1, right_back_2);
 
-        drive = new TankDrive(leftSide, rightSide);
+        drive = new DifferentialDrive(leftSide, rightSide);
         gamepad = new GamepadEx(gamepad1);
 
         waitForStart();
