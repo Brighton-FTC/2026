@@ -25,6 +25,7 @@ public abstract class GenericAutonomous extends OpMode {
     private boolean intaking = false;
     public final Pose startingPose = getStartingPose();
 
+    private final Pose startScorePose = getStartScorePose();
     private final Pose scorePose = getScorePose();
     private final Pose pickup1Pose = getPickup1Pose();
     private final Pose pickup2Pose = getPickup2Pose();
@@ -33,6 +34,7 @@ public abstract class GenericAutonomous extends OpMode {
     private final Pose controlPoint1 = getControlPoint1();
     private final Pose controlPoint2 = getControlPoint2();
     private final Pose controlPoint3 = getControlPoint3();
+
 
     private TurretPIDComponent turret;
     private FlyWheelMotorComponent launcher;
@@ -47,14 +49,14 @@ public abstract class GenericAutonomous extends OpMode {
     protected abstract Pose getControlPoint1();
     protected abstract Pose getControlPoint2();
     protected abstract Pose getControlPoint3();
-
+    protected abstract Pose getStartScorePose();
 
     private Path scorePreload;
     private PathChain grabPickup1, scorePickup1, grabPickup2, scorePickup2, grabPickup3, scorePickup3;
 
     public void buildPaths() {
         /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
-        scorePreload = new Path(new BezierLine(startingPose, scorePose));
+        scorePreload = new Path(new BezierLine(startingPose, startScorePose));
         scorePreload.setConstantHeadingInterpolation(startingPose.getHeading());
 
     /* Here is an example for Constant Interpolation
@@ -62,7 +64,7 @@ public abstract class GenericAutonomous extends OpMode {
 
         /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         grabPickup1 = follower.pathBuilder()
-                .addPath(new BezierCurve(scorePose, controlPoint1, pickup1Pose))
+                .addPath(new BezierCurve(startScorePose, controlPoint1, pickup1Pose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading())
                 .build();
 
