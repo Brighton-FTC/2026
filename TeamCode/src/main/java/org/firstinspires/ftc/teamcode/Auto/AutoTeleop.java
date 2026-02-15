@@ -104,7 +104,7 @@
 //        }
 //
 //        if (shooting) {
-//            if (turret.aimToObject(follower.getPose().getX(), follower.getPose().getY(), follower.getHeading()) <= 5) {
+//            if (turret.aimToObject(follower.getPose().getX(), follower.getPose().getY(), follower.getPose().getHeading()) <= 5) {
 //
 //                // CODE FOR LAUNCH GOES HERE!!!
 //

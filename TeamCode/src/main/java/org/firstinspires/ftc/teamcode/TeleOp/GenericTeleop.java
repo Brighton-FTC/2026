@@ -9,6 +9,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.FlyWheel.FlyWheelMotorComponent;
 import org.firstinspires.ftc.teamcode.IntakeMotorComponent;
@@ -26,9 +27,12 @@ import java.util.function.Supplier;
  */
 
 @Configurable
+@TeleOp
 public abstract class GenericTeleop extends OpMode {
     public Follower follower;
     private boolean shooting = false;
+
+    private boolean driveFieldCentric = false;
 
     private boolean intaking = false;
 
@@ -65,19 +69,16 @@ public abstract class GenericTeleop extends OpMode {
         follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
         follower.update();
         telemetryManager = PanelsTelemetry.INSTANCE.getTelemetry();
-        kicker1 = new ServoKickComponent(hardwareMap, "kicker1");
-        //kicker2 = new ServoKickComponent(hardwareMap, "kicker2");
-        //kicker3 = new ServoKickComponent(hardwareMap, "kicker3");
-
-        //turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, -72, 72, startingPose, telemetry);
-
+//
         turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, getObjectXPosition(), 144, telemetry);
         launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
-
-        intake = new IntakeMotorComponent(hardwareMap, "intakeMotor");
+//
+       intake = new IntakeMotorComponent(hardwareMap, "intakeMotor");
 
         gamepadEx1 = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
+
+        turret.resetTurretEncoder();
     }
 
     @Override
@@ -92,19 +93,45 @@ public abstract class GenericTeleop extends OpMode {
         telemetryManager.update();
 
         if (!automatedDrive) {
-            if (!slowMode) follower.setTeleOpDrive(
-                    -gamepadEx1.getLeftY(),
-                    gamepadEx1.getLeftX(),
-                    gamepadEx1.getRightX(),
-                    true
-            );
 
-            else follower.setTeleOpDrive(
-                    -gamepadEx1.getLeftY() * slowModeMultiplier,
-                    gamepadEx1.getLeftX() * slowModeMultiplier,
-                    -gamepadEx1.getRightX() * slowModeMultiplier,
-                    true
-            );
+            if(driveFieldCentric) {
+                double forward = -gamepadEx1.getLeftY();
+                double strafe = gamepadEx1.getLeftX();
+
+                double heading = follower.getHeading();
+
+                double rotX = forward * Math.cos(heading) + strafe * Math.sin(heading);
+                double rotY = -forward * Math.sin(heading) + strafe * Math.cos(heading);
+                if (!slowMode) follower.setTeleOpDrive(
+                        rotY,
+                        rotX,
+                        gamepadEx1.getRightX(),
+                        false
+                );
+
+                else follower.setTeleOpDrive(
+                        rotY,
+                        rotX,
+                        gamepadEx1.getRightX() * slowModeMultiplier,
+                        false
+                );
+            }
+            else {
+                if (!slowMode) follower.setTeleOpDrive(
+                        gamepadEx1.getLeftY(),
+                        -gamepadEx1.getLeftX(),
+                        gamepadEx1.getRightX(),
+                        true
+                );
+
+                else follower.setTeleOpDrive(
+                        gamepadEx1.getLeftY() * slowModeMultiplier,
+
+                        -gamepadEx1.getLeftX() * slowModeMultiplier,
+                        gamepadEx1.getRightX() * slowModeMultiplier,
+                        true
+                );
+            }
 
             if (gamepadEx1.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)&&!aim) {
                 aim = true;
@@ -118,7 +145,10 @@ public abstract class GenericTeleop extends OpMode {
             if (gamepadEx1.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
                 slowMode = !slowMode;
             }
-
+            if(gamepadEx1.wasJustPressed(PSButtons.SQUARE)){
+                driveFieldCentric = !driveFieldCentric;
+            }
+//
             if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE) && !shooting) {
                 launcher.runMotorAt(1);
                 shooting = true;
@@ -127,8 +157,8 @@ public abstract class GenericTeleop extends OpMode {
                 launcher.stopMotor();
                 shooting = false;
             }
-
-
+//
+//
             if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&!intaking){
                 intake.startMotor();
                 intaking = true;
@@ -137,16 +167,7 @@ public abstract class GenericTeleop extends OpMode {
                 intake.stopMotor();
                 intaking = false;
             }
-
-            if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
-                kicker1.up();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                kicker1.down();
-            }
+//
         }
 
 

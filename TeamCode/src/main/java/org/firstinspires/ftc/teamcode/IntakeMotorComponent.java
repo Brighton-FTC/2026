@@ -13,7 +13,7 @@ public class IntakeMotorComponent {
     }
 
     public void startMotor(){
-        motor.set(1);
+        motor.set(-1);
     }
 
     public void stopMotor(){
