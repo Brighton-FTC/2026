@@ -38,7 +38,7 @@ public class RedAuton extends GenericAutonomous {
     }
 
     protected Pose getStartScorePose(){
-        return new Pose(100, 100, Math.toRadians(45));
+        return new Pose(100, 100, Math.toRadians(0));
     }
 
     protected Pose getControlPoint1(){return new Pose(96.661, 81.976);}

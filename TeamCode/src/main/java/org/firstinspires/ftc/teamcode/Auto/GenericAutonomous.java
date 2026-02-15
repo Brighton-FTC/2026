@@ -56,7 +56,7 @@ public abstract class GenericAutonomous extends OpMode {
     public void buildPaths() {
         /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
         scorePreload = new Path(new BezierLine(startingPose, startScorePose));
-        scorePreload.setConstantHeadingInterpolation(startingPose.getHeading());
+        scorePreload.setLinearHeadingInterpolation(startingPose.getHeading(), pickup1Pose.getHeading());
 
     /* Here is an example for Constant Interpolation
     scorePreload.setConstantInterpolation(startPose.getHeading()); */
@@ -64,7 +64,7 @@ public abstract class GenericAutonomous extends OpMode {
         /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         grabPickup1 = follower.pathBuilder()
                 .addPath(new BezierCurve(startScorePose, controlPoint1, pickup1Pose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading())
+                .setConstantHeadingInterpolation(pickup1Pose.getHeading())
                 .build();
 
         /* This is our scorePickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
