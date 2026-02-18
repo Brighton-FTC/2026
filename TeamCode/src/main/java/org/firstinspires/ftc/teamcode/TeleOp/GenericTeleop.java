@@ -38,26 +38,23 @@ public abstract class GenericTeleop extends OpMode {
 
     private boolean aim = false;
 
+    private boolean transfering = false;
+
     private GamepadEx gamepadEx1;
     private GamepadEx gamepadEx2;
     public final Pose startingPose = getStartingPose();
     private boolean automatedDrive = false;
-    private Supplier<PathChain> pathChain;
-
     private TurretPIDComponent turret;
-    //private FlyWheelMotorComponent turret;
 
-    private ServoKickComponent kicker1;
-    //private ServoKickComponent kicker2;
+    private ServoKickComponent cap;
 
-    //private ServoKickComponent kicker3;
-
+    private FlyWheelMotorComponent transfer;
     private FlyWheelMotorComponent launcher;
 
     private IntakeMotorComponent intake;
     private TelemetryManager telemetryManager;
     private boolean slowMode = false;
-    private double slowModeMultiplier = 0.5;
+    private double slowModeMultiplier = 0.25;
 
     protected abstract double getObjectXPosition();
 
@@ -72,6 +69,8 @@ public abstract class GenericTeleop extends OpMode {
 //
         turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, getObjectXPosition(), 144, telemetry);
         launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
+
+        transfer = new FlyWheelMotorComponent(hardwareMap, "transferMotor");
 //
        intake = new IntakeMotorComponent(hardwareMap, "intakeMotor");
 
@@ -95,23 +94,16 @@ public abstract class GenericTeleop extends OpMode {
         if (!automatedDrive) {
 
             if(driveFieldCentric) {
-                double forward = -gamepadEx1.getLeftY();
-                double strafe = gamepadEx1.getLeftX();
-
-                double heading = follower.getHeading();
-
-                double rotX = forward * Math.cos(heading) + strafe * Math.sin(heading);
-                double rotY = -forward * Math.sin(heading) + strafe * Math.cos(heading);
                 if (!slowMode) follower.setTeleOpDrive(
-                        rotY,
-                        rotX,
-                        gamepadEx1.getRightX(),
+                        gamepadEx1.getLeftY(),
+                        -gamepadEx1.getLeftX(),
+                        gamepadEx1.getRightX() * slowModeMultiplier,
                         false
                 );
 
                 else follower.setTeleOpDrive(
-                        rotY,
-                        rotX,
+                        gamepadEx1.getLeftY(),
+                        -gamepadEx1.getLeftX(),
                         gamepadEx1.getRightX() * slowModeMultiplier,
                         false
                 );
@@ -151,21 +143,37 @@ public abstract class GenericTeleop extends OpMode {
 //
             if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE) && !shooting) {
                 launcher.runMotorAt(1);
-                shooting = true;
+                shooting = !shooting;
             }
             else if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&& shooting){
                 launcher.stopMotor();
-                shooting = false;
+                shooting = !shooting;
             }
 //
 //
             if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&!intaking){
                 intake.startMotor();
-                intaking = true;
+                intaking = !intaking;
             }
             else if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&intaking){
                 intake.stopMotor();
-                intaking = false;
+                intaking = !intaking;
+            }
+
+            if(gamepadEx1.wasJustPressed(PSButtons.TRIANGLE)&&!transfering){
+                transfer.runMotorAt(1);
+                transfering = !transfering;
+            }
+            else if (gamepadEx1.wasJustPressed(PSButtons.TRIANGLE)&&transfering){
+                transfer.stopMotor();
+                transfering = !transfering;
+            }
+
+            if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
+                cap.up();
+            }
+            if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)){
+                cap.down();
             }
 //
         }
