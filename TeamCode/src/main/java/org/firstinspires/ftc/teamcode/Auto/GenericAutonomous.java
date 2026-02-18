@@ -6,8 +6,10 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.FlyWheel.DynamicAngleComponent;
 import org.firstinspires.ftc.teamcode.FlyWheel.FlyWheelMotorComponent;
 import org.firstinspires.ftc.teamcode.IntakeMotorComponent;
+import org.firstinspires.ftc.teamcode.ServoKick.ServoKickComponent;
 import org.firstinspires.ftc.teamcode.Turret.TurretPIDComponent;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
@@ -36,8 +38,11 @@ public abstract class GenericAutonomous extends OpMode {
 
 
     private TurretPIDComponent turret;
-    private FlyWheelMotorComponent launcher;
+    private DynamicAngleComponent launcher;
+    private FlyWheelMotorComponent transfer;
     private IntakeMotorComponent intake;
+
+    private ServoKickComponent cap;
 
     protected abstract double getObjectXPosition();
     protected abstract Pose getStartingPose();
@@ -105,9 +110,15 @@ public abstract class GenericAutonomous extends OpMode {
         follower.update();
 
         turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, getObjectXPosition(), 144, telemetry);
-        launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
+//        launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
 
         intake = new IntakeMotorComponent(hardwareMap, "intakeMotor");
+
+        cap = new ServoKickComponent(hardwareMap, "launchCap");
+
+        transfer = new FlyWheelMotorComponent(hardwareMap, "transfer");
+
+        launcher = new DynamicAngleComponent(hardwareMap, "servo", getObjectXPosition(), 144, 42,2, 0.2, startingPose, telemetry);
 
     }
 
@@ -116,6 +127,7 @@ public abstract class GenericAutonomous extends OpMode {
         switch (pathState) {
             case 0:
                 follower.followPath(scorePreload);
+                cap.down();
                 setState(1);
                 break;
             case 1:
@@ -135,13 +147,16 @@ public abstract class GenericAutonomous extends OpMode {
                     /* Grab Sample */
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     follower.followPath(scorePickup1,true);
+                    intaking = !intaking;
+                    transfer.runMotorAt(1);
+                    cap.up();
                     setState(3);
                 }
                 break;
             case 3:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
-                    intaking = !intaking;
+                    cap.down();
                     /* Score Sample */
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     follower.followPath(grabPickup2,true);
@@ -155,13 +170,16 @@ public abstract class GenericAutonomous extends OpMode {
                     /* Grab Sample */
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     follower.followPath(scorePickup2,true);
+                    intaking = !intaking;
+                    transfer.runMotorAt(1);
+                    cap.up();
                     setState(5);
                 }
                 break;
             case 5:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
-                    intaking = !intaking;
+                    cap.down();
                     /* Score Sample */
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     follower.followPath(grabPickup3,true);
@@ -172,6 +190,9 @@ public abstract class GenericAutonomous extends OpMode {
             case 6:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
                 if(!follower.isBusy()) {
+                    intaking = !intaking;
+                    transfer.runMotorAt(1);
+                    cap.up();
                     /* Grab Sample */
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     follower.followPath(scorePickup3, true);
@@ -197,7 +218,7 @@ public abstract class GenericAutonomous extends OpMode {
         // These loop the movements of the robot, these must be called continuously in order to work
         follower.update();
         turret.aimToObject(follower.getPose().getX(), follower.getPose().getY(), follower.getHeading());
-        launcher.runMotorAt(1);
+        launcher.dynamicMotorPower();
 
         if (intaking){
             intake.startMotor();
