@@ -27,7 +27,7 @@ import org.firstinspires.ftc.teamcode.AprilTag.AprilTagLocalization;
 public class TurretPIDComponent {
 
     private Follower follower;
-    public static double kP = 0.0017;
+    public static double kP = 0.008;
     public static double kI = 0.0;
     public static double kD = 0.0;
 
