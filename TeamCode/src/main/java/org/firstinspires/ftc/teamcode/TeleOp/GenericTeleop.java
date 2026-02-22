@@ -70,7 +70,9 @@ public abstract class GenericTeleop extends OpMode {
         turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, getObjectXPosition(), 144, telemetry);
         launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
 
-//        transfer = new FlyWheelMotorComponent(hardwareMap, "transferMotor");
+        transfer = new FlyWheelMotorComponent(hardwareMap, "transferMotor");
+
+        cap = new ServoKickComponent(hardwareMap, "launchCap");
 //
        intake = new IntakeMotorComponent(hardwareMap, "intakeMotor");
 
@@ -160,22 +162,22 @@ public abstract class GenericTeleop extends OpMode {
                 intaking = !intaking;
             }
 
-//            if(gamepadEx1.wasJustPressed(PSButtons.TRIANGLE)&&!transfering){
-//                transfer.runMotorAt(1);
-//                transfering = !transfering;
-//            }
-//            else if (gamepadEx1.wasJustPressed(PSButtons.TRIANGLE)&&transfering){
-//                transfer.stopMotor();
-//                transfering = !transfering;
-//            }
+            if(gamepadEx1.wasJustPressed(PSButtons.TRIANGLE)&&!transfering){
+                transfer.runMotorAt(1);
+                transfering = !transfering;
+            }
+            else if (gamepadEx1.wasJustPressed(PSButtons.TRIANGLE)&&transfering){
+                transfer.stopMotor();
+                transfering = !transfering;
+            }
 
-//            if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
-//                cap.up();
-//            }
-//            if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)){
-//                cap.down();
-//            }
-////
+            if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
+                cap.up();
+            }
+            if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)){
+                cap.down();
+            }
+//
         }
 
 
