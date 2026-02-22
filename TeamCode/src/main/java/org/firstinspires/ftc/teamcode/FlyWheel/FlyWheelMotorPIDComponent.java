@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.FlyWheel;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.controller.wpilibcontroller.SimpleMotorFeedforward;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.bylazar.configurables.annotations.Configurable;
@@ -13,28 +14,26 @@ public class FlyWheelMotorPIDComponent {
 
     private final Motor motor;
 
-    public double kP = 0.0015;
-    public double kI = 0 ;
-    public double kD = 0;
-    public double kS;
-    public double kV;
-    private SimpleMotorFeedforward ff = new SimpleMotorFeedforward(kS, kV);
-
-    private PIDController controller = new PIDController(kP, kI, kD);
+    public static double kP = 0.0015;
+    public static double kI = 0 ;
+    public static double kD = 0;
+    public double kF = 0;
+    private PIDFController controller = new PIDFController(kP, kI, kD, kF);
 
 
 
     public FlyWheelMotorPIDComponent(HardwareMap hardwareMap, String motorID){
         motor = new Motor(hardwareMap, motorID);
+        motor.setRunMode(Motor.RunMode.VelocityControl);
+        motor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
     }
 
     public void runMotorAt(double velocity){
         controller.setSetPoint(velocity);
-        double PIDpower = controller.calculate(motor.getCorrectedVelocity(), velocity);
-        double FFpower = ff.calculate(velocity);
+        double power = controller.calculate(getVel());
 
 
-        motor.set(FFpower + PIDpower);
+        motor.set(power);
 
     }
 

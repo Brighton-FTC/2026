@@ -218,7 +218,7 @@ public abstract class GenericAutonomous extends OpMode {
         // These loop the movements of the robot, these must be called continuously in order to work
         follower.update();
         turret.aimToObject(follower.getPose().getX(), follower.getPose().getY(), follower.getHeading());
-        launcher.dynamicMotorPower();
+        launcher.dynamicMotorPower(follower.getPose().getX(), follower.getPose().getY());
 
         if (intaking){
             intake.startMotor();

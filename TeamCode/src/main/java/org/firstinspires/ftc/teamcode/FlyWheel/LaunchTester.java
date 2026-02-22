@@ -36,7 +36,7 @@ public class LaunchTester extends OpMode {
             run = false;
         }
         if (run){
-            launcher.dynamicMotorPower();
+            launcher.dynamicMotorPower(0, 0);
         }
 
 
