@@ -116,7 +116,7 @@ public abstract class GenericAutonomous extends OpMode {
 
         cap = new ServoKickComponent(hardwareMap, "launchCap");
 
-        transfer = new FlyWheelMotorComponent(hardwareMap, "transfer");
+        transfer = new FlyWheelMotorComponent(hardwareMap, "transferMotor");
 
         launcher = new DynamicAngleComponent(hardwareMap, "servo", getObjectXPosition(), 144, 42,2, 0.2, startingPose, telemetry);
 
