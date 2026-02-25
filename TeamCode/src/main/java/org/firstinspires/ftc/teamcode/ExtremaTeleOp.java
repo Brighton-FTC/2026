@@ -53,7 +53,7 @@ public class ExtremaTeleOp extends LinearOpMode {
 
             if (gamepad.wasJustPressed(PSButtons.SQUARE)) {
                 if(!intake_on) {
-                    intake.set(0.8);
+                    intake.set(0.4);
                     intake_on = true;
                 } else {
                     intake.set(0);
@@ -63,7 +63,7 @@ public class ExtremaTeleOp extends LinearOpMode {
 
             if (gamepad.wasJustPressed(PSButtons.CIRCLE)) {
                 if(!storage_on) {
-                    storage.set(0.5);
+                    storage.set(0.8);
                     storage_on = true;
                 } else {
                     storage.set(0);
