@@ -28,6 +28,8 @@ public class TurretPIDComponent {
 
     private Follower follower;
     public static double kP = 0.008;
+
+    public static double n = 360;
     public static double kI = 0.0;
     public static double kD = 0.0;
 
@@ -71,7 +73,7 @@ public class TurretPIDComponent {
     }
 
     public void resetTurretEncoder(){
-        turretMotor.stopAndResetEncoder();
+        turretMotor.resetEncoder();
     }
 
     public double encoderTicksToAngle(int ticks) {
@@ -116,7 +118,7 @@ public class TurretPIDComponent {
             turretAngle = encoderTicksToAngle(turretMotor.getCurrentPosition());
 
             double toTurn = destinationAngle - (turretAngle + robotAngle);
-            double turnMod = (((toTurn + 540) % 360) - 180);
+            double turnMod = ((toTurn + n + 180) % 360 + 360) % 360 - 180;
             telemetry.addData("To turn :", turnMod);
             telemetry.update();
 
