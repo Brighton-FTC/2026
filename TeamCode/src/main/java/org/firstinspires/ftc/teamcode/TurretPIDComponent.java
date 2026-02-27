@@ -27,7 +27,9 @@ import org.firstinspires.ftc.teamcode.AprilTagLocalization;
 public class TurretPIDComponent {
 
     private Follower follower;
-    public static double kP = 0.0017;
+    public static double kP = 0.008;
+
+    public static double n = 360;
     public static double kI = 0.0;
     public static double kD = 0.0;
 
@@ -71,7 +73,7 @@ public class TurretPIDComponent {
     }
 
     public void resetTurretEncoder(){
-        turretMotor.stopAndResetEncoder();
+        turretMotor.resetEncoder();
     }
 
     public double encoderTicksToAngle(int ticks) {
@@ -98,7 +100,7 @@ public class TurretPIDComponent {
         telemetry.addData("Motor Power: ", power);
         telemetry.update();
 
-        turretMotor.set(-power);
+        turretMotor.set(power);
     }
 
 
@@ -116,20 +118,22 @@ public class TurretPIDComponent {
             turretAngle = encoderTicksToAngle(turretMotor.getCurrentPosition());
 
             double toTurn = destinationAngle - (turretAngle + robotAngle);
-            telemetry.addData("To turn :", toTurn);
+            double turnMod = ((toTurn + n + 180) % 360 + 360) % 360 - 180;
+            telemetry.addData("To turn :", turnMod);
             telemetry.update();
-            double turnMod = (((toTurn + 540) % 360) - 180);
 
 
-            // take the mod/remainder of toTurn/360 to keep angle in the range of [0,360]
-            if (turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) > 180) {
-                turnTurretBy(turnMod-360);
-            } else if (turnMod + encoderTicksToAngle(turretMotor.getCurrentPosition()) < -180) {
-                turnTurretBy(turnMod+360);
-            } else {
-                turnTurretBy(turnMod);
-            }
-//           turnTurretBy(turnMod); // isn't this turning twice?
+//            // take the mod/remainder of toTurn/360 to keep angle in the range of [0,360]
+//            if (destinationAngle > 180) {
+//                telemetry.addData("long path", true);
+//                telemetry.update();
+//            } else if (destinationAngle < -180) {
+//                telemetry.addData("long path", true);
+//                telemetry.update();
+//            } else {
+//                telemetry.addData("long path", false);
+//            }
+            turnTurretBy(turnMod);
         }
     }
 
