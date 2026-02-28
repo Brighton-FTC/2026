@@ -118,7 +118,7 @@ public class TurretPIDComponent {
             turretAngle = encoderTicksToAngle(turretMotor.getCurrentPosition());
 
             double toTurn = destinationAngle - (turretAngle + robotAngle);
-            double turnMod = ((toTurn + n + 180) % 360 + 360) % 360 - 180;
+            double turnMod = ((toTurn + n) % 360 + 360) % 360 - 180;
             telemetry.addData("To turn :", turnMod);
             telemetry.update();
 
