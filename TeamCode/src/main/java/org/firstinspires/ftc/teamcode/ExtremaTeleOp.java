@@ -16,7 +16,7 @@ public class ExtremaTeleOp extends LinearOpMode {
     public void runOpMode() {
         boolean fieldCentric = false;
         boolean intake_on = false;
-        boolean storage_on = false;
+        boolean outtake_on = false;
         double maxPower = 1;
 
         Motor[] motors = {
@@ -28,6 +28,7 @@ public class ExtremaTeleOp extends LinearOpMode {
 
         Motor intake = new Motor(hardwareMap, "intake");
         Motor storage = new Motor(hardwareMap, "storage");
+        Motor outtake = new Motor(hardwareMap, "outtake");
 
 
         MecanumDrive drive = new MecanumDrive(motors[0], motors[1], motors[2], motors[3]);
@@ -60,6 +61,20 @@ public class ExtremaTeleOp extends LinearOpMode {
                     intake.set(0);
                     storage.set(0);
                     intake_on = false;
+                }
+            }
+
+            if (gamepad.wasJustPressed(PSButtons.CIRCLE)) {
+                if (!outtake_on) {
+                    outtake.set(1);
+                    intake.set(1);
+                    storage.set(1);
+                    outtake_on = true;
+                } else {
+                    outtake.set(0);
+                    intake.set(0);
+                    storage.set(0);
+                    outtake_on = false;
                 }
             }
 
