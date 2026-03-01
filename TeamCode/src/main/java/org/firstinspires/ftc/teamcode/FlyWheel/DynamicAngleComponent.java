@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.FlyWheel;
 
 
 import com.acmerobotics.dashboard.config.Config;
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -19,13 +20,9 @@ import java.lang.Math;
 
 
 @Config
+@Configurable
 public class DynamicAngleComponent {
 
-    private Servo launchAngleServo;
-
-    private static final double MIN_POSITION = 0;
-
-    private static final double MAX_POSITION = 180;
 
     private double objectXPosition;
 
@@ -49,8 +46,6 @@ public class DynamicAngleComponent {
     private Follower follower;
 
     public DynamicAngleComponent(HardwareMap hardwareMap, String servoID, double objectXPosition, double objectYPosition, double objectHeight, double flyWheelRadius, double efficiency, Pose startingPose, Telemetry telemetry) {
-        launchAngleServo = hardwareMap.servo.get(servoID);
-        launchAngleServo.setDirection(Servo.Direction.REVERSE);
 //        camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1", telemetry);
         //flyWheel = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
         flyWheel = new FlyWheelMotorPIDComponent(hardwareMap, "flyWheelMotor");
@@ -67,15 +62,6 @@ public class DynamicAngleComponent {
 
     //Gear ratio for servo gear vs launcher gear
     //setPos (Gr*degrees/ppd)/180
-    public void turnServoTo(double degrees) {
-        //Gear ratio = 2, launch angle is set to 60 degrees when servo is at neutral position.
-        //Servo constrained [0, 90], launch angle constrained [45, 90]
-        launchAngleServo.setPosition((2*(degrees-60))/300);
-    }
-
-    public void resetServo(){
-        launchAngleServo.setPosition(0);
-    }
 
     public void dynamicMotorPower(double robotX, double robotY) {
 

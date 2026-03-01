@@ -11,6 +11,7 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.FlyWheel.DynamicAngleComponent;
 import org.firstinspires.ftc.teamcode.FlyWheel.FlyWheelMotorComponent;
 import org.firstinspires.ftc.teamcode.IntakeMotorComponent;
 import org.firstinspires.ftc.teamcode.PSButtons;
@@ -49,7 +50,7 @@ public abstract class GenericTeleop extends OpMode {
     private ServoKickComponent cap;
 
     private FlyWheelMotorComponent transfer;
-    private FlyWheelMotorComponent launcher;
+    private DynamicAngleComponent launcher;
 
     private IntakeMotorComponent intake;
     private TelemetryManager telemetryManager;
@@ -68,7 +69,7 @@ public abstract class GenericTeleop extends OpMode {
         telemetryManager = PanelsTelemetry.INSTANCE.getTelemetry();
 //
         turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, getObjectXPosition(), 144, telemetry);
-        launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
+        launcher = new DynamicAngleComponent(hardwareMap, "servo", getObjectXPosition(), 144, 42,2, 0.2, startingPose, telemetry);
 
         transfer = new FlyWheelMotorComponent(hardwareMap, "transferMotor");
 
@@ -99,14 +100,14 @@ public abstract class GenericTeleop extends OpMode {
                 if (!slowMode) follower.setTeleOpDrive(
                         gamepadEx1.getLeftY(),
                         -gamepadEx1.getLeftX(),
-                        gamepadEx1.getRightX() * slowModeMultiplier,
+                        -gamepadEx1.getRightX() * slowModeMultiplier,
                         false
                 );
 
                 else follower.setTeleOpDrive(
                         gamepadEx1.getLeftY(),
                         -gamepadEx1.getLeftX(),
-                        gamepadEx1.getRightX() * slowModeMultiplier,
+                        -gamepadEx1.getRightX() * slowModeMultiplier,
                         false
                 );
             }
@@ -114,7 +115,7 @@ public abstract class GenericTeleop extends OpMode {
                 if (!slowMode) follower.setTeleOpDrive(
                         gamepadEx1.getLeftY(),
                         -gamepadEx1.getLeftX(),
-                        gamepadEx1.getRightX(),
+                        -gamepadEx1.getRightX(),
                         true
                 );
 
@@ -122,7 +123,7 @@ public abstract class GenericTeleop extends OpMode {
                         gamepadEx1.getLeftY() * slowModeMultiplier,
 
                         -gamepadEx1.getLeftX() * slowModeMultiplier,
-                        gamepadEx1.getRightX() * slowModeMultiplier,
+                        -gamepadEx1.getRightX() * slowModeMultiplier,
                         true
                 );
             }
@@ -144,11 +145,11 @@ public abstract class GenericTeleop extends OpMode {
             }
 //
             if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE) && !shooting) {
-                launcher.runMotorAt(1);
+                launcher.dynamicMotorPower(follower.getPose().getX(), follower.getPose().getY());
                 shooting = !shooting;
             }
             else if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&& shooting){
-                launcher.stopMotor();
+                launcher.stop();
                 shooting = !shooting;
             }
 //

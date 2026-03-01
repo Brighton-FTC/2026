@@ -9,6 +9,7 @@ public class IntakeMotorComponent {
     public IntakeMotorComponent(HardwareMap hardwareMap, String motorID){
         motor = new Motor(hardwareMap, motorID);
         motor.setRunMode(Motor.RunMode.RawPower);
+        motor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
     }
 
