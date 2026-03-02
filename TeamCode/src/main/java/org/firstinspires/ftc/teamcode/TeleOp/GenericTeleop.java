@@ -39,7 +39,6 @@ public abstract class GenericTeleop extends OpMode {
 
     private boolean aim = false;
 
-    private boolean transfering = false;
 
     private GamepadEx gamepadEx1;
     private GamepadEx gamepadEx2;
@@ -50,7 +49,8 @@ public abstract class GenericTeleop extends OpMode {
     private ServoKickComponent cap;
 
     private FlyWheelMotorComponent transfer;
-    private DynamicAngleComponent launcher;
+//    private DynamicAngleComponent launcher;
+    private FlyWheelMotorComponent launcher;
 
     private IntakeMotorComponent intake;
     private TelemetryManager telemetryManager;
@@ -69,8 +69,8 @@ public abstract class GenericTeleop extends OpMode {
         telemetryManager = PanelsTelemetry.INSTANCE.getTelemetry();
 //
         turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, getObjectXPosition(), 144, telemetry);
-        launcher = new DynamicAngleComponent(hardwareMap, "servo", getObjectXPosition(), 144, 42,2, 0.2, startingPose, telemetry);
-
+//        launcher = new DynamicAngleComponent(hardwareMap, "servo", getObjectXPosition(), 144, 42,2, 0.2, startingPose, telemetry);
+        launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
         transfer = new FlyWheelMotorComponent(hardwareMap, "transferMotor");
 
         cap = new ServoKickComponent(hardwareMap, "launchCap");
@@ -145,32 +145,27 @@ public abstract class GenericTeleop extends OpMode {
             }
 //
             if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE) && !shooting) {
-                launcher.dynamicMotorPower(follower.getPose().getX(), follower.getPose().getY());
+//                launcher.dynamicMotorPower(follower.getPose().getX(), follower.getPose().getY());
+                launcher.runMotorAt(1);
                 shooting = !shooting;
             }
             else if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&& shooting){
-                launcher.stop();
+                launcher.stopMotor();
                 shooting = !shooting;
             }
 //
 //
             if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&!intaking){
                 intake.startMotor();
+                transfer.runMotorAt(1);
                 intaking = !intaking;
             }
             else if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&intaking){
                 intake.stopMotor();
+                transfer.stopMotor();
                 intaking = !intaking;
             }
 
-            if(gamepadEx1.wasJustPressed(PSButtons.TRIANGLE)&&!transfering){
-                transfer.runMotorAt(1);
-                transfering = !transfering;
-            }
-            else if (gamepadEx1.wasJustPressed(PSButtons.TRIANGLE)&&transfering){
-                transfer.stopMotor();
-                transfering = !transfering;
-            }
 
             if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
                 cap.up();
