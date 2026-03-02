@@ -49,8 +49,8 @@ public abstract class GenericTeleop extends OpMode {
     private ServoKickComponent cap;
 
     private FlyWheelMotorComponent transfer;
-//    private DynamicAngleComponent launcher;
-    private FlyWheelMotorComponent launcher;
+    private DynamicAngleComponent launcher;
+//    private FlyWheelMotorComponent launcher;
 
     private IntakeMotorComponent intake;
     private TelemetryManager telemetryManager;
@@ -69,8 +69,8 @@ public abstract class GenericTeleop extends OpMode {
         telemetryManager = PanelsTelemetry.INSTANCE.getTelemetry();
 //
         turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, getObjectXPosition(), 144, telemetry);
-//        launcher = new DynamicAngleComponent(hardwareMap, "servo", getObjectXPosition(), 144, 42,2, 0.2, startingPose, telemetry);
-        launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
+        launcher = new DynamicAngleComponent(hardwareMap, "servo", getObjectXPosition(), 144, 42,2, 0.2, startingPose, telemetry);
+//        launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
         transfer = new FlyWheelMotorComponent(hardwareMap, "transferMotor");
 
         cap = new ServoKickComponent(hardwareMap, "launchCap");
@@ -145,12 +145,13 @@ public abstract class GenericTeleop extends OpMode {
             }
 //
             if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE) && !shooting) {
-//                launcher.dynamicMotorPower(follower.getPose().getX(), follower.getPose().getY());
-                launcher.runMotorAt(1);
+                launcher.dynamicMotorPower(follower.getPose().getX(), follower.getPose().getY());
+//                launcher.runMotorAt(1);
                 shooting = !shooting;
             }
             else if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&& shooting){
-                launcher.stopMotor();
+//                launcher.stopMotor();
+                launcher.stop();
                 shooting = !shooting;
             }
 //
