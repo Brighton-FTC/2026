@@ -15,12 +15,12 @@ public class MecanumDrivePractice extends LinearOpMode{
     private IMU imu;
 
     public void init(HardwareMap hwMap) {
-        frontLeftMotor = new Motor(hwMap, "lf");
-        backLeftMotor = new Motor(hwMap, "lr");
-        frontRightMotor = new Motor(hwMap, "rf");
-        backRightMotor = new Motor(hwMap, "rr");
+        frontLeftMotor = new Motor(hardwareMap, "front_left_drive");
+        backLeftMotor = new Motor(hardwareMap, "back_left_drive");
+        frontRightMotor = new Motor(hardwareMap, "front_right_drive");
+        backRightMotor = new Motor(hardwareMap, "back_right_drive");
 
-        imu = hwMap.get(IMU.class, "imu");
+        imu = hardwareMap.get(IMU.class, "imu");
 
         //check if this is correct as well
         RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(
