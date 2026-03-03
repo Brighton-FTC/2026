@@ -57,7 +57,7 @@ public class TurretPIDComponent {
         //remove if
         turretMotor.setDistancePerPulse(4*scalingFactor); // 360/537.7 = 4*0.167
         turretMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        turretMotor.setRunMode(Motor.RunMode.VelocityControl);
+        turretMotor.setRunMode(Motor.RunMode.RawPower);
 
 //        camera = new AprilTagLocalization(hardwareMap, cameraPosition, cameraOrientation, "Webcam 1", telemetry);
         this.objectXPosition = objectXPosition;

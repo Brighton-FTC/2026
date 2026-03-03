@@ -14,25 +14,23 @@ public class FlyWheelMotorPIDComponent {
 
     private final Motor motor;
 
-    public static double kP = 0.0015;
+    public static double kP = 1;
     public static double kI = 0 ;
     public static double kD = 0;
-    public double kF = 0;
+    public static double kF = 0;
     private PIDFController controller = new PIDFController(kP, kI, kD, kF);
 
 
 
     public FlyWheelMotorPIDComponent(HardwareMap hardwareMap, String motorID){
         motor = new Motor(hardwareMap, motorID);
-        motor.setRunMode(Motor.RunMode.VelocityControl);
+        motor.setRunMode(Motor.RunMode.RawPower);
         motor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
     }
 
     public void runMotorAt(double velocity){
         controller.setSetPoint(velocity);
         double power = controller.calculate(getVel());
-
-
         motor.set(power);
 
     }
