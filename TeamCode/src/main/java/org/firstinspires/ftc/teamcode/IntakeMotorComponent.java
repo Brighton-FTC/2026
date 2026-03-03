@@ -17,6 +17,8 @@ public class IntakeMotorComponent {
         motor.set(-1);
     }
 
+    public void reverseMotor(){motor.set(1);}
+
     public void stopMotor(){
         motor.stopMotor();
     }

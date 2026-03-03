@@ -37,6 +37,8 @@ public abstract class GenericTeleop extends OpMode {
 
     private boolean intaking = false;
 
+    private boolean transfering = false;
+
     private boolean aim = false;
 
 
@@ -165,6 +167,30 @@ public abstract class GenericTeleop extends OpMode {
                 intake.stopMotor();
                 transfer.stopMotor();
                 intaking = !intaking;
+            }
+
+            if (gamepadEx1.wasJustPressed(PSButtons.TRIANGLE)&&!intaking){
+                intake.reverseMotor();
+                intaking = !intaking;
+            }
+            else if(gamepadEx1.wasJustPressed(PSButtons.TRIANGLE)&&intaking){
+                intake.stopMotor();
+                intaking = !intaking;
+            }
+
+            if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)&&!transfering){
+                transfer.runMotorAt(1);
+                transfering = !transfering;
+            }else if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)&&transfering){
+                transfer.stopMotor();
+                transfering = !transfering;
+            }
+            if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)&&!intaking){
+                intake.startMotor();
+                intaking = !intaking;
+            }else if(intaking&&gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)){
+                intaking = !intaking;
+                intake.stopMotor();
             }
 
 
