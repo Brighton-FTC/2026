@@ -25,7 +25,7 @@ public class Constants {
             .leftRearMotorName("back_left_drive")
             .leftFrontMotorName("front_left_drive")
             .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
 
@@ -45,9 +45,12 @@ public class Constants {
             .leftFrontMotorName("front_left_drive")
             .robotLength(13)
             .robotWidth(16)
-            .leftFrontEncoderDirection(Encoder.REVERSE)
-            .leftRearEncoderDirection(Encoder.REVERSE)
-            .rightFrontEncoderDirection(Encoder.FORWARD)
-            .rightRearEncoderDirection(Encoder.FORWARD);
+            .forwardTicksToInches(0.010141039824677752)
+            .strafeTicksToInches(0.10231375087589775)
+            .turnTicksToInches(0.12697726404753162)
+            .leftFrontEncoderDirection(Encoder.FORWARD)
+            .leftRearEncoderDirection(Encoder.FORWARD)
+            .rightFrontEncoderDirection(Encoder.REVERSE)
+            .rightRearEncoderDirection(Encoder.REVERSE);
 
 }
