@@ -124,7 +124,10 @@ public class TurretPIDComponent {
             else{turnMod = ((toTurn - n) % -360) + 180;}
 
             telemetry.addData("To turn :", turnMod);
+            telemetry.addData("error", controller.getPositionError());
+            telemetry.addData("destination", toTurn);
             telemetry.update();
+
 
 
 //            // take the mod/remainder of toTurn/360 to keep angle in the range of [0,360]
