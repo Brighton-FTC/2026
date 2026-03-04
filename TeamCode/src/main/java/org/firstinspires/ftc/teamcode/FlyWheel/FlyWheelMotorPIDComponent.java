@@ -18,6 +18,8 @@ public class FlyWheelMotorPIDComponent {
     public static double kI = 0 ;
     public static double kD = 0;
     public static double kF = 0;
+
+    private double power;
     private PIDFController controller = new PIDFController(kP, kI, kD, kF);
 
 
@@ -28,17 +30,18 @@ public class FlyWheelMotorPIDComponent {
         motor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
     }
 
-    public double runMotorAt(double velocity){
+    public void runMotorAt(double velocity){
         controller.setSetPoint(velocity);
-        double power = controller.calculate(getVel());
+        power = controller.calculate(getVel());
         motor.set(power);
-        return power;
 
     }
 
     public double getVel(){
         return motor.getCorrectedVelocity();
     }
+
+    public double getPower(){return power;}
 
     public void stopMotor(){
         motor.stopMotor();
