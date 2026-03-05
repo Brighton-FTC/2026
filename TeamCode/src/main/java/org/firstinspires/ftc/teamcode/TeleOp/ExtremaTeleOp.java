@@ -99,7 +99,7 @@ public class ExtremaTeleOp extends LinearOpMode {
                 drive.driveFieldCentric(-(gamepad1.left_stick_y*maxPower), (gamepad1.left_stick_x*maxPower), -(gamepad1.right_stick_x*maxPower), yaw, true);
                 telemetry.addLine("Field Centric");
             } else {
-                drive.driveRobotCentric(-(gamepad1.left_stick_y*maxPower), (gamepad1.left_stick_x*maxPower), -(gamepad1.right_stick_x*maxPower), true);
+                drive.driveRobotCentric(-(gamepad1.left_stick_y*maxPower), (gamepad1.left_stick_x*maxPower), (gamepad1.right_stick_x*maxPower), true);
                 telemetry.addLine("Robot Centric");
             }
 
