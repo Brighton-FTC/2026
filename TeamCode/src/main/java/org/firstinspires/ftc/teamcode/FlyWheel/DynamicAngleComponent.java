@@ -90,8 +90,15 @@ public class DynamicAngleComponent {
             //We let y = objectHeight and x = distance from robot
             double denom = distance * Math.tan(Math.toRadians(60)) - objectHeight;
 
-            //Linear velocity required for artifact to pass through x = distance from robot and y = object height
-            double v = Math.sqrt((386.09 * Math.pow(distance, 2)) / (2.0 * Math.cos(Math.toRadians(60)) * Math.cos(Math.toRadians(60)) * denom));
+            double v;
+
+            if(denom<=0) {
+                //Linear velocity required for artifact to pass through x = distance from robot and y = object height
+                v = 0;
+            }
+            else {
+                v = Math.sqrt((386.09 * Math.pow(distance, 2)) / (2.0 * Math.cos(Math.toRadians(60)) * Math.cos(Math.toRadians(60)) * denom));
+            }
 
 //            double launchEnergy = 0.5*0.00512835678 *Math.pow(v, 2);
 //            double requiredEnergy = launchEnergy / efficiency; //we tune efficiency
@@ -127,7 +134,7 @@ public class DynamicAngleComponent {
 //            double v_real = Math.sqrt((2*requiredEnergy)/inertia); //angular velocity calculated from rotational energy 1/2 IΩ (omega)
             double v_real = v/efficiency;
             //Linear velocity is converted to angular velocity.
-            double rpm = (60.0 / (2.0 * Math.PI*3.78)) * v_real;
+            double rpm = (60.0 / (2.0 * Math.PI*flyWheelRadius)) * v_real;
 
 
 

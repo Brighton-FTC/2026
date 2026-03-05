@@ -73,7 +73,7 @@ public abstract class GenericTeleop extends OpMode {
         telemetryManager = PanelsTelemetry.INSTANCE.getTelemetry();
 //
         turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, getObjectXPosition(), 144, telemetry);
-//        launcher = new DynamicAngleComponent(hardwareMap, "servo", getObjectXPosition(), 144, 42,2, 0.2, startingPose, telemetry);
+//        launcher = new DynamicAngleComponent(hardwareMap, "servo", getObjectXPosition(), 144, 42,1.9, 0.2, startingPose, telemetry);
         launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
         transfer = new FlyWheelMotorComponent(hardwareMap, "transferMotor");
 
