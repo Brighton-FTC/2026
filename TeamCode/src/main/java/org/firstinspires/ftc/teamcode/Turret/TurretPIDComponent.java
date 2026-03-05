@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -29,9 +30,11 @@ public class TurretPIDComponent {
     private Follower follower;
     public static double kP = 0.008;
 
-    public static double n = 360;
-    public static double kI = 0.0;
+    public static double n = 540;
+    public static double kI = 0.1;
     public static double kD = 0.0;
+
+    public static double kF = 0.0;
 
     private double scalingFactor;
 
@@ -49,7 +52,7 @@ public class TurretPIDComponent {
     private YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES,
             0, -90, 0, 0);
 
-    private final PIDController controller = new PIDController(0, 0, 0);
+    private final PIDFController controller = new PIDFController(0, 0, 0, 0);
 
     public TurretPIDComponent(HardwareMap hardwareMap, String motorID, double scalingFactor, double objectXPosition, double objectYPosition, Telemetry telemetry) {
         turretMotor = new Motor(hardwareMap, motorID);
@@ -90,7 +93,7 @@ public class TurretPIDComponent {
     }
 
     public void turnTurretBy(double degrees) {
-        controller.setPID(kP, kI, kD);
+        controller.setPIDF(kP, kI, kD, kF);
 
         double currentPosition = turretMotor.getCurrentPosition();
         double TARGET_TICK_VALUE = angleToEncoderTicks(degrees) + currentPosition;
@@ -119,12 +122,12 @@ public class TurretPIDComponent {
 
             double toTurn = destinationAngle - (turretAngle + robotAngle);
             double turnMod;
-            if (toTurn < 0){
-             turnMod = ((toTurn + n) % 360) - 180;}
-            else{turnMod = ((toTurn - n) % -360) + 180;}
+//            if (toTurn < 0){
+//             turnMod = ((toTurn + n) % 360) - 180;}
+//            else{turnMod = ((toTurn - n) % -360) + 180;}
 
-            telemetry.addData("To turn :", turnMod);
-            telemetry.addData("error", controller.getPositionError());
+            telemetry.addData("To turn :", toTurn);
+            telemetry.addData("error", encoderTicksToAngle((int) controller.getPositionError()));
             telemetry.addData("destination", toTurn);
             telemetry.update();
 
@@ -140,7 +143,7 @@ public class TurretPIDComponent {
 //            } else {
 //                telemetry.addData("long path", false);
 //            }
-           turnTurretBy(turnMod);
+           turnTurretBy(toTurn);
         }
     }
 
