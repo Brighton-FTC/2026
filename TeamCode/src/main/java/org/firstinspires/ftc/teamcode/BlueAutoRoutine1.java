@@ -5,15 +5,19 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.pedropathing.util.Timer;
 
+import org.firstinspires.ftc.teamcode.mechanisms.outtakeLogic;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 //OUTDATED - USE BLUE1AUTO INSTEAD
 @Autonomous
 public class BlueAutoRoutine1 extends OpMode {
     private Follower follower;
     private Timer pathTimer, opModeTimer;
+    private outtakeLogic shooter = new outtakeLogic();
+    private boolean shotsTriggered = false;
 
     public enum PathState {
         DRIVE_START_SHOOT,
@@ -44,7 +48,15 @@ public class BlueAutoRoutine1 extends OpMode {
             case SHOOT_LOAD:
                 if (!follower.isBusy()) {
                     //TODO: add shooter logic here
-                    telemetry.addLine("Path 1 done");
+                    if (!follower.isBusy()) {
+                        if (!shotsTriggered) {
+                            shooter.fire(3);
+                            shotsTriggered = true;
+                        }
+                        else if (shotsTriggered && !shooter.isBusy()){
+                            telemetry.addLine("Path 1 done");
+                        }
+                    }
                 }
                 break;
             default:
@@ -56,6 +68,7 @@ public class BlueAutoRoutine1 extends OpMode {
     public void setPathState(PathState newState){
         pathState = newState;
         pathTimer.resetTimer();
+        shotsTriggered = false;
     }
 
     @Override
@@ -65,6 +78,8 @@ public class BlueAutoRoutine1 extends OpMode {
         opModeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
         //TODO: add other inits for other mechanisms
+        shooter.init(hardwareMap);
+
         buildPaths();
         follower.setPose(startPose);
     }
@@ -77,6 +92,7 @@ public class BlueAutoRoutine1 extends OpMode {
     @Override
     public void loop() {
         follower.update();
+        shooter.update();
         statePathUpdate();
         
         telemetry.addData("path state", pathState.toString());
