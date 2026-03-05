@@ -28,6 +28,6 @@ public class RedTeleop extends GenericTeleop {
     }
 
     protected Pose getStartingPose() {
-        return new Pose(132, 132, Math.toRadians(225));
+        return new Pose(100, 100, Math.toRadians(0));
     }
 }

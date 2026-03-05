@@ -41,6 +41,8 @@ public abstract class GenericTeleop extends OpMode {
 
     private boolean aim = false;
 
+    private boolean opened = false;
+
 
     private GamepadEx gamepadEx1;
     private GamepadEx gamepadEx2;
@@ -179,7 +181,7 @@ public abstract class GenericTeleop extends OpMode {
             }
 
             if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)&&!transfering){
-                transfer.runMotorAt(1);
+                transfer.runMotorAt(0.5);
                 transfering = !transfering;
             }else if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)&&transfering){
                 transfer.stopMotor();
@@ -194,11 +196,13 @@ public abstract class GenericTeleop extends OpMode {
             }
 
 
-            if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
-                cap.up();
+            if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_UP)&&!opened){
+                cap.open();
+                opened = !opened;
             }
-            if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)){
-                cap.down();
+            if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_UP)&&opened){
+                cap.close();
+                opened = !opened;
             }
 //
         }

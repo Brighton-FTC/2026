@@ -11,11 +11,11 @@ public class ServoKickComponent {
 
     }
 
-    public void up(){
+    public void open(){
         kicker.setPosition(kicker.getPosition()+0.25);
     }
     //Either 0 or 1. 1 means full rotation (servo we have only ranges [0, 180] degrees. Its good to work in radians too [0, pi])
-    public void down(){
+    public void close(){
         kicker.setPosition(kicker.getPosition()-0.25);
     }
 
