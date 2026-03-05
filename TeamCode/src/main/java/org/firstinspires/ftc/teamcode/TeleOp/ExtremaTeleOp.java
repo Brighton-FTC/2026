@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -65,10 +66,24 @@ public class ExtremaTeleOp extends LinearOpMode {
                 }
             }
 
-            if (gamepad.wasJustPressed(PSButtons.CIRCLE)) {
+            if (gamepad.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
                 if (!outtake_on) {
                     outtake.set(1);
                     intake.set(1);
+                    storage.set(1);
+                    outtake_on = true;
+                } else {
+                    outtake.set(0);
+                    intake.set(0);
+                    storage.set(0);
+                    outtake_on = false;
+                }
+            }
+
+            if (gamepad.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)) {
+                if (!outtake_on) {
+                    outtake.set(0.8);
+                    intake.set(0.8);
                     storage.set(1);
                     outtake_on = true;
                 } else {
