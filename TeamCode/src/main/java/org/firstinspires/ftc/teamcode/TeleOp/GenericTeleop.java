@@ -144,9 +144,9 @@ public abstract class GenericTeleop extends OpMode {
             if (gamepadEx1.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
                 slowMode = !slowMode;
             }
-            if(gamepadEx1.wasJustPressed(PSButtons.SQUARE)){
-                driveFieldCentric = !driveFieldCentric;
-            }
+//            if(gamepadEx1.wasJustPressed(PSButtons.SQUARE)){
+//                driveFieldCentric = !driveFieldCentric;
+//            }
 //
             if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE) && !shooting) {
 //                launcher.dynamicMotorPower(follower.getPose().getX(), follower.getPose().getY());
@@ -160,49 +160,47 @@ public abstract class GenericTeleop extends OpMode {
             }
 //
 //
-            if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&!intaking){
-                intake.startMotor();
-                transfer.runMotorAt(1);
-                intaking = !intaking;
-            }
-            else if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&intaking){
-                intake.stopMotor();
-                transfer.stopMotor();
-                intaking = !intaking;
-            }
+//            if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&!intaking){
+//                intake.startMotor();
+//                transfer.runMotorAt(1);
+//                intaking = !intaking;
+//            }
+//            else if (gamepadEx1.wasJustPressed(PSButtons.CROSS)&&intaking){
+//                intake.stopMotor();
+//                transfer.stopMotor();
+//                intaking = !intaking;
+//            }
 
-            if (gamepadEx1.wasJustPressed(PSButtons.TRIANGLE)&&!intaking){
+            if (gamepadEx2.wasJustPressed(PSButtons.TRIANGLE)&&!intaking){
                 intake.reverseMotor();
                 intaking = !intaking;
             }
-            else if(gamepadEx1.wasJustPressed(PSButtons.TRIANGLE)&&intaking){
+            else if(gamepadEx2.wasJustPressed(PSButtons.TRIANGLE)&&intaking){
                 intake.stopMotor();
                 intaking = !intaking;
             }
 
-            if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)&&!transfering){
+            if(gamepadEx2.wasJustPressed(PSButtons.CROSS)&&!transfering){
                 transfer.runMotorAt(0.5);
                 transfering = !transfering;
-            }else if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)&&transfering){
+            }else if(gamepadEx2.wasJustPressed(PSButtons.CROSS)&&transfering){
                 transfer.stopMotor();
                 transfering = !transfering;
             }
-            if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)&&!intaking){
+            if(gamepadEx2.wasJustPressed(PSButtons.CIRCLE)&&!intaking){
                 intake.startMotor();
                 intaking = !intaking;
-            }else if(intaking&&gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)){
+            }else if(intaking&&gamepadEx2.wasJustPressed(PSButtons.CIRCLE)){
                 intaking = !intaking;
                 intake.stopMotor();
             }
 
 
-            if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_UP)&&!opened){
+            if(gamepadEx2.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
                 cap.open();
-                opened = !opened;
             }
-            if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_UP)&&opened){
+            if(gamepadEx2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)){
                 cap.close();
-                opened = !opened;
             }
 //
         }

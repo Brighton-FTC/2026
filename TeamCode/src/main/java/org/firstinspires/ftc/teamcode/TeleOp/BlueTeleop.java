@@ -28,6 +28,6 @@ public class BlueTeleop extends GenericTeleop {
     }
 
     protected Pose getStartingPose() {
-        return new Pose(12, 132, Math.toRadians(315));
+        return new Pose(60, 84, Math.toRadians(180));
     }
 }

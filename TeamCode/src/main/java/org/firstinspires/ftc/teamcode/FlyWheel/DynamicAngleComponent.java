@@ -93,9 +93,9 @@ public class DynamicAngleComponent {
             //Linear velocity required for artifact to pass through x = distance from robot and y = object height
             double v = Math.sqrt((386.09 * Math.pow(distance, 2)) / (2.0 * Math.cos(Math.toRadians(60)) * Math.cos(Math.toRadians(60)) * denom));
 
-            double launchEnergy = 0.5*0.00512835678 *Math.pow(v, 2);
-            double requiredEnergy = launchEnergy / efficiency; //we tune efficiency
-            double inertia = 0.5*0.0056187848* Math.pow(3.78, 2); //disk inertia calculated by 1/2 mr^2
+//            double launchEnergy = 0.5*0.00512835678 *Math.pow(v, 2);
+//            double requiredEnergy = launchEnergy / efficiency; //we tune efficiency
+//            double inertia = 0.5*0.0056187848* Math.pow(3.78, 2); //disk inertia calculated by 1/2 mr^2
 
 //            //Denominator less than or equal 0 will yield undefined / imaginary solution. Meaning no velocity will allow artifact to reach target at 60 degrees.
 //            if (denom <= 0) {
@@ -124,10 +124,10 @@ public class DynamicAngleComponent {
 //                flyWheel.runMotorAt(motorPower);
 //            }
             //just tune the efficiency. experimental measurement of efficiency is too much hassle.
-            double v_real = Math.sqrt((2*requiredEnergy)/inertia); //angular velocity calculated from rotational energy 1/2 IΩ (omega)
-
+//            double v_real = Math.sqrt((2*requiredEnergy)/inertia); //angular velocity calculated from rotational energy 1/2 IΩ (omega)
+            double v_real = v/efficiency;
             //Linear velocity is converted to angular velocity.
-            double rpm = (60.0 / (2.0 * Math.PI)) * v_real;
+            double rpm = (60.0 / (2.0 * Math.PI*3.78)) * v_real;
 
 
 

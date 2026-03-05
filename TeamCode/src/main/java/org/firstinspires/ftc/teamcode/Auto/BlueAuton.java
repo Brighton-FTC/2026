@@ -37,7 +37,7 @@ public class BlueAuton extends GenericAutonomous {
     }
 
     protected Pose getStartingPose() {
-        return new Pose(22, 123, Math.toRadians(135));
+        return new Pose(22, 123, Math.toRadians(321));
     }
 
     protected Pose getControlPoint1(){return new Pose(60.661, 81.976);}
