@@ -29,7 +29,7 @@ public class ServoKickTester extends OpMode{
         servo1 = new ServoKickComponent(hardwareMap, "servo1");
         gamepad = new GamepadEx(gamepad1);
 
-        servo1.down();
+        servo1.close();
         up = false;
     }
 
@@ -37,12 +37,12 @@ public class ServoKickTester extends OpMode{
     public void loop() {
         gamepad.readButtons(); //Must call this at the start of the loop otherwise buttons won't be read.
         if (gamepad.wasJustPressed(PSButtons.CIRCLE) && up){
-            servo1.down();
+            servo1.close();
             up = false;
         }
         //to be more efficient, we can use boolean.
         if (gamepad.wasJustPressed(PSButtons.SQUARE)&& !up){
-            servo1.up();
+            servo1.open();
             up = true;
         }
         if (gamepad.wasJustPressed(PSButtons.CIRCLE)){
@@ -50,13 +50,13 @@ public class ServoKickTester extends OpMode{
             //here we can output it for debugging with telemetry but i need to read docs for this because its pain in the ass...
         }
         if(gamepad.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
-            servo1.up();
+            servo1.open();
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            servo1.down();
+            servo1.close();
         }
 
     }

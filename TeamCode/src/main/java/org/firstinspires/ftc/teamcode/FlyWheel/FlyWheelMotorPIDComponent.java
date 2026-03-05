@@ -14,10 +14,10 @@ public class FlyWheelMotorPIDComponent {
 
     private final Motor motor;
 
-    public static double kP = 0.00065;
+    public static double kP = 0.0;
     public static double kI = 0 ;
     public static double kD = 0;
-    public static double kF = 0;
+    public static double kF =  0.00065;
 
     private double power;
     private PIDFController controller = new PIDFController(kP, kI, kD, kF);

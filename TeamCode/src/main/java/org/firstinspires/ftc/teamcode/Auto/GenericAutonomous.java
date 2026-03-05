@@ -105,9 +105,12 @@ public abstract class GenericAutonomous extends OpMode {
 
     @Override
     public void init() {
+
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
-        follower.update();
+        pathTimer = new Timer();
+        opmodeTimer = new Timer();
+        buildPaths();
 
         turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, getObjectXPosition(), 144, telemetry);
 //        launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
@@ -243,6 +246,7 @@ public abstract class GenericAutonomous extends OpMode {
         opmodeTimer.resetTimer();
         setState(0);
     }
+
 
 
 }
