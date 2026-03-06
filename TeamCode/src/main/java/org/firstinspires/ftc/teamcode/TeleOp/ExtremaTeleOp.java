@@ -33,7 +33,7 @@ public class ExtremaTeleOp extends LinearOpMode {
         Motor outtake = new Motor(hardwareMap, "outtake");
 
 
-        MecanumDrive drive = new MecanumDrive(motors[0], motors[1], motors[2], motors[3]);
+        MecanumDrive drive = new MecanumDrive(motors[1], motors[0], motors[3], motors[2]);
 
         IMU imu = hardwareMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(
