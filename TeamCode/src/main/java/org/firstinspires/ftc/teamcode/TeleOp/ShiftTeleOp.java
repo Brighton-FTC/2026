@@ -24,13 +24,13 @@ public class ShiftTeleOp extends LinearOpMode {
             fld.set(gamepad.getLeftY());
             frd.set(gamepad.getRightY());
             if (gamepad.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
-                arm.set(0.5);
+                arm.set(0.25);
             }
             if (gamepad.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
                 arm.set(0);
             }
             if (gamepad.isDown(GamepadKeys.Button.LEFT_BUMPER)) {
-                arm.set(-0.5);
+                arm.set(-0.25);
             }
             if (gamepad.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
                 arm.set(0);
