@@ -38,7 +38,7 @@ public class FlyWheelMotorTester extends OpMode {
             setpoint = 1000;
         }
 
-        if (setpoint > 0) {
+        if (setpoint != 0) {
             flyWheel.runMotorAt(setpoint);
         }
         telemetry.addData("power", flyWheel.getPower());

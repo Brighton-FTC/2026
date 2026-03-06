@@ -96,6 +96,7 @@ public abstract class GenericTeleop extends OpMode {
     public void loop() {
         follower.update();
         gamepadEx1.readButtons();
+        gamepadEx2.readButtons();
         telemetryManager.update();
 
         if (!automatedDrive) {
