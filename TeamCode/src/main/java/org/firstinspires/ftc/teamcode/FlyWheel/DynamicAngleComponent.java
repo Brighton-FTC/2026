@@ -72,7 +72,7 @@ public class DynamicAngleComponent {
         Assuming turret faces the goal at all time, therefore 3D kinematics may be neglected.
         2 Modes of launching artifacts - adjusting speed or adjusting angle (adjusting speed comes in priority)
 
-        Launch mode is switched to dynamic angle if / when it is unreachable at 60 degrees
+        Launch mode is switched to dynamic angle if / when it is unreachable at 65 degrees
 
 
          */
@@ -82,13 +82,13 @@ public class DynamicAngleComponent {
         if (robotX != 1000 && robotY != 1000){
 
             //Efficiency of the hood must not be neglected.
-            double fixV = (2.0 * Math.PI * flyWheelRadius / 60.0) * 6000  * efficiency;
+            double fixV = (2.0 * Math.PI * flyWheelRadius / 65.0) * 6000  * efficiency;
 
 
             double distance = Math.sqrt(Math.pow(objectXPosition - robotX, 2) + Math.pow(objectYPosition - robotY, 2));
 
             //We let y = objectHeight and x = distance from robot
-            double denom = distance * Math.tan(Math.toRadians(60)) - objectHeight;
+            double denom = distance * Math.tan(Math.toRadians(65)) - objectHeight;
 
             double v;
 
@@ -97,14 +97,14 @@ public class DynamicAngleComponent {
                 v = 0;
             }
             else {
-                v = Math.sqrt((386.09 * Math.pow(distance, 2)) / (2.0 * Math.cos(Math.toRadians(60)) * Math.cos(Math.toRadians(60)) * denom));
+                v = Math.sqrt((386.09 * Math.pow(distance, 2)) / (2.0 * Math.cos(Math.toRadians(65)) * Math.cos(Math.toRadians(65)) * denom));
             }
 
 //            double launchEnergy = 0.5*0.00512835678 *Math.pow(v, 2);
 //            double requiredEnergy = launchEnergy / efficiency; //we tune efficiency
 //            double inertia = 0.5*0.0056187848* Math.pow(3.78, 2); //disk inertia calculated by 1/2 mr^2
 
-//            //Denominator less than or equal 0 will yield undefined / imaginary solution. Meaning no velocity will allow artifact to reach target at 60 degrees.
+//            //Denominator less than or equal 0 will yield undefined / imaginary solution. Meaning no velocity will allow artifact to reach target at 65 degrees.
 //            if (denom <= 0) {
 //                double inside = Math.pow(fixV, 4) - 386.09 * (386.09 * Math.pow(distance, 2) + 2 * objectHeight * Math.pow(fixV, 2));
 //
@@ -116,14 +116,14 @@ public class DynamicAngleComponent {
 //                turnServoTo(Math.toDegrees(chosen) % 360);
 //            } else {
 //
-//                //This ensures launch angle is reset to 60 when the launcher is running in dynamic velocity mode.
+//                //This ensures launch angle is reset to 65 when the launcher is running in dynamic velocity mode.
 //                resetServo();
 //
 //                //just tune the efficiency. experimental measurement of efficiency is too much hassle.
 //                double v_real = v/efficiency;
 //
 //                //Linear velocity is converted to angular velocity.
-//                double rpm = (60.0 / (2.0 * Math.PI * flyWheelRadius)) * v_real;
+//                double rpm = (65.0 / (2.0 * Math.PI * flyWheelRadius)) * v_real;
 //
 //
 //                double motorPower = rpm / 6000;
