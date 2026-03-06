@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Constants {
-    public static FollowerConstants followerConstants = new FollowerConstants().mass(9.9);
+    public static FollowerConstants followerConstants = new FollowerConstants().mass(10.1);
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
@@ -24,10 +24,10 @@ public class Constants {
             .rightRearMotorName("back_right_drive")
             .leftRearMotorName("back_left_drive")
             .leftFrontMotorName("front_left_drive")
-            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
+            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
@@ -45,12 +45,12 @@ public class Constants {
             .leftFrontMotorName("front_left_drive")
             .robotLength(13)
             .robotWidth(16)
-            .forwardTicksToInches(0.010141039824677752)
-            .strafeTicksToInches(0.10231375087589775)
-            .turnTicksToInches(0.12697726404753162)
+            .forwardTicksToInches(0.008634416414748255)
+            .strafeTicksToInches(0.010728867620669751)
+            .turnTicksToInches(0.018024767425878725)
             .leftFrontEncoderDirection(Encoder.FORWARD)
-            .leftRearEncoderDirection(Encoder.FORWARD)
-            .rightFrontEncoderDirection(Encoder.REVERSE)
+            .leftRearEncoderDirection(Encoder.REVERSE)
+            .rightFrontEncoderDirection(Encoder.FORWARD)
             .rightRearEncoderDirection(Encoder.REVERSE);
 
 }
