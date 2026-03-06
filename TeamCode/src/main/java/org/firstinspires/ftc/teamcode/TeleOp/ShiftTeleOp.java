@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -11,8 +12,7 @@ public class ShiftTeleOp extends LinearOpMode {
     public void runOpMode() {
         Motor fld = new Motor(hardwareMap,"front_left_drive");
         Motor frd = new Motor(hardwareMap, "front_right_drive");
-        Motor rld = new Motor(hardwareMap, "back_left_drive");
-        Motor rrd = new Motor(hardwareMap, "back_right_drive");
+        Motor arm = new Motor(hardwareMap, "arm");
 
         GamepadEx gamepad = new GamepadEx(gamepad1);
 
@@ -22,9 +22,19 @@ public class ShiftTeleOp extends LinearOpMode {
             gamepad.readButtons();
 
             fld.set(gamepad.getLeftY());
-            rld.set(gamepad.getLeftY());
             frd.set(gamepad.getRightY());
-            rrd.set(gamepad.getRightY());
+            if (gamepad.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
+                arm.set(0.5);
+            }
+            if (gamepad.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
+                arm.set(0);
+            }
+            if (gamepad.isDown(GamepadKeys.Button.LEFT_BUMPER)) {
+                arm.set(-0.5);
+            }
+            if (gamepad.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
+                arm.set(0);
+            }
 
             sleep(20);
         }
