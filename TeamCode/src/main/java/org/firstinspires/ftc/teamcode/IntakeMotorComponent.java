@@ -14,10 +14,10 @@ public class IntakeMotorComponent {
     }
 
     public void startMotor(){
-        motor.set(-1);
+        motor.set(-0.9);
     }
 
-    public void reverseMotor(){motor.set(1);}
+    public void reverseMotor(){motor.set(0.9);}
 
     public void stopMotor(){
         motor.stopMotor();
