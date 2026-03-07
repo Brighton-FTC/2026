@@ -32,6 +32,10 @@ public class ExtremaTeleOp extends LinearOpMode {
         Motor storage = new Motor(hardwareMap, "storage");
         Motor outtake = new Motor(hardwareMap, "outtake");
 
+        motors[0].setInverted(false);
+        motors[1].setInverted(true);
+        motors[2].setInverted(true);
+        motors[3].setInverted(false);
 
         MecanumDrive drive = new MecanumDrive(motors[0], motors[1], motors[2], motors[3]);
 
@@ -96,11 +100,15 @@ public class ExtremaTeleOp extends LinearOpMode {
 
             if (fieldCentric) {
                 double yaw = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-                drive.driveFieldCentric(-(gamepad1.left_stick_y*maxPower), (gamepad1.left_stick_x*maxPower), -(gamepad1.right_stick_x*maxPower), yaw, true);
+                drive.driveFieldCentric((gamepad1.left_stick_x*maxPower), -(gamepad1.left_stick_y*maxPower), -(gamepad1.right_stick_x*maxPower), yaw, true);
                 telemetry.addLine("Field Centric");
             } else {
-                drive.driveRobotCentric(-(gamepad1.left_stick_y*maxPower), (gamepad1.left_stick_x*maxPower), (gamepad1.right_stick_x*maxPower), true);
+                drive.driveRobotCentric((gamepad1.left_stick_x*maxPower), -(gamepad1.left_stick_y*maxPower), (gamepad1.right_stick_x*maxPower), true);
                 telemetry.addLine("Robot Centric");
+                telemetry.addData("FrontLeft",motors[0].getCurrentPosition());
+                telemetry.addData("BackLeft",motors[1].getCurrentPosition());
+                telemetry.addData("FrontRight",motors[2].getCurrentPosition());
+                telemetry.addData("BackRight",motors[3].getCurrentPosition());
             }
 
             telemetry.update();
