@@ -21,8 +21,8 @@ public class outtakeLogic{
          RESET
      }
      private OuttakeState outtakeState;
-     private double SPINUP_TIME = 2;
-     private double SHOOT_TIME = 2;
+     private double SPINUP_TIME = 5;
+     private double SHOOT_TIME = 3.5;
      private int shotsRemaining = 0;
 
      public void init(HardwareMap hardwareMap) {

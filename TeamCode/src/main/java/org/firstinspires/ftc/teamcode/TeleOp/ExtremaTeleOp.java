@@ -19,6 +19,7 @@ public class ExtremaTeleOp extends LinearOpMode {
         boolean fieldCentric = false;
         boolean intake_on = false;
         boolean outtake_on = false;
+        boolean flush_on = false;
         double maxPower = 1;
 
         Motor[] motors = {
@@ -95,6 +96,20 @@ public class ExtremaTeleOp extends LinearOpMode {
                     intake.set(0);
                     storage.set(0);
                     outtake_on = false;
+                }
+            }
+
+            if (gamepad.wasJustPressed(PSButtons.CIRCLE)) {
+                if (!flush_on) {
+                    outtake.set(-0.5);
+                    intake.set(-0.5);
+                    storage.set(-0.6);
+                    flush_on = true;
+                } else {
+                    outtake.set(0);
+                    intake.set(0);
+                    storage.set(0);
+                    flush_on = false;
                 }
             }
 
