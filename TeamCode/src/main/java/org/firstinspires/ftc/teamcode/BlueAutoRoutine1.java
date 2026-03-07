@@ -21,7 +21,8 @@ public class BlueAutoRoutine1 extends OpMode {
 
     public enum PathState {
         DRIVE_START_SHOOT,
-        SHOOT_LOAD
+        SHOOT_LOAD,
+        DRIVE_SHOOT_END
     }
 
     PathState pathState;
@@ -29,13 +30,18 @@ public class BlueAutoRoutine1 extends OpMode {
     //poses
     private final Pose startPose = new Pose(21.751351351351364,124.95135135135135,Math.toRadians(142));
     private final Pose shootPose = new Pose(50.20540540540541,93.98918918918922,Math.toRadians(133));
+    private final Pose endPose = new Pose(41.78918918918919,71.35135135135135,Math.toRadians(180));
 
-    private PathChain driveStartShoot;
+    private PathChain driveStartShoot, driveShootEnd;
 
     public void buildPaths() {
         driveStartShoot = follower.pathBuilder()
                 .addPath(new BezierLine(startPose,shootPose))
                 .setLinearHeadingInterpolation(startPose.getHeading(), shootPose.getHeading())
+                .build();
+        driveShootEnd = follower.pathBuilder()
+                .addPath(new BezierLine(shootPose,endPose))
+                .setLinearHeadingInterpolation(shootPose.getHeading(), endPose.getHeading())
                 .build();
     }
 
@@ -54,11 +60,17 @@ public class BlueAutoRoutine1 extends OpMode {
                             shotsTriggered = true;
                         }
                         else if (shotsTriggered && !shooter.isBusy()){
+                            follower.followPath(driveShootEnd, true);
+                            setPathState(PathState.DRIVE_SHOOT_END);
                             telemetry.addLine("Path 1 done");
                         }
                     }
                 }
                 break;
+            case DRIVE_SHOOT_END:
+                if(!follower.isBusy()) {
+                    telemetry.addLine("DONE!");
+                }
             default:
                 telemetry.addLine("not in state");
                 break;
