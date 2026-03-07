@@ -11,7 +11,6 @@ import com.pedropathing.util.Timer;
 
 import org.firstinspires.ftc.teamcode.mechanisms.outtakeLogic;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-//OUTDATED - USE BLUE1AUTO INSTEAD
 @Autonomous
 public class BlueAutoRoutine1 extends OpMode {
     private Follower follower;

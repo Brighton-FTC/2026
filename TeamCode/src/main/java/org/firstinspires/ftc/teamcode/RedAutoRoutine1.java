@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.mechanisms.outtakeLogic;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-//OUTDATED - USE BLUE1AUTO INSTEAD
 @Autonomous
 public class RedAutoRoutine1 extends OpMode {
     private Follower follower;
@@ -28,9 +27,9 @@ public class RedAutoRoutine1 extends OpMode {
     PathState pathState;
 
     //poses
-    private final Pose startPose = new Pose(21.751351351351364,124.95135135135135,Math.toRadians(142));
-    private final Pose shootPose = new Pose(50.20540540540541,93.98918918918922,Math.toRadians(133));
-    private final Pose endPose = new Pose(41.78918918918919,71.35135135135135,Math.toRadians(180));
+    private final Pose startPose = new Pose(124.1081081081081,127.48108108108106,Math.toRadians(30));
+    private final Pose shootPose = new Pose(95.49729729729734,94.31351351351351,Math.toRadians(45));
+    private final Pose endPose = new Pose(105.05405405405406,71.83783783783784,Math.toRadians(0));
 
     private PathChain driveStartShoot, driveShootEnd;
 
