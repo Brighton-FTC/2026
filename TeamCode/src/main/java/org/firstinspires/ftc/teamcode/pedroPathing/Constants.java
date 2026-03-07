@@ -18,16 +18,17 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(10)
-            .forwardZeroPowerAcceleration(-36.217454168514266)
-            .lateralZeroPowerAcceleration(-54.78063416685368)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.037, 0, 0.002, 0.02))
-            .headingPIDFCoefficients(new PIDFCoefficients(0.8, 0, 0.01, 0.025))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.008, 0, 0.001,0.6, 0.01))
-            .centripetalScaling(0.05);
+            .mass(10.5)
+            .forwardZeroPowerAcceleration(-36.31613020212713)
+            .lateralZeroPowerAcceleration(-66.78920091577899)
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.035, 0, 0.002, 0.02))
+            .headingPIDFCoefficients(new PIDFCoefficients(0.8, 0, 0.02, 0.025))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.0168, 0, 0.001,0.6, 0.01))
+            .centripetalScaling(0
+            );
 
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1.5, 1);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1.3, 1);
 
 
     public static MecanumConstants driveConstants = new MecanumConstants()
@@ -41,8 +42,8 @@ public class Constants {
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
 
-            .xVelocity(63.76887812576896)
-            .yVelocity(54.06007829801306)
+            .xVelocity(65.90741447388658)
+            .yVelocity(53.95611476147269)
 
             .maxPower(1);
 
@@ -60,7 +61,7 @@ public class Constants {
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
             .forwardPodY(8)
-            .strafePodX(-5)
+            .strafePodX(-6)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("pinpoint")
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)

@@ -28,13 +28,15 @@ public class DynamicAngleComponent {
 
     private double objectXPosition;
 
+    private double rpm;
+
     private double objectYPosition;
 
     private double objectHeight;
 
     private double flyWheelRadius;
 
-    private double efficiency;
+    public static double efficiency;
 
     //private FlyWheelMotorComponent flyWheel;
     private FlyWheelMotorPIDComponent flyWheel;
@@ -134,13 +136,17 @@ public class DynamicAngleComponent {
 //            double v_real = Math.sqrt((2*requiredEnergy)/inertia); //angular velocity calculated from rotational energy 1/2 IΩ (omega)
             double v_real = v/efficiency;
             //Linear velocity is converted to angular velocity.
-            double rpm = (60.0 / (2.0 * Math.PI*flyWheelRadius)) * v_real;
+            rpm = (60.0 / (2.0 * Math.PI*flyWheelRadius)) * v_real;
 
 
 
             flyWheel.runMotorAt(rpm);
         }
 
+    }
+
+    public double getRPM(){
+        return rpm;
     }
 
     public void stop(){

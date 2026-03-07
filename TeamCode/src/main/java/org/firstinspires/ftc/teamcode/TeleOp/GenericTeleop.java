@@ -53,8 +53,8 @@ public abstract class GenericTeleop extends OpMode {
     private ServoKickComponent cap;
 
     private FlyWheelMotorComponent transfer;
-//    private DynamicAngleComponent launcher;
-    private FlyWheelMotorComponent launcher;
+    private DynamicAngleComponent launcher;
+//    private FlyWheelMotorComponent launcher;
 
     private IntakeMotorComponent intake;
     private TelemetryManager telemetryManager;
@@ -73,8 +73,8 @@ public abstract class GenericTeleop extends OpMode {
         telemetryManager = PanelsTelemetry.INSTANCE.getTelemetry();
 //
         turret = new TurretPIDComponent(hardwareMap, "turretMotor", 0.167, getObjectXPosition(), 144, telemetry);
-//        launcher = new DynamicAngleComponent(hardwareMap, "servo", getObjectXPosition(), 144, 42,1.9, 0.2, startingPose, telemetry);
-        launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
+        launcher = new DynamicAngleComponent(hardwareMap, "servo", getObjectXPosition(), 144, 42,1.9, 1, startingPose, telemetry);
+//        launcher = new FlyWheelMotorComponent(hardwareMap, "flyWheelMotor");
         transfer = new FlyWheelMotorComponent(hardwareMap, "transferMotor");
 
         cap = new ServoKickComponent(hardwareMap, "launchCap");
@@ -150,14 +150,16 @@ public abstract class GenericTeleop extends OpMode {
 //            }
 //
             if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE) && !shooting) {
-//                launcher.dynamicMotorPower(follower.getPose().getX(), follower.getPose().getY());
-                launcher.runMotorAt(1);
-                shooting = !shooting;
+//                launcher.runMotorAt(1);
+                shooting = true;
             }
             else if (gamepadEx1.wasJustPressed(PSButtons.CIRCLE)&& shooting){
-                launcher.stopMotor();
-//                launcher.stop();
+//                launcher.stopMotor();
+                launcher.stop();
                 shooting = !shooting;
+            }
+            if (shooting){
+                launcher.dynamicMotorPower(follower.getPose().getX(), follower.getPose().getY());
             }
 //
 //
@@ -174,10 +176,12 @@ public abstract class GenericTeleop extends OpMode {
 
             if (gamepadEx2.wasJustPressed(PSButtons.TRIANGLE)&&!intaking){
                 intake.reverseMotor();
+                transfer.runMotorAt(-0.5);
                 intaking = !intaking;
             }
             else if(gamepadEx2.wasJustPressed(PSButtons.TRIANGLE)&&intaking){
                 intake.stopMotor();
+                transfer.stopMotor();
                 intaking = !intaking;
             }
 
@@ -203,10 +207,21 @@ public abstract class GenericTeleop extends OpMode {
             if(gamepadEx2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)){
                 cap.close();
             }
+            if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)&&!intaking){
+                intake.startMotor();
+                transfer.runMotorAt(0.5);
+                cap.open();
+                intaking = !intaking;
+            }else if(gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)&&intaking){
+                intake.stopMotor();
+                transfer.stopMotor();
+                cap.close();
+                intaking = !intaking;
+            }
 //
         }
 
-
+        telemetry.addData("rpm", launcher.getRPM());
         telemetryManager.debug("position", follower.getPose());
         telemetryManager.debug("velocity", follower.getVelocity());
         telemetryManager.debug("automatedDrive", automatedDrive);

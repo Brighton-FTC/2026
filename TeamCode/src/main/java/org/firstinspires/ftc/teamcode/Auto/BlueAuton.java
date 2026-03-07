@@ -18,22 +18,22 @@ public class BlueAuton extends GenericAutonomous {
     }
 
     protected Pose getPickup1Pose() {
-        return new Pose(22, 84, Math.toRadians(180));
+        return new Pose(22, 84, Math.toRadians(179));
     }
 
     protected Pose getPickup2Pose() {
-        return new Pose(22, 60, Math.toRadians(180));
+        return new Pose(22, 60, Math.toRadians(179));
     }
 
     protected Pose getPickup3Pose() {
-        return  new Pose(22, 35.5, Math.toRadians(180));
+        return  new Pose(22, 35.5, Math.toRadians(179));
     }
 
     protected Pose getScorePose() {
-        return new Pose(60, 84, Math.toRadians(180));
+        return new Pose(60, 84, Math.toRadians(179));
     }
     protected Pose getStartScorePose(){
-        return new Pose(44, 100, Math.toRadians(180));
+        return new Pose(44, 100, Math.toRadians(179));
     }
 
     protected Pose getStartingPose() {

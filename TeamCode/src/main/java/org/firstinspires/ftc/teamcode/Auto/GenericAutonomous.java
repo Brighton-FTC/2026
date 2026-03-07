@@ -17,6 +17,8 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.paths.Path;
 import com.pedropathing.util.Timer;
 
+import java.util.concurrent.Delayed;
+
 
 public abstract class GenericAutonomous extends OpMode {
 
@@ -131,18 +133,25 @@ public abstract class GenericAutonomous extends OpMode {
             case 0:
                 cap.open();
                 follower.followPath(scorePreload);
-                cap.close();
-                setState(1);
+                if (pathTimer.getElapsedTimeSeconds()>2){
+                    intaking = true;}
+                if(pathTimer.getElapsedTimeSeconds()>3){
+                    cap.close();}
+                if(pathTimer.getElapsedTimeSeconds()>3.5){
+                setState(1);}
+
                 break;
             case 1:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
-                    intaking = !intaking;
+
                     /* Score Preload */
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     follower.followPath(grabPickup1,true);
-                    intaking = !intaking;
-                    setState(2);
+                    if (pathTimer.getElapsedTimeSeconds()>3){
+                    intaking = false;}
+                  if(pathTimer.getElapsedTimeSeconds()>3.5){
+                  setState(2);}
                 }
                 break;
             case 2:
@@ -151,10 +160,14 @@ public abstract class GenericAutonomous extends OpMode {
                     /* Grab Sample */
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     follower.followPath(scorePickup1,true);
-                    intaking = !intaking;
+                    if(pathTimer.getElapsedTimeSeconds()>3){
+                    cap.open();}
+                    //wait
+                    if (pathTimer.getElapsedTimeSeconds()>4){
+                        intaking = true;}
 
-                    cap.open();
-                    setState(3);
+
+                    if(pathTimer.getElapsedTimeSeconds()>5){setState(3);}
                 }
                 break;
             case 3:
@@ -164,8 +177,10 @@ public abstract class GenericAutonomous extends OpMode {
                     /* Score Sample */
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     follower.followPath(grabPickup2,true);
-                    intaking = !intaking;
-                    setState(4);
+                    if (pathTimer.getElapsedTimeSeconds()>3){
+                        intaking = false;}
+                    if(pathTimer.getElapsedTimeSeconds()>3.5){
+                        setState(4);}
                 }
                 break;
             case 4:
@@ -174,10 +189,15 @@ public abstract class GenericAutonomous extends OpMode {
                     /* Grab Sample */
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     follower.followPath(scorePickup2,true);
-                    intaking = !intaking;
+                    if(pathTimer.getElapsedTimeSeconds()>3){
+                        cap.open();}
+                    //wait
+                    if (pathTimer.getElapsedTimeSeconds()>4){
+                        intaking = true;}
 
-                    cap.open();
-                    setState(5);
+
+                    if(pathTimer.getElapsedTimeSeconds()>5){setState(5);}
+
                 }
                 break;
             case 5:
@@ -187,21 +207,31 @@ public abstract class GenericAutonomous extends OpMode {
                     /* Score Sample */
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     follower.followPath(grabPickup3,true);
-                    intaking = !intaking;
-                    setState(6);
+                    if (pathTimer.getElapsedTimeSeconds()>3){
+                        intaking = false;}
+                    if(pathTimer.getElapsedTimeSeconds()>3.5){
+                        setState(6);}
                 }
                 break;
             case 6:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
                 if(!follower.isBusy()) {
-                    intaking = !intaking;
 
-                    cap.open();
+
+
                     /* Grab Sample */
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     follower.followPath(scorePickup3, true);
-                    cap.close();
-                    setState(7);
+                    if(pathTimer.getElapsedTimeSeconds()>3){
+                        cap.open();}
+                    //wait
+                    if (pathTimer.getElapsedTimeSeconds()>4){
+                        intaking = true;}
+
+
+                    if(pathTimer.getElapsedTimeSeconds()>5){cap.close();}
+                    if(pathTimer.getElapsedTimeSeconds()>5.5){
+                        setState(7);}
                 }
                 break;
             case 7:
@@ -216,23 +246,27 @@ public abstract class GenericAutonomous extends OpMode {
 
     public void setState(int state){
         pathState = state;
+        pathTimer.resetTimer();
     }
     @Override
     public void loop(){
 
+        pathUpdate();
         // These loop the movements of the robot, these must be called continuously in order to work
         follower.update();
+
+
         turret.aimToObject(follower.getPose().getX(), follower.getPose().getY(), follower.getHeading());
         launcher.dynamicMotorPower(follower.getPose().getX(), follower.getPose().getY());
 
         if (intaking){
             intake.startMotor();
-            transfer.runMotorAt(1);
+            transfer.runMotorAt(0.5);
         }
-        else{intake.stopMotor();
+        else {intake.stopMotor();
         transfer.stopMotor();}
 
-        pathUpdate();
+
         // Feedback to Driver Hub for debugging
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());

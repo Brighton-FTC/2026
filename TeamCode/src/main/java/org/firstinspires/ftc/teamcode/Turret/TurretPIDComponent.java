@@ -30,11 +30,15 @@ public class TurretPIDComponent {
     private Follower follower;
     public static double kP = 0.008;
 
-    public static double n = 540;
+    public static double n = 360;
     public static double kI = 0.1;
     public static double kD = 0.0;
 
     public static double kF = 0.0;
+
+    private double lastTurretAngle = 0;
+
+    private double turretGlobalAngle = 0;
 
     private double scalingFactor;
 
@@ -109,40 +113,35 @@ public class TurretPIDComponent {
 
 
     public void aimToObject(double robotX, double robotY, double robotHeading) {
-        //double robotYPosition = camera.returnYPosition();
-        //double robotXPosition = camera.returnXPosition();
-        //follower.getPose().getY();
-        //follower.getPose().getX();
         if (robotX != 1000 && robotY != 1000) {
             double robotAngle = Math.toDegrees(robotHeading);
             double destinationAngle = Math.toDegrees(Math.atan2(objectYPosition - robotY,
                     objectXPosition - robotX));
 
+
+
             turretAngle = encoderTicksToAngle(turretMotor.getCurrentPosition());
 
+            double delta = turretAngle - lastTurretAngle;
+
+            turretGlobalAngle += delta;
+            lastTurretAngle = turretAngle;
+
             double toTurn = destinationAngle - (turretAngle + robotAngle);
-            double turnMod;
-//            if (toTurn < 0){
-//             turnMod = ((toTurn + n) % 360) - 180;}
-//            else{turnMod = ((toTurn - n) % -360) + 180;}
+
+            if (Math.abs(turretGlobalAngle+toTurn) >= 180 && toTurn > 0){
+                toTurn-=360;
+            }else if (Math.abs(turretGlobalAngle+toTurn) >= 180 && toTurn < 0){
+                toTurn+=360;
+            }
 
             telemetry.addData("To turn :", toTurn);
             telemetry.addData("error", encoderTicksToAngle((int) controller.getPositionError()));
-            telemetry.addData("destination", toTurn);
+            telemetry.addData("destination", destinationAngle);
+            telemetry.addData("current angle", turretAngle);
             telemetry.update();
 
 
-
-//            // take the mod/remainder of toTurn/360 to keep angle in the range of [0,360]
-//            if (destinationAngle > 180) {
-//                telemetry.addData("long path", true);
-//                telemetry.update();
-//            } else if (destinationAngle < -180) {
-//                telemetry.addData("long path", true);
-//                telemetry.update();
-//            } else {
-//                telemetry.addData("long path", false);
-//            }
            turnTurretBy(toTurn);
         }
     }

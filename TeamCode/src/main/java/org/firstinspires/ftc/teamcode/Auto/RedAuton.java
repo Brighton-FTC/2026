@@ -12,25 +12,26 @@ import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 
 @Configurable
+@Autonomous
 public class RedAuton extends GenericAutonomous {
     protected double getObjectXPosition() {
         return 0;
     }
 
     protected Pose getPickup1Pose() {
-        return new Pose(122.5, 84, Math.toRadians(0));
+        return new Pose(122.5, 84, Math.toRadians(1));
     }
 
     protected Pose getPickup2Pose() {
-        return new Pose(122.5, 60, Math.toRadians(0));
+        return new Pose(122.5, 60, Math.toRadians(1));
     }
 
     protected Pose getPickup3Pose() {
-        return  new Pose(122.5, 35.5, Math.toRadians(0));
+        return  new Pose(122.5, 35.5, Math.toRadians(1));
     }
 
     protected Pose getScorePose() {
-        return new Pose(84, 84, Math.toRadians(0));
+        return new Pose(84, 84, Math.toRadians(1));
     }
 
     protected Pose getStartingPose() {
@@ -38,7 +39,7 @@ public class RedAuton extends GenericAutonomous {
     }
 
     protected Pose getStartScorePose(){
-        return new Pose(100, 100, Math.toRadians(0));
+        return new Pose(100, 100, Math.toRadians(1));
     }
 
     protected Pose getControlPoint1(){return new Pose(96.661, 81.976);}
