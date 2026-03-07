@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -17,14 +21,14 @@ public class outtakeLogic{
          RESET
      }
      private OuttakeState outtakeState;
-     private double SPINUP_TIME = 1.5;
+     private double SPINUP_TIME = 2;
      private double SHOOT_TIME = 2;
      private int shotsRemaining = 0;
 
      public void init(HardwareMap hardwareMap) {
-         storage = hardwareMap.get(Motor.class, "storage");
-         intake = hardwareMap.get(Motor.class, "intake");
-         outtake = hardwareMap.get(Motor.class, "outtake");
+         storage = new Motor(hardwareMap,"storage");
+         intake = new Motor(hardwareMap,"intake");
+         outtake = new Motor(hardwareMap, "outtake");
 
          outtakeState = OuttakeState.IDLE;
          storage.set(0);
